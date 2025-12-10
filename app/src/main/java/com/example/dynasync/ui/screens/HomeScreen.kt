@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -138,22 +140,43 @@ fun HomeScreen(
                     style = MaterialTheme.typography.headlineMedium
                 )
 
-                Column (
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    state.projects.forEach { project ->
-                        ProjectCard(project = project, onClick = {
-                            navController.navigate(MainDestination.ProjectDetail(projectId = project.id))
-                        })
+                if(state.projects.isEmpty()) {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.no_projects2_1),
+                            contentDescription = "No projects image",
+                            modifier = Modifier.width(285.dp).height(289.dp).clip(RoundedCornerShape(20.dp))
+                        )
+
+                        Text(
+                            text = "Parece que no tienes proyectos en progreso.  Crea uno nuevo!",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
                     }
                 }
+                else {
+                    Column (
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        state.projects.forEach { project ->
+                            ProjectCard(project = project, onClick = {
+                                navController.navigate(MainDestination.ProjectDetail(projectId = project.id))
+                            })
+                        }
+                    }
+                }
+
             }
 
 
         }
 
         item {
-            Spacer(modifier = Modifier.height(60.dp))
+            Spacer(modifier = Modifier.height(80.dp))
         }
 
 

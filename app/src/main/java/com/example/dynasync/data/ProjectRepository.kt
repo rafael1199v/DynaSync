@@ -54,6 +54,8 @@ object ProjectRepository {
         )
     )
 
+    //val projects = emptyList<Project>()
+
     suspend fun getProjectById(projectId: Int): Project? {
         return projects.find { it.id == projectId }
     }
