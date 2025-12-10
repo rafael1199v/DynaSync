@@ -40,6 +40,7 @@ import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.navigation.MainGraph
 import com.example.dynasync.ui.factory.LayoutFactoryProvider
 import com.example.dynasync.ui.screens.HomeScreen
+import com.example.dynasync.ui.screens.ProjectDetailScreen
 import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.IcyBlue
 import com.example.dynasync.ui.theme.JungleTeal
@@ -200,7 +201,7 @@ fun App(
 
 
                 composable<MainDestination.ProjectDetail> {
-                    Text("Detalle del proyecto")
+                    ProjectDetailScreen()
                 }
             }
         }
