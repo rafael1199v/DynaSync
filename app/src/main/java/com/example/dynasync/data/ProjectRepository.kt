@@ -59,4 +59,8 @@ object ProjectRepository {
     suspend fun getProjectById(projectId: Int): Project? {
         return projects.find { it.id == projectId }
     }
+
+    suspend fun getProjects() : List<Project> {
+        return projects
+    }
 }
