@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -119,9 +121,14 @@ fun App(
                 NavigationBar(
                     containerColor = IcyBlue.copy(alpha = 0.2f)
                 ) {
+
+                    val currentDestination = navBackStackEntry?.destination
                     NavigationBarList.items.forEachIndexed { index, item ->
 
-                        val isSelected = index == selectedNavbarItemId
+                        val isSelected = currentDestination?.hierarchy?.any { destinationInHierarchy ->
+                            destinationInHierarchy.hasRoute(item.destination::class)
+                        } == true
+
                         NavigationBarItem(
                             selected = isSelected,
                             onClick = {
