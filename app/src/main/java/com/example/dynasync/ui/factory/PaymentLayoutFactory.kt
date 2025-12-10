@@ -11,9 +11,9 @@ class PaymentLayoutFactory(
         return LayoutConfiguration(
             isVisible = true,
 
-            navigationIconId = R.drawable.outline_logout_24,
+            navigationIconId = R.drawable.baseline_arrow_back_24,
             onNavigationIconClick = onNavigationIconClick,
-            title = "Home",
+            title = "Registro de pagos",
 
             actionsList = listActions,
 

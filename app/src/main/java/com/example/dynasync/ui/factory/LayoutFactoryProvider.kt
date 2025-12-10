@@ -26,7 +26,7 @@ object LayoutFactoryProvider {
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
                             contentDescription = "Profile",
-                            onClick = {}
+                            onClick = { }
                         )
                     )
                 )
