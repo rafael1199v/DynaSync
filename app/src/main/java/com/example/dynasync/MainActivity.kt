@@ -31,6 +31,7 @@ import com.example.dynasync.navigation.AuthenticationDestination
 import com.example.dynasync.navigation.AuthenticationGraph
 import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.navigation.MainGraph
+import com.example.dynasync.ui.screens.HomeScreen
 import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.IcyBlue
 
@@ -138,7 +139,7 @@ fun App(
 
             navigation<MainGraph>(startDestination = MainDestination.Home) {
                 composable<MainDestination.Home> {
-                    Text(text = "Home")
+                    HomeScreen(modifier = Modifier.fillMaxSize())
                 }
 
                 composable<MainDestination.Payment> {

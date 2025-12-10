@@ -69,6 +69,7 @@ fun HomeScreen(
                         .build(),
                     placeholder = painterResource(id = R.drawable.ic_launcher_background),
                     contentDescription = "Profile picture",
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .height(120.dp)
                         .width(120.dp)
@@ -101,7 +102,7 @@ fun HomeScreen(
                             Spacer(modifier = Modifier.width(12.dp))
 
 
-                            Text(text = "2 Proyectos en proceso", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "${state.projectsInProcess} Proyectos en proceso", style = MaterialTheme.typography.bodyMedium)
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -117,7 +118,7 @@ fun HomeScreen(
 
                             Spacer(modifier = Modifier.width(12.dp))
 
-                            Text("3 Tareas pendientes", style = MaterialTheme.typography.bodyMedium)
+                            Text("${state.pendingTasks} Tareas pendientes", style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }
