@@ -23,7 +23,7 @@ object ProjectRepository {
             objective = "Mejorar la productividad de las personas",
             description = "Esta tiene que ser una descripcion muy larga para que las personas puedan ver hasta donde se puede extender..",
             finishDate = LocalDate(year = 2023, month = 12, day = 1),
-            imageUrl = "https://images.unsplash.com/photo-1761839257864-c6ccab7238de?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            imageUrl = "https://images.unsplash.com/photo-1761839256791-6a93f89fb8b0?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
             tasks = emptyList()
         )
     )
