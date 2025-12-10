@@ -113,7 +113,7 @@ fun ProjectDetailScreenContent(
                 )
 
                 Text(
-                    text = "Fecha de finalizacion ${state.project?.finishDate.toString()}",
+                    text = "Finalización: ${state.project?.finishDate.toString()}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )

@@ -17,7 +17,7 @@ class HomeLayoutFactory(
 
             actionsList = listActions,
 
-            floatingActionButtonText = "Proyectos",
+            floatingActionButtonText = "Proyecto",
             onFloatActionButtonClick = onFloatActionButtonClick,
             floatingActionButtonIconId = R.drawable.baseline_add_24
         )
