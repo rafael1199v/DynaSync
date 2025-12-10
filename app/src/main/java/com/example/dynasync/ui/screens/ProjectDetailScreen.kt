@@ -2,6 +2,7 @@ package com.example.dynasync.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -122,6 +123,11 @@ fun ProjectDetailScreenContent(
 
         items(state.project?.tasks ?: emptyList()) { task ->
             TaskCard(task = task, modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp))
+        }
+
+
+        item {
+            Spacer(modifier = Modifier.height(60.dp))
         }
 
     }
