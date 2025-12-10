@@ -21,8 +21,8 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
-    tertiary = Pink40
-
+    tertiary = Pink40,
+    background = Color(0xFFFFFFFF),
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -54,7 +54,7 @@ fun DynaSyncTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> MyTheme
+        else -> LightColorScheme
     }
 
     MaterialTheme(
