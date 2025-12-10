@@ -2,14 +2,18 @@ package com.example.dynasync.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -125,6 +128,52 @@ fun ProjectDetailScreenContent(
             TaskCard(task = task, modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp))
         }
 
+        item {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 4.dp
+                ),
+            ) {
+                OutlinedButton(
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                           painter = painterResource(id = R.drawable.baseline_edit_24),
+                            contentDescription = "Edit"
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(text = "Editar proyecto")
+                    }
+
+                }
+
+                OutlinedButton(
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.delete_filled),
+                            contentDescription = "Delete"
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Text(text = "Eliminar proyecto")
+                    }
+                }
+            }
+        }
 
         item {
             Spacer(modifier = Modifier.height(60.dp))
