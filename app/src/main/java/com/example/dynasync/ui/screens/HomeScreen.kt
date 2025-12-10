@@ -82,7 +82,7 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(text = "Hola, Linus", style = MaterialTheme.typography.headlineSmall)
+                    Text(text = "Hola, ${state.user.name}", style = MaterialTheme.typography.headlineSmall)
 
                     Spacer(modifier = Modifier.height(16.dp))
 
