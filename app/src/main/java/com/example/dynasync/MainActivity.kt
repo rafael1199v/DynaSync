@@ -187,7 +187,7 @@ fun App(
 
             navigation<MainGraph>(startDestination = MainDestination.Home) {
                 composable<MainDestination.Home> {
-                    HomeScreen(modifier = Modifier.fillMaxSize())
+                    HomeScreen(modifier = Modifier.fillMaxSize(), navController = navController)
                 }
 
                 composable<MainDestination.Payment> {
@@ -196,6 +196,11 @@ fun App(
 
                 composable<MainDestination.Staff> {
                     Text(text = "Personal")
+                }
+
+
+                composable<MainDestination.ProjectDetail> {
+                    Text("Detalle del proyecto")
                 }
             }
         }

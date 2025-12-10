@@ -1,4 +1,4 @@
-package com.example.dynasync.data
+package com.example.dynasync.domain
 
 import kotlinx.datetime.LocalDate
 

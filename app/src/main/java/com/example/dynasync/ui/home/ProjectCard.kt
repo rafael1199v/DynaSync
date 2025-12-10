@@ -1,6 +1,5 @@
 package com.example.dynasync.ui.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,13 +28,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
-import com.example.dynasync.data.Project
+import com.example.dynasync.domain.Project
 import com.example.dynasync.ui.theme.WisteriaBlue
 import kotlinx.datetime.LocalDate
 
 @Composable
 fun ProjectCard(
     project: Project,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -47,9 +47,7 @@ fun ProjectCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),
-        onClick = {
-
-        }
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.height(IntrinsicSize.Min)
@@ -123,5 +121,5 @@ fun ProjectCardPreview() {
         tasks = emptyList()
     )
 
-    ProjectCard(project = project)
+    ProjectCard(project = project, onClick = {})
 }

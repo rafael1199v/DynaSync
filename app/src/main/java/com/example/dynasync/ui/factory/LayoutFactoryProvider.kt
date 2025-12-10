@@ -3,6 +3,7 @@ package com.example.dynasync.ui.factory
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.toRoute
 import com.example.dynasync.R
 import com.example.dynasync.navigation.MainDestination
 
@@ -34,6 +35,22 @@ object LayoutFactoryProvider {
 
             destination.hasRoute<MainDestination.Payment>() -> {
                 PaymentLayoutFactory(
+                    onNavigationIconClick = { navController.popBackStack() },
+                    onFloatActionButtonClick = {},
+                    listActions = listOf(
+                        ActionItem(
+                            iconId = R.drawable.outline_account_circle_24,
+                            contentDescription = "Profile",
+                            onClick = {}
+                        )
+                    )
+                )
+            }
+
+            destination.hasRoute<MainDestination.ProjectDetail>() -> {
+                val args = entry.toRoute<MainDestination.ProjectDetail>()
+
+                ProjectDetailLayoutFactory(
                     onNavigationIconClick = { navController.popBackStack() },
                     onFloatActionButtonClick = {},
                     listActions = listOf(

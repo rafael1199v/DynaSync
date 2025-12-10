@@ -20,6 +20,9 @@ sealed interface MainDestination {
 
     @Serializable
     data object Staff : MainDestination
+
+    @Serializable
+    data class ProjectDetail(val projectId: Int)
 }
 
 

@@ -29,14 +29,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
+import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.ui.home.ProjectCard
 import com.example.dynasync.viewmodels.HomeViewModel
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     homeViewModel: HomeViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
@@ -139,7 +142,9 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     state.projects.forEach { project ->
-                        ProjectCard(project = project)
+                        ProjectCard(project = project, onClick = {
+                            navController.navigate(MainDestination.ProjectDetail(projectId = project.id))
+                        })
                     }
                 }
             }
@@ -159,5 +164,5 @@ fun HomeScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(navController = NavController(LocalContext.current))
 }

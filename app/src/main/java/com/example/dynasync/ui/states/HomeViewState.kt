@@ -1,7 +1,7 @@
 package com.example.dynasync.ui.states
 
-import com.example.dynasync.data.Project
-import com.example.dynasync.data.User
+import com.example.dynasync.domain.Project
+import com.example.dynasync.domain.User
 
 data class HomeViewState(
     val projectsInProcess: Int = 0,
