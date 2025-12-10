@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -20,10 +22,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -124,9 +128,37 @@ fun ProjectDetailScreenContent(
 
         }
 
-        items(state.project?.tasks ?: emptyList()) { task ->
-            TaskCard(task = task, modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp))
+        if(state.project?.tasks?.isEmpty() == true) {
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.no_task2_1),
+                        contentDescription = "No tasks image",
+                        modifier = Modifier
+                            .width(260.dp)
+                            .height(271.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                    )
+
+                    Text(
+                        text = "Parece que no tienes tareas nuevas. Añade una!",
+                        style = MaterialTheme.typography.headlineSmall,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+            }
         }
+        else {
+            items(state.project?.tasks ?: emptyList()) { task ->
+                TaskCard(task = task, modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp))
+            }
+        }
+
 
         item {
             Column(
@@ -222,6 +254,7 @@ fun ProjectDetailScreenPreview() {
                     finishDate = LocalDate(year = 2023, month = 12, day = 1),
                 )
             )
+            //tasks = emptyList()
         )
     )
 
