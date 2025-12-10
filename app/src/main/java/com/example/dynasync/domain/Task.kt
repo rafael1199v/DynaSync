@@ -7,6 +7,6 @@ data class Task(
     val title: String,
     val description: String,
     val isCompleted: Boolean,
-    val personInChargeId: Int,
+    val personal: Personal,
     val finishDate: LocalDate
 )

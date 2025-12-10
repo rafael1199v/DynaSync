@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +26,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
+import com.example.dynasync.domain.Personal
 import com.example.dynasync.domain.Project
+import com.example.dynasync.domain.Task
+import com.example.dynasync.ui.projectdetail.TaskCard
 import com.example.dynasync.ui.states.ProjectDetailState
 import com.example.dynasync.viewmodels.ProjectDetailViewModel
 import kotlinx.datetime.LocalDate
@@ -116,6 +120,9 @@ fun ProjectDetailScreenContent(
 
         }
 
+        items(state.project?.tasks ?: emptyList()) { task ->
+            TaskCard(task = task, modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp))
+        }
 
     }
 }
@@ -132,7 +139,34 @@ fun ProjectDetailScreenPreview() {
             objective = "Proporcionar una aplicación fiable y fácil de usuario para cualquier emprendedor ",
             finishDate = LocalDate(year = 2023, month = 12, day = 1),
             imageUrl = "https://images.unsplash.com/photo-1761839256791-6a93f89fb8b0?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            tasks = emptyList()
+            tasks = listOf(
+                Task(
+                    id = 1,
+                    title = "Task 1",
+                    description = "Description of task 1",
+                    isCompleted = true,
+                    personal = Personal(
+                        id = 1,
+                        name = "Carlos",
+                        lastname = "Salazar",
+                        charge = "Developer"
+                    ),
+                    finishDate = LocalDate(year = 2023, month = 12, day = 1),
+                ),
+                Task(
+                    id = 2,
+                    title = "Task 2",
+                    description = "Description of task 2",
+                    isCompleted = false,
+                    personal = Personal(
+                        id = 1,
+                        name = "Rafael",
+                        lastname = "Vargas",
+                        charge = "Developer"
+                    ),
+                    finishDate = LocalDate(year = 2023, month = 12, day = 1),
+                )
+            )
         )
     )
 
