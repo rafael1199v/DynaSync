@@ -37,13 +37,26 @@ import com.example.dynasync.navigation.MainDestination
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
+    onProjectClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
 
+    HomeScreenContent(
+        onProjectClick = onProjectClick,
+        state = state,
+        modifier = modifier
+    )
+}
 
+
+@Composable
+fun HomeScreenContent(
+    onProjectClick: (Int) -> Unit,
+    state: HomeViewState,
+    modifier: Modifier = Modifier
+) {
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.Top,
@@ -168,9 +181,12 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         state.projects.forEach { project ->
-                            ProjectCard(project = project, onClick = {
-                                navController.navigate(MainDestination.ProjectDetail(projectId = project.id))
-                            })
+                            ProjectCard(
+                                project = project,
+                                onClick = {
+                                    onProjectClick(project.id)
+                                }
+                            )
                         }
                     }
                 }
@@ -179,11 +195,9 @@ fun HomeScreen(
 
 
         }
-
         item {
             Spacer(modifier = Modifier.height(80.dp))
         }
-
 
     }
 }
@@ -192,5 +206,10 @@ fun HomeScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(navController = NavController(LocalContext.current))
+    //HomeScreen(navController = NavController(LocalContext.current))
+    HomeScreenContent(
+        onProjectClick = {},
+        state = HomeViewState(),
+        modifier = Modifier.fillMaxWidth()
+    )
 }

@@ -201,7 +201,12 @@ fun App(
 
             navigation<MainGraph>(startDestination = MainDestination.Home) {
                 composable<MainDestination.Home> {
-                    HomeScreen(modifier = Modifier.fillMaxSize(), navController = navController)
+                    HomeScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onProjectClick = { projectId ->
+                            navController.navigate(MainDestination.ProjectDetail(projectId))
+                        }
+                    )
                 }
 
                 composable<MainDestination.Payment> {
