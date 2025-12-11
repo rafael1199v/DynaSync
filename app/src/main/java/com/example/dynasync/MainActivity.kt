@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 fun App(
     modifier: Modifier = Modifier
 ) {
-    var userIsAuthenticated by remember { mutableStateOf(value = true )}
+    var userIsAuthenticated by remember { mutableStateOf(value = false )}
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 

@@ -18,9 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dynasync.R
-import com.example.dynasync.domain.Payment
-import com.example.dynasync.domain.PaymentType
-import com.example.dynasync.domain.toCustomFormat
+import com.example.dynasync.domain.model.Payment
+import com.example.dynasync.domain.model.PaymentType
+import com.example.dynasync.domain.model.toCustomFormat
 import kotlinx.datetime.LocalDateTime
 import kotlin.math.roundToInt
 

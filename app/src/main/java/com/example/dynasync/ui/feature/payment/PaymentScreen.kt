@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
-import com.example.dynasync.data.PaymentRepository
-import com.example.dynasync.domain.PaymentType
+import com.example.dynasync.data.repository.PaymentRepository
+import com.example.dynasync.domain.model.PaymentType
 import com.example.dynasync.ui.theme.JungleTeal
 
 @Composable

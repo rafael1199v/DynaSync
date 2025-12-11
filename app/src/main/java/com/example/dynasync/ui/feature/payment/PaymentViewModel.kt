@@ -2,10 +2,9 @@ package com.example.dynasync.ui.feature.payment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dynasync.data.PaymentRepository
-import com.example.dynasync.domain.Payment
-import com.example.dynasync.domain.PaymentType
-import com.example.dynasync.ui.feature.payment.PaymentViewState
+import com.example.dynasync.data.repository.PaymentRepository
+import com.example.dynasync.domain.model.Payment
+import com.example.dynasync.domain.model.PaymentType
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

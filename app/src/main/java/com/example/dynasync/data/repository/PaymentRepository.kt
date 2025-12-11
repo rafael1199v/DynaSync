@@ -1,7 +1,7 @@
-package com.example.dynasync.data
+package com.example.dynasync.data.repository
 
-import com.example.dynasync.domain.Payment
-import com.example.dynasync.domain.PaymentType
+import com.example.dynasync.domain.model.Payment
+import com.example.dynasync.domain.model.PaymentType
 import kotlinx.datetime.LocalDateTime
 
 object PaymentRepository {

@@ -1,8 +1,8 @@
-package com.example.dynasync.data
+package com.example.dynasync.data.repository
 
-import com.example.dynasync.domain.Personal
-import com.example.dynasync.domain.Project
-import com.example.dynasync.domain.Task
+import com.example.dynasync.domain.model.Personal
+import com.example.dynasync.domain.model.Project
+import com.example.dynasync.domain.model.Task
 import kotlinx.datetime.LocalDate
 
 object ProjectRepository {

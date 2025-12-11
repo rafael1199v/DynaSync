@@ -1,4 +1,4 @@
-package com.example.dynasync.domain
+package com.example.dynasync.domain.model
 
 data class User(
     val id: Int,

@@ -59,17 +59,10 @@ fun LoginScreen(
 
     LoginScreenContent(
         state = state,
-        modifier = modifier,
-        onUpdateEmail = { newEmail ->
-            viewModel.updateEmail(newEmail)
+        onIntent = { intent ->
+            viewModel.onIntent(intent)
         },
-        onUpdatePassword = { newPassword ->
-            viewModel.updatePassword(newPassword)
-        },
-        onSubmitForm = {
-            println("Antes del form")
-            viewModel.submitForm()
-        }
+        modifier = modifier
     )
 }
 
@@ -77,9 +70,7 @@ fun LoginScreen(
 @Composable
 fun LoginScreenContent(
     state: LoginViewState,
-    onUpdateEmail: (String) -> Unit,
-    onUpdatePassword: (String) -> Unit,
-    onSubmitForm: () -> Unit,
+    onIntent: (LoginIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -129,7 +120,7 @@ fun LoginScreenContent(
                 OutlinedTextField(
                     value = state.email,
                     onValueChange = {
-                        onUpdateEmail(it)
+                        onIntent(LoginIntent.EmailChanged(it))
                     },
                     placeholder = {
                         Text(text = "Ingresa tu correo")
@@ -153,7 +144,7 @@ fun LoginScreenContent(
                 OutlinedTextField(
                     value = state.password,
                     onValueChange = {
-                        onUpdatePassword(it)
+                        onIntent(LoginIntent.PasswordChanged(it))
                     },
                     visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     placeholder = {
@@ -203,7 +194,7 @@ fun LoginScreenContent(
 
             Button(
                 onClick = {
-                    onSubmitForm()
+                    onIntent(LoginIntent.SubmitLogin)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = JungleTeal
@@ -259,9 +250,7 @@ fun LoginScreenContent(
 fun LoginScreenPreview() {
     LoginScreenContent(
         modifier = Modifier.fillMaxSize(),
+        onIntent = {},
         state = LoginViewState(),
-        onUpdateEmail = {},
-        onUpdatePassword = {},
-        onSubmitForm = {}
     )
 }

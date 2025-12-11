@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
-import com.example.dynasync.domain.Project
+import com.example.dynasync.domain.model.Project
 import com.example.dynasync.ui.theme.WisteriaBlue
 import kotlinx.datetime.LocalDate
 

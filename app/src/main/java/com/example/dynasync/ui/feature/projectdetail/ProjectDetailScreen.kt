@@ -34,9 +34,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
-import com.example.dynasync.domain.Personal
-import com.example.dynasync.domain.Project
-import com.example.dynasync.domain.Task
+import com.example.dynasync.domain.model.Personal
+import com.example.dynasync.domain.model.Project
+import com.example.dynasync.domain.model.Task
 import kotlinx.datetime.LocalDate
 
 @Composable

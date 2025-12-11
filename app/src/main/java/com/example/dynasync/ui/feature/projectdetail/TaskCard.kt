@@ -26,8 +26,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dynasync.R
-import com.example.dynasync.domain.Personal
-import com.example.dynasync.domain.Task
+import com.example.dynasync.domain.model.Personal
+import com.example.dynasync.domain.model.Task
 import com.example.dynasync.ui.theme.JungleTeal
 import kotlinx.datetime.LocalDate
 

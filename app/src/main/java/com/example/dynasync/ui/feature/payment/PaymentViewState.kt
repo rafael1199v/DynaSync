@@ -1,7 +1,7 @@
 package com.example.dynasync.ui.feature.payment
 
-import com.example.dynasync.domain.Payment
-import com.example.dynasync.domain.PaymentType
+import com.example.dynasync.domain.model.Payment
+import com.example.dynasync.domain.model.PaymentType
 
 data class PaymentViewState(
     val paymentList: List<Payment> = emptyList(),

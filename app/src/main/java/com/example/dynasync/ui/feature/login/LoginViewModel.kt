@@ -18,58 +18,68 @@ class LoginViewModel: ViewModel() {
     private val _uiEvent = Channel<LoginUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun updateEmail(newEmailValue: String) {
+
+    fun onIntent(intent: LoginIntent) {
+        when(intent) {
+            is LoginIntent.EmailChanged -> updateEmail(intent.email)
+            is LoginIntent.PasswordChanged -> updatePassword(intent.password)
+            is LoginIntent.SubmitLogin -> submitForm()
+        }
+    }
+
+    private fun updateEmail(newEmailValue: String) {
         _state.update { it.copy(email = newEmailValue) }
     }
 
-    fun updatePassword(newPasswordValue: String) {
+    private fun updatePassword(newPasswordValue: String) {
         _state.update { it.copy(password = newPasswordValue) }
     }
 
-    fun validateEmail() {
+    private fun validateEmail() : Boolean {
         val emailInput = _state.value.email.trim()
 
         if (emailInput.isEmpty()) {
             _state.update { it.copy(emailError = "El correo es obligatorio") }
-            return
+            return false
         }
-
         if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
             _state.update { it.copy(emailError = "Formato de correo inválido") }
+            return false
         } else {
             _state.update { it.copy(emailError = null) }
+            return true
         }
     }
 
-    fun validatePassword() {
+    private fun validatePassword(): Boolean {
         val passwordInput = _state.value.password.trim()
 
         if (passwordInput.isEmpty()) {
             _state.update { it.copy(passwordError = "La contraseña es obligatoria") }
-            return
+            return false
         }
 
         if (passwordInput.length < 8) {
             _state.update { it.copy(passwordError = "La contraseña debe tener al menos 8 caracteres") }
+            return false
         } else {
             _state.update { it.copy(passwordError = null) }
+            return true
         }
     }
 
-    fun submitForm() {
+    private fun submitForm() {
+        val isEmailValid = validateEmail()
+        val isPasswordValid = validatePassword()
 
-        validateEmail()
-        validatePassword()
-
-        if(_state.value.emailError == null && _state.value.passwordError == null) {
+        if (isEmailValid && isPasswordValid) {
             viewModelScope.launch {
-                // Aquí iría tu llamada a la API (Retrofit/Firebase)
-                // if (apiResponse.isSuccess) {
+                _state.update { it.copy(isLoading = true) }
 
-                // 2. Emitimos el evento de navegación
+                //Logica de API Integrar
                 _uiEvent.send(LoginUiEvent.NavigateToHome)
 
-                // }
+                _state.update { it.copy(isLoading = false) }
             }
         }
     }
