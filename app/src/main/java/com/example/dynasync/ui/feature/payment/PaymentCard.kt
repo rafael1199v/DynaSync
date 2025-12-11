@@ -1,7 +1,6 @@
-package com.example.dynasync.ui.payment
+package com.example.dynasync.ui.feature.payment
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

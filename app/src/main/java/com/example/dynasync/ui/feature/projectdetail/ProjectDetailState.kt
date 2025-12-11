@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.states
+package com.example.dynasync.ui.feature.projectdetail
 
 import com.example.dynasync.domain.Project
 data class ProjectDetailState(

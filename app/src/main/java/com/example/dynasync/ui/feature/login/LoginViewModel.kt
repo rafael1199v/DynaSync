@@ -1,12 +1,8 @@
-package com.example.dynasync.viewmodels
+package com.example.dynasync.ui.feature.login
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import com.example.dynasync.navigation.MainDestination
-import com.example.dynasync.ui.event.LoginUiEvent
-import com.example.dynasync.ui.states.LoginViewState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

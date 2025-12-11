@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.states
+package com.example.dynasync.ui.feature.payment
 
 import com.example.dynasync.domain.Payment
 import com.example.dynasync.domain.PaymentType

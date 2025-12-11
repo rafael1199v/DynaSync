@@ -1,14 +1,11 @@
-package com.example.dynasync.viewmodels
+package com.example.dynasync.ui.feature.projectdetail
 
-import androidx.compose.runtime.internal.isLiveLiteralsEnabled
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.dynasync.data.ProjectRepository
-import com.example.dynasync.domain.Project
 import com.example.dynasync.navigation.MainDestination
-import com.example.dynasync.ui.states.ProjectDetailState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

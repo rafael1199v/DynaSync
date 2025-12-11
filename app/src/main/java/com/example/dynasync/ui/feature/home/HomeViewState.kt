@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.states
+package com.example.dynasync.ui.feature.home
 
 import com.example.dynasync.domain.Project
 import com.example.dynasync.domain.User

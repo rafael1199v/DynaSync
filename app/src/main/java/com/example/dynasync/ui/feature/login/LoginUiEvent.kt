@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.event
+package com.example.dynasync.ui.feature.login
 
 sealed interface LoginUiEvent {
     object NavigateToHome : LoginUiEvent

@@ -1,8 +1,9 @@
-package com.example.dynasync.viewmodels
+package com.example.dynasync.ui.feature.home
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dynasync.data.ProjectRepository
-import com.example.dynasync.ui.states.HomeViewState
+import com.example.dynasync.ui.feature.home.HomeViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

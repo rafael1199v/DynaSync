@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.screens
+package com.example.dynasync.ui.feature.payment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -33,10 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
 import com.example.dynasync.data.PaymentRepository
 import com.example.dynasync.domain.PaymentType
-import com.example.dynasync.ui.payment.PaymentCard
-import com.example.dynasync.ui.states.PaymentViewState
 import com.example.dynasync.ui.theme.JungleTeal
-import com.example.dynasync.viewmodels.PaymentViewModel
 
 @Composable
 fun PaymentScreen(
@@ -75,14 +71,14 @@ fun PaymentScreenContent(
     onFilterSelected: (PaymentType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        if(state.error != null) {
+        if (state.error != null) {
             Column(
                 modifier = Modifier.fillMaxSize().padding(28.dp)
             ) {
@@ -93,8 +89,7 @@ fun PaymentScreenContent(
                 )
             }
 
-        }
-        else if(state.paymentList.isNotEmpty()){
+        } else if (state.paymentList.isNotEmpty()) {
             LazyRow(
                 modifier = Modifier,
                 contentPadding = PaddingValues(horizontal = 36.dp),
@@ -152,8 +147,7 @@ fun PaymentScreenContent(
             }
 
             Spacer(modifier = Modifier.height(60.dp))
-        }
-        else {
+        } else {
 
             Column(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp),
@@ -176,7 +170,6 @@ fun PaymentScreenContent(
 
     }
 }
-
 
 
 @Preview(showBackground = true, showSystemUi = true)

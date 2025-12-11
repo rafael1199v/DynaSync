@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.projectdetail
+package com.example.dynasync.ui.feature.projectdetail
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.screens
+package com.example.dynasync.ui.feature.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,19 +34,17 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
 import com.example.dynasync.navigation.MainDestination
-import com.example.dynasync.ui.home.ProjectCard
-import com.example.dynasync.viewmodels.HomeViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeViewModel: HomeViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
 
 
-    LazyColumn (
+    LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -78,7 +74,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .height(120.dp)
                         .width(120.dp)
-                        .clip(RoundedCornerShape(20.dp))
+                        .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
                 )
 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -87,7 +83,10 @@ fun HomeScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(text = "Hola, ${state.user.name}", style = MaterialTheme.typography.headlineSmall)
+                    Text(
+                        text = "Hola, ${state.user.name}",
+                        style = MaterialTheme.typography.headlineSmall
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -107,7 +106,10 @@ fun HomeScreen(
                             Spacer(modifier = Modifier.width(12.dp))
 
 
-                            Text(text = "${state.projectsInProcess} Proyectos en proceso", style = MaterialTheme.typography.bodyMedium)
+                            Text(
+                                text = "${state.projectsInProcess} Proyectos en proceso",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
@@ -123,7 +125,10 @@ fun HomeScreen(
 
                             Spacer(modifier = Modifier.width(12.dp))
 
-                            Text("${state.pendingTasks} Tareas pendientes", style = MaterialTheme.typography.bodyMedium)
+                            Text(
+                                "${state.pendingTasks} Tareas pendientes",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                         }
                     }
                 }
@@ -134,13 +139,13 @@ fun HomeScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp)
-            ){
+            ) {
                 Text(
                     text = "Proyectos",
                     style = MaterialTheme.typography.headlineMedium
                 )
 
-                if(state.projects.isEmpty()) {
+                if (state.projects.isEmpty()) {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -148,7 +153,8 @@ fun HomeScreen(
                         Image(
                             painter = painterResource(id = R.drawable.no_projects2_1),
                             contentDescription = "No projects image",
-                            modifier = Modifier.width(285.dp).height(289.dp).clip(RoundedCornerShape(20.dp))
+                            modifier = Modifier.width(285.dp).height(289.dp)
+                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
                         )
 
                         Text(
@@ -157,9 +163,8 @@ fun HomeScreen(
                             textAlign = TextAlign.Center
                         )
                     }
-                }
-                else {
-                    Column (
+                } else {
+                    Column(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         state.projects.forEach { project ->

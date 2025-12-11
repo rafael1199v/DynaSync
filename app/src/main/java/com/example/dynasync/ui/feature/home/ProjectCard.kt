@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.home
+package com.example.dynasync.ui.feature.home
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +36,7 @@ import kotlinx.datetime.LocalDate
 fun ProjectCard(
     project: Project,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.Companion
 ) {
     Card(
         modifier = modifier.border(
@@ -45,12 +45,12 @@ fun ProjectCard(
             shape = RoundedCornerShape(size = 12.dp)
         ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Companion.Transparent
         ),
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier.height(IntrinsicSize.Min)
+            modifier = Modifier.Companion.height(IntrinsicSize.Min)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -59,12 +59,12 @@ fun ProjectCard(
                     .build(),
                 placeholder = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = "Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.width(108.dp).fillMaxHeight()
+                contentScale = ContentScale.Companion.Crop,
+                modifier = Modifier.Companion.width(108.dp).fillMaxHeight()
             )
 
             Column(
-                modifier = Modifier.padding(all = 16.dp),
+                modifier = Modifier.Companion.padding(all = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Column(
@@ -75,17 +75,17 @@ fun ProjectCard(
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.Companion.width(4.dp))
 
                     Text(
                         text = project.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Ellipsis,
+                        overflow = TextOverflow.Companion.Ellipsis,
                         maxLines = 2
                     )
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.Companion.width(8.dp))
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -100,7 +100,7 @@ fun ProjectCard(
                             0.5f
                         },
                         color = WisteriaBlue,
-                        modifier = Modifier.height(8.dp)
+                        modifier = Modifier.Companion.height(8.dp)
                     )
                 }
             }

@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.screens
+package com.example.dynasync.ui.feature.projectdetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,15 +37,12 @@ import com.example.dynasync.R
 import com.example.dynasync.domain.Personal
 import com.example.dynasync.domain.Project
 import com.example.dynasync.domain.Task
-import com.example.dynasync.ui.projectdetail.TaskCard
-import com.example.dynasync.ui.states.ProjectDetailState
-import com.example.dynasync.viewmodels.ProjectDetailViewModel
 import kotlinx.datetime.LocalDate
 
 @Composable
 fun ProjectDetailScreen(
-    viewModel: ProjectDetailViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ProjectDetailViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
 

@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.states
+package com.example.dynasync.ui.feature.login
 
 data class LoginViewState(
     val email: String = "",

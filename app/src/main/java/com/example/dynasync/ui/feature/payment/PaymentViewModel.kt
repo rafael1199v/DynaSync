@@ -1,12 +1,11 @@
-package com.example.dynasync.viewmodels
+package com.example.dynasync.ui.feature.payment
 
-import androidx.compose.runtime.internal.isLiveLiteralsEnabled
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dynasync.data.PaymentRepository
 import com.example.dynasync.domain.Payment
 import com.example.dynasync.domain.PaymentType
-import com.example.dynasync.ui.states.PaymentViewState
+import com.example.dynasync.ui.feature.payment.PaymentViewState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
