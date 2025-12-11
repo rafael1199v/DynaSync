@@ -13,7 +13,10 @@ class HomeViewModel : ViewModel() {
     val state = _state.asStateFlow()
 
     init {
+        onIntent(HomeIntent.LoadProjects)
+    }
 
+    private fun getProjects() {
         viewModelScope.launch {
             val projects = ProjectRepository.getProjects()
 
@@ -23,6 +26,14 @@ class HomeViewModel : ViewModel() {
                     pendingTasks = 3,
                     projects = projects
                 )
+            }
+        }
+    }
+
+    fun onIntent(intent: HomeIntent) {
+        when(intent) {
+            is HomeIntent.LoadProjects -> {
+                getProjects()
             }
         }
     }

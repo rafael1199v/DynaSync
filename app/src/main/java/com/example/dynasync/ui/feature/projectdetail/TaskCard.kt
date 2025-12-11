@@ -34,6 +34,8 @@ import kotlinx.datetime.LocalDate
 @Composable
 fun TaskCard(
     task: Task,
+    onToggleTask: (taskId: Int) -> Unit,
+    onDeleteTask: (taskId: Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -52,7 +54,10 @@ fun TaskCard(
         ) {
             Checkbox(
                 checked = checkboxToggle,
-                onCheckedChange = { checkboxToggle = it },
+                onCheckedChange = {
+                    checkboxToggle = it
+                    onToggleTask(task.id)
+                },
                 colors = CheckboxDefaults.colors(
                     checkedColor = JungleTeal
                 )
@@ -103,7 +108,9 @@ fun TaskCard(
         }
 
         IconButton(
-            onClick = {},
+            onClick = {
+                onDeleteTask(task.id)
+            },
             modifier = Modifier.align(Alignment.TopEnd)
         ) {
             Icon(
@@ -133,6 +140,8 @@ fun TaskCardPreview() {
         finishDate = LocalDate(year = 2023, month = 12, day = 1),
     )
     TaskCard(
-        task = task
+        task = task,
+        onDeleteTask = {},
+        onToggleTask = {}
     )
 }

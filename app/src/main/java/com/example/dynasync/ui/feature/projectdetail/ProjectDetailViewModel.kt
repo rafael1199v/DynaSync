@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.dynasync.data.repository.ProjectRepository
+import com.example.dynasync.data.repository.ProjectRepository.getProjectById
 import com.example.dynasync.navigation.MainDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProjectDetailViewModel(
@@ -19,17 +21,46 @@ class ProjectDetailViewModel(
     private val _state = MutableStateFlow(value = ProjectDetailState())
     val state = _state.asStateFlow()
 
+    val projectId = args.projectId
+
     init {
-        _state.value = _state.value.copy(isLoading = true)
-        println(args.projectId)
-        getProjectById(args.projectId)
+        _state.update {
+            it.copy(isLoading = true)
+        }
+
+        onIntent(ProjectDetailIntent.LoadProject(projectId))
     }
 
-    fun getProjectById(projectId: Int) {
+    fun onIntent(intent: ProjectDetailIntent) {
+        when(intent) {
+            is ProjectDetailIntent.LoadProject -> {
+                getProjectById(intent.projectId)
+            }
+            is ProjectDetailIntent.DeleteProject -> {
+                println("Eliminando el proyecto ${intent.projectId}")
+            }
+            is ProjectDetailIntent.EditProject -> {
+                println("Editando el proyecto ${intent.projectId}")
+            }
+            is ProjectDetailIntent.DeleteTask -> {
+                println("Eliminando la tarea ${intent.taskId}")
+            }
+            is ProjectDetailIntent.ToggleTask -> {
+                println("Toggle la tarea ${intent.taskId}")
+            }
+        }
+    }
+
+    private fun getProjectById(projectId: Int) {
         viewModelScope.launch {
             val project = ProjectRepository.getProjectById(projectId = projectId)
-            _state.value = _state.value.copy(project = project)
-            _state.value = _state.value.copy(isLoading = false)
+
+            _state.update {
+                it.copy(
+                    project = project,
+                    isLoading = false
+                )
+            }
         }
     }
 }

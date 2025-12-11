@@ -55,8 +55,8 @@ fun PaymentScreen(
     else {
         PaymentScreenContent(
             state = state,
-            onFilterSelected = { paymentType ->
-                viewModel.onFilterSelected(paymentType)
+            onIntent = { intent ->
+                viewModel.onIntent(intent)
             },
             modifier = modifier
         )
@@ -68,7 +68,7 @@ fun PaymentScreen(
 @Composable
 fun PaymentScreenContent(
     state: PaymentViewState,
-    onFilterSelected: (PaymentType) -> Unit,
+    onIntent: (PaymentIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -100,7 +100,7 @@ fun PaymentScreenContent(
                     val isSelected = state.selectedFilter == paymentType
 
                     FilterChip(
-                        onClick = { onFilterSelected(paymentType) },
+                        onClick = { onIntent(PaymentIntent.FilterPayments(paymentType)) },
                         label = {
                             Text(text = paymentType.description)
                         },
@@ -177,7 +177,7 @@ fun PaymentScreenContent(
 fun PaymentScreenPreview() {
     PaymentScreenContent(
         state = PaymentViewState(paymentList = PaymentRepository.payments),
-        onFilterSelected = {},
+        onIntent = {},
         modifier = Modifier.fillMaxSize()
     )
 }

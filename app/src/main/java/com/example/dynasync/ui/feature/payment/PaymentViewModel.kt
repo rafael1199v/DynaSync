@@ -19,10 +19,22 @@ class PaymentViewModel: ViewModel() {
 
 
     init {
-        getPayments()
+        onIntent(PaymentIntent.LoadPayments)
     }
 
-    fun getPayments() {
+
+    fun onIntent(intent: PaymentIntent) {
+        when(intent) {
+            is PaymentIntent.FilterPayments -> {
+                onFilterSelected(intent.paymentType)
+            }
+            PaymentIntent.LoadPayments -> {
+                getPayments()
+            }
+        }
+    }
+
+    private fun getPayments() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true )}
 
@@ -46,7 +58,7 @@ class PaymentViewModel: ViewModel() {
     }
 
 
-    fun onFilterSelected(type: PaymentType) {
+    private fun onFilterSelected(type: PaymentType) {
         val currentFilter = _state.value.selectedFilter
         val newFilter = if(currentFilter == type) null else type
 

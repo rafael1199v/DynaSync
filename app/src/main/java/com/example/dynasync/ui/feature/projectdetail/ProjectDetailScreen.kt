@@ -49,6 +49,9 @@ fun ProjectDetailScreen(
 
     ProjectDetailScreenContent(
         state = state,
+        onIntent = { intent ->
+            viewModel.onIntent(intent = intent)
+        },
         modifier = modifier
     )
 
@@ -57,6 +60,7 @@ fun ProjectDetailScreen(
 @Composable
 fun ProjectDetailScreenContent(
     state: ProjectDetailState,
+    onIntent: (ProjectDetailIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -152,7 +156,16 @@ fun ProjectDetailScreenContent(
         }
         else {
             items(state.project?.tasks ?: emptyList()) { task ->
-                TaskCard(task = task, modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp))
+                TaskCard(
+                    task = task,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+                    onToggleTask = { taskId ->
+                        onIntent(ProjectDetailIntent.ToggleTask(taskId))
+                    },
+                    onDeleteTask = { taskId ->
+                        onIntent(ProjectDetailIntent.DeleteTask(taskId))
+                    }
+                )
             }
         }
 
@@ -165,7 +178,9 @@ fun ProjectDetailScreenContent(
                 ),
             ) {
                 OutlinedButton(
-                    onClick = {},
+                    onClick = {
+                        onIntent(ProjectDetailIntent.EditProject(projectId = state.project?.id ?: 0))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
 
@@ -185,7 +200,9 @@ fun ProjectDetailScreenContent(
                 }
 
                 OutlinedButton(
-                    onClick = {},
+                    onClick = {
+                        onIntent(ProjectDetailIntent.DeleteProject(state.project?.id ?: 0))
+                    },
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -257,6 +274,7 @@ fun ProjectDetailScreenPreview() {
 
     ProjectDetailScreenContent(
         state = state,
+        onIntent = {},
         modifier = Modifier.fillMaxSize()
     )
 }
