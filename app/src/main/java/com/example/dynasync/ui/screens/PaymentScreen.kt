@@ -11,20 +11,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.dynasync.R
 import com.example.dynasync.data.PaymentRepository
 import com.example.dynasync.domain.PaymentType
 import com.example.dynasync.ui.payment.PaymentCard
 import com.example.dynasync.ui.states.PaymentViewState
+import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.viewmodels.PaymentViewModel
 
 @Composable
@@ -34,11 +42,24 @@ fun PaymentScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    PaymentScreenContent(
-        state = state,
-        modifier = modifier
-    )
-
+    if(state.isLoading) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+    else {
+        PaymentScreenContent(
+            state = state,
+            onFilterSelected = { paymentType ->
+                viewModel.onFilterSelected(paymentType)
+            },
+            modifier = modifier
+        )
+    }
 
 }
 
@@ -46,6 +67,7 @@ fun PaymentScreen(
 @Composable
 fun PaymentScreenContent(
     state: PaymentViewState,
+    onFilterSelected: (PaymentType) -> Unit,
     modifier: Modifier = Modifier
 ) {
     
@@ -62,13 +84,31 @@ fun PaymentScreenContent(
         ) {
             items(items = PaymentType.entries.toTypedArray()) { paymentType ->
 
+                val isSelected = state.selectedFilter == paymentType
+
                 FilterChip(
-                    onClick = {},
+                    onClick = { onFilterSelected(paymentType) },
                     label = {
                         Text(text = paymentType.description)
                     },
-                    selected = false,
-                    leadingIcon = {}
+                    selected = isSelected,
+                    leadingIcon = if (isSelected) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_check_24),
+                                contentDescription = null,
+                            )
+                        }
+                    } else null,
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = Color.Transparent,
+                        labelColor = Color.Black,
+                        iconColor = Color.Gray,
+
+                        selectedContainerColor = JungleTeal,
+                        selectedLabelColor = Color.White,
+                        selectedLeadingIconColor = Color.White,
+                    )
                 )
             }
         }
@@ -93,6 +133,13 @@ fun PaymentScreenContent(
             }
         }
 
+        if(state.error != null) {
+            Text(
+                text = state.error,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
         Spacer(modifier = Modifier.height(60.dp))
     }
 }
@@ -102,5 +149,9 @@ fun PaymentScreenContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PaymentScreenPreview() {
-    PaymentScreenContent(state = PaymentViewState(paymentList = PaymentRepository.payments),modifier = Modifier.fillMaxSize())
+    PaymentScreenContent(
+        state = PaymentViewState(paymentList = PaymentRepository.payments),
+        onFilterSelected = {},
+        modifier = Modifier.fillMaxSize()
+    )
 }
