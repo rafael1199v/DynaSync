@@ -48,7 +48,9 @@ fun PaymentScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(
+                color = JungleTeal
+            )
         }
     }
     else {
@@ -115,6 +117,13 @@ fun PaymentScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
+        if(state.error != null) {
+            Text(
+                text = state.error,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,12 +142,7 @@ fun PaymentScreenContent(
             }
         }
 
-        if(state.error != null) {
-            Text(
-                text = state.error,
-                color = MaterialTheme.colorScheme.error
-            )
-        }
+
 
         Spacer(modifier = Modifier.height(60.dp))
     }
