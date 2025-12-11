@@ -43,6 +43,7 @@ import com.example.dynasync.navigation.MainGraph
 import com.example.dynasync.ui.factory.LayoutFactoryProvider
 import com.example.dynasync.ui.screens.HomeScreen
 import com.example.dynasync.ui.screens.LoginScreen
+import com.example.dynasync.ui.screens.PaymentScreen
 import com.example.dynasync.ui.screens.ProjectDetailScreen
 import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.IcyBlue
@@ -67,7 +68,7 @@ class MainActivity : ComponentActivity() {
 fun App(
     modifier: Modifier = Modifier
 ) {
-    var userIsAuthenticated by remember { mutableStateOf(value = false )}
+    var userIsAuthenticated by remember { mutableStateOf(value = true )}
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -204,7 +205,7 @@ fun App(
                 }
 
                 composable<MainDestination.Payment> {
-                    Text(text = "Pagos")
+                    PaymentScreen(modifier = Modifier.fillMaxSize())
                 }
 
                 composable<MainDestination.Staff> {
