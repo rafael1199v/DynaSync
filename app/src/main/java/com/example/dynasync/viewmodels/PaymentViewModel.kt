@@ -40,7 +40,7 @@ class PaymentViewModel: ViewModel() {
                 }
             } catch (e: Exception) {
                 _state.update {
-                    it.copy(isLoading = false, error = "Error al cargar el registro de pagos")
+                    it.copy(isLoading = false, error = "Error al cargar el registro de pagos. Intentalo otra vez.")
                 }
             }
 
