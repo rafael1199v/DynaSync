@@ -42,6 +42,7 @@ import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.navigation.MainGraph
 import com.example.dynasync.ui.factory.LayoutFactoryProvider
 import com.example.dynasync.ui.screens.HomeScreen
+import com.example.dynasync.ui.screens.LoginScreen
 import com.example.dynasync.ui.screens.ProjectDetailScreen
 import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.IcyBlue
@@ -66,8 +67,7 @@ class MainActivity : ComponentActivity() {
 fun App(
     modifier: Modifier = Modifier
 ) {
-    var selectedNavbarItemId by remember { mutableStateOf(value = 0) }
-    var userIsAuthenticated by remember { mutableStateOf(value = true)}
+    var userIsAuthenticated by remember { mutableStateOf(value = false )}
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -132,7 +132,6 @@ fun App(
                         NavigationBarItem(
                             selected = isSelected,
                             onClick = {
-                                selectedNavbarItemId = index
                                 navController.navigate(item.destination)
                             },
                             label = {
@@ -185,7 +184,13 @@ fun App(
         ) {
             navigation<AuthenticationGraph>(startDestination = AuthenticationDestination.Login) {
                 composable<AuthenticationDestination.Login>{
-                    Text(text = "Login")
+                    LoginScreen(modifier = Modifier.fillMaxSize(), onLoginSuccess = {
+                        navController.navigate(MainDestination.Home) {
+                            popUpTo(AuthenticationGraph) {
+                                inclusive = true
+                            }
+                        }
+                    })
                 }
 
                 composable<AuthenticationDestination.Register> {

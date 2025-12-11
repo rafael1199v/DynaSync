@@ -11,7 +11,7 @@ class HomeLayoutFactory(
         return LayoutConfiguration(
             isVisible = true,
 
-            navigationIconId = R.drawable.outline_logout_24,
+            navigationIconId = null,
             onNavigationIconClick = onNavigationIconClick,
             title = "Home",
 
