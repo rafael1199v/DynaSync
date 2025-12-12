@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -18,6 +20,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -38,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
+import com.example.dynasync.ui.components.DynaSyncDatePicker
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
 
@@ -66,6 +70,8 @@ fun CreateProjectScreenContent(
 
     var showDatePicker by remember { mutableStateOf(false) }
 
+    val scrollState = rememberScrollState()
+
     val datePickerState = rememberDatePickerState(
         selectableDates = object : SelectableDates {
             override fun isSelectableYear(year: Int): Boolean {
@@ -78,11 +84,29 @@ fun CreateProjectScreenContent(
     val objectiveMaxChars = 50
     val descriptionMaxChars = 100
 
+
+    val customTextFieldColors = OutlinedTextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,
+        focusedBorderColor = Color.Gray,
+        focusedLabelColor = Color.Gray,
+        cursorColor = JungleTeal,
+
+        unfocusedContainerColor = Color.Transparent,
+        unfocusedBorderColor = Color.Gray,
+        unfocusedLabelColor = Color.Gray,
+    )
+
+
     Column(
-        modifier = modifier.padding(top = 40.dp, start = 26.dp, end = 26.dp),
+        modifier = modifier.
+            padding(start = 26.dp, end = 26.dp)
+            .fillMaxSize()
+            .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(36.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        Spacer(modifier = Modifier.height(4.dp))
 
         Column(
             verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -129,7 +153,7 @@ fun CreateProjectScreenContent(
                 OutlinedTextField(
                     value = state.title,
                     onValueChange = {
-                        if(state.title.length <= titleMaxChars) {
+                        if(it.length <= titleMaxChars) {
                             onIntent(CreateProjectIntent.TitleChange(it))
                         }
                     },
@@ -149,13 +173,14 @@ fun CreateProjectScreenContent(
                             Text(text = "Nombre del proyecto - ${state.title.length}/${titleMaxChars}")
                         }
                     },
-                    maxLines = 1
+                    maxLines = 1,
+                    colors = customTextFieldColors
                 )
 
                 OutlinedTextField(
                     value = state.objective,
                     onValueChange = {
-                        if(state.objective.length <= objectiveMaxChars) {
+                        if(it.length <= objectiveMaxChars) {
                             onIntent(CreateProjectIntent.ObjectiveChange(it))
                         }
                     },
@@ -165,9 +190,9 @@ fun CreateProjectScreenContent(
                         Text(text = "Objetivo")
                     },
                     supportingText = {
-                        if(state.titleError != null) {
+                        if(state.objectiveError != null) {
                             Text(
-                                text = state.titleError,
+                                text = state.objectiveError,
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -175,13 +200,15 @@ fun CreateProjectScreenContent(
                             Text(text = "¿Qué quieres lograr con este negocio? - ${state.objective.length}/${objectiveMaxChars}")
                         }
                     },
-                    maxLines = 2
+                    maxLines = 2,
+                    colors = customTextFieldColors
+
                 )
 
                 OutlinedTextField(
                     value = state.description,
                     onValueChange = {
-                        if(state.description.length <= descriptionMaxChars)  {
+                        if(it.length <= descriptionMaxChars)  {
                             onIntent(CreateProjectIntent.DescriptionChange(it))
                         }
                     },
@@ -191,9 +218,9 @@ fun CreateProjectScreenContent(
                         Text(text = "Descripción")
                     },
                     supportingText = {
-                        if(state.titleError != null) {
+                        if(state.descriptionError != null) {
                             Text(
-                                text = state.titleError,
+                                text = state.descriptionError,
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -201,7 +228,8 @@ fun CreateProjectScreenContent(
                             Text(text = "Descripción detallada - ${state.description.length}/${descriptionMaxChars}")
                         }
                     },
-                    maxLines = 5
+                    maxLines = 5,
+                    colors = customTextFieldColors
                 )
 
 
@@ -212,6 +240,7 @@ fun CreateProjectScreenContent(
                     },
                     modifier = Modifier
                         .fillMaxWidth(),
+                    isError = state.finishDateError != null,
                     readOnly = true,
                     label = { Text("Finalización") },
                     trailingIcon = {
@@ -231,9 +260,9 @@ fun CreateProjectScreenContent(
                             }
                     },
                     supportingText = {
-                        if(state.titleError != null) {
+                        if(state.finishDateError != null) {
                             Text(
-                                text = state.titleError,
+                                text = state.finishDateError,
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
@@ -241,6 +270,7 @@ fun CreateProjectScreenContent(
                             Text(text = "Fecha estimada de finalización")
                         }
                     },
+                    colors = customTextFieldColors
                 )
 
             }
@@ -250,7 +280,9 @@ fun CreateProjectScreenContent(
             onClick = {
                 onIntent(CreateProjectIntent.SubmitProjectForm)
             },
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
             colors = ButtonDefaults.buttonColors(
                 contentColor = Color.White,
                 containerColor = JungleTeal
@@ -263,31 +295,23 @@ fun CreateProjectScreenContent(
             )
         }
 
-
+        Spacer(modifier = Modifier.height(24.dp))
     }
 
     if (showDatePicker) {
-        DatePickerDialog(
+
+        DynaSyncDatePicker(
             onDismissRequest = { showDatePicker = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    datePickerState.selectedDateMillis?.let { millis ->
-                        val formattedDate = convertMillisToDate(millis)
-                        onIntent(CreateProjectIntent.FinishDateChange(formattedDate))
-                    }
-                    showDatePicker = false
-                }) {
-                    Text("Aceptar")
+            onConfirmButtonClick = {
+                datePickerState.selectedDateMillis?.let { millis ->
+                    val formattedDate = convertMillisToDate(millis)
+                    onIntent(CreateProjectIntent.FinishDateChange(formattedDate))
                 }
+                showDatePicker = false
             },
-            dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) {
-                    Text("Cancelar")
-                }
-            }
-        ) {
-            DatePicker(state = datePickerState)
-        }
+            onDismissButtonClick = { showDatePicker = false },
+            datePickerState = datePickerState
+        )
     }
 
 }

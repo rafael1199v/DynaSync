@@ -1,6 +1,7 @@
 package com.example.dynasync.ui.feature.createproject
 
 import androidx.lifecycle.ViewModel
+import com.example.dynasync.ui.feature.projectdetail.ProjectDetailState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -69,9 +70,14 @@ class CreateProjectViewModel: ViewModel() {
 
     private fun submitForm() {
         val newState = projectFormValidator.validate(state.value)
+        println(newState)
 
         if(projectFormValidator.isValid(newState)) {
             //Logica de crear projecto
+
+            _state.update {
+                CreateProjectViewState()
+            }
         }
         else {
             _state.update {
