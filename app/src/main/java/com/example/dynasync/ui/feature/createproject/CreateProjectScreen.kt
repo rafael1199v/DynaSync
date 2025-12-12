@@ -219,7 +219,7 @@ fun CreateProjectScreenContent(
                         containerColor = JungleTeal
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.baseline_edit_24),
+                            painter = painterResource(id = R.drawable.outline_edit_square_24),
                             contentDescription = "Cambiar", tint = Color.White
                         )
                     }
