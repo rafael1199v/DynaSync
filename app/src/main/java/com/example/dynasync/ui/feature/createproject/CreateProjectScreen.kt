@@ -226,7 +226,16 @@ fun CreateProjectScreenContent(
                             Text(text = "Fecha estimada de finalización")
                         }
                     },
-                    //colors = customTextFieldColors
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        focusedBorderColor = Color.Gray,
+                        focusedLabelColor = Color.Gray,
+                        cursorColor = JungleTeal,
+
+                        unfocusedContainerColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Gray,
+                        unfocusedLabelColor = Color.Gray,
+                    )
                 )
 
             }
