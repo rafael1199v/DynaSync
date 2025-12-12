@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
+import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.navigation.MainDestination
 
 @Composable
@@ -70,11 +71,13 @@ fun HomeScreenContent(
         item {
             Row(
                 modifier = Modifier
+                    .padding(horizontal = 12.dp)
                     .border(
                         width = 1.dp,
                         color = Color.Black.copy(alpha = 0.2f),
                         shape = RoundedCornerShape(20.dp)
-                    ).padding(all = 20.dp)
+                    ).padding(all = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -209,7 +212,9 @@ fun HomeScreenPreview() {
     //HomeScreen(navController = NavController(LocalContext.current))
     HomeScreenContent(
         onProjectClick = {},
-        state = HomeViewState(),
+        state = HomeViewState(
+            projects = ProjectRepository.projects
+        ),
         modifier = Modifier.fillMaxWidth()
     )
 }

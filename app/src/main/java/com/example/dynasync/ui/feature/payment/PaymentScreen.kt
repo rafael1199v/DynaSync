@@ -126,15 +126,13 @@ fun PaymentScreenContent(
                 }
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
-
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(
-                    top = 12.dp,
+                    top = 20.dp,
                     start = 32.dp,
                     end = 32.dp,
                     bottom = 60.dp
@@ -146,7 +144,6 @@ fun PaymentScreenContent(
                 }
             }
 
-            Spacer(modifier = Modifier.height(60.dp))
         } else {
 
             Column(
