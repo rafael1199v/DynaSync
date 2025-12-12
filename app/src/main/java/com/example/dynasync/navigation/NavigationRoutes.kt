@@ -22,7 +22,10 @@ sealed interface MainDestination {
     data object Staff : MainDestination
 
     @Serializable
-    data class ProjectDetail(val projectId: Int)
+    data class ProjectDetail(val projectId: Int) : MainDestination
+
+    @Serializable
+    data object CreateProject : MainDestination
 }
 
 

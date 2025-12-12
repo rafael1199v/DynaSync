@@ -41,6 +41,7 @@ import com.example.dynasync.navigation.AuthenticationGraph
 import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.navigation.MainGraph
 import com.example.dynasync.ui.factory.LayoutFactoryProvider
+import com.example.dynasync.ui.feature.createproject.CreateProjectScreen
 import com.example.dynasync.ui.feature.home.HomeScreen
 import com.example.dynasync.ui.feature.login.LoginScreen
 import com.example.dynasync.ui.feature.payment.PaymentScreen
@@ -220,6 +221,12 @@ fun App(
 
                 composable<MainDestination.ProjectDetail> {
                     ProjectDetailScreen()
+                }
+
+                composable<MainDestination.CreateProject> {
+                    CreateProjectScreen(
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }
