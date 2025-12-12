@@ -69,7 +69,6 @@ fun CreateProjectScreenContent(
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
-
     val scrollState = rememberScrollState()
 
     val datePickerState = rememberDatePickerState(
@@ -83,7 +82,6 @@ fun CreateProjectScreenContent(
     val titleMaxChars = 20
     val objectiveMaxChars = 50
     val descriptionMaxChars = 100
-
 
     val customTextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedContainerColor = Color.Transparent,
