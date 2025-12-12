@@ -35,9 +35,11 @@ private val LightColorScheme = lightColorScheme(
 )
 
 
-private val MyTheme = lightColorScheme(
+private val DynaSyncTheme = lightColorScheme(
     primary = JungleTeal,
-    onPrimary = Color.White
+    onPrimary = Color.White,
+    surface = Color.White,
+    onSurface = Color.Black
 )
 
 @Composable
@@ -54,7 +56,7 @@ fun DynaSyncTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> DynaSyncTheme
     }
 
     MaterialTheme(

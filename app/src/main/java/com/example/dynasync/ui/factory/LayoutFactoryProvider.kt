@@ -79,6 +79,20 @@ object LayoutFactoryProvider {
                 )
             }
 
+            destination.hasRoute<MainDestination.Staff>() -> {
+                StaffLayoutFactory(
+                    onNavigationIconClick = { navController.popBackStack() },
+                    onFloatActionButtonClick = { },
+                    listActions = listOf(
+                        ActionItem(
+                            iconId = R.drawable.outline_account_circle_24,
+                            contentDescription = "Profile",
+                            onClick = {}
+                        )
+                    )
+                )
+            }
+
             else -> EmptyLayoutFactory()
         }
     }
