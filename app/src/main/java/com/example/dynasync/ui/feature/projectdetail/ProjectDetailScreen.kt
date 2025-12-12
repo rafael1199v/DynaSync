@@ -1,7 +1,10 @@
 package com.example.dynasync.ui.feature.projectdetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,16 +16,25 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -37,15 +49,26 @@ import com.example.dynasync.R
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
+import com.example.dynasync.ui.feature.createproject.CreateProjectUiEvent
 import kotlinx.datetime.LocalDate
 
 @Composable
 fun ProjectDetailScreen(
+    onDeleteProjectSuccess: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProjectDetailViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is ProjectDetailUiEvent.NavigateToHome -> {
+                    onDeleteProjectSuccess()
+                }
+            }
+        }
+    }
 
     ProjectDetailScreenContent(
         state = state,
@@ -63,8 +86,8 @@ fun ProjectDetailScreenContent(
     onIntent: (ProjectDetailIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-    //Text(text = "${state.project.toString()}")
+    var showDeleteProjectDialog by remember { mutableStateOf(false) }
+    var taskToDelete by remember { mutableStateOf<Task?>(null) }
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(
@@ -163,8 +186,8 @@ fun ProjectDetailScreenContent(
                     onToggleTask = { taskId ->
                         onIntent(ProjectDetailIntent.ToggleTask(taskId))
                     },
-                    onDeleteTask = { taskId ->
-                        onIntent(ProjectDetailIntent.DeleteTask(taskId))
+                    onDeleteTask = {
+                        taskToDelete = task
                     }
                 )
             }
@@ -202,7 +225,7 @@ fun ProjectDetailScreenContent(
 
                 OutlinedButton(
                     onClick = {
-                        onIntent(ProjectDetailIntent.DeleteProject(state.project?.id ?: 0))
+                        showDeleteProjectDialog = true
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -226,6 +249,60 @@ fun ProjectDetailScreenContent(
             Spacer(modifier = Modifier.height(60.dp))
         }
 
+    }
+
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .clickable(enabled = false) {}, // Bloquea clicks
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+        }
+    }
+
+
+    if (showDeleteProjectDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteProjectDialog = false },
+            title = { Text("Eliminar Proyecto") },
+            text = { Text("¿Estás seguro de que quieres eliminar este proyecto? Esta acción no se puede deshacer.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteProjectDialog = false
+                        onIntent(ProjectDetailIntent.DeleteProject(state.project?.id ?: 0))
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) { Text("Eliminar") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteProjectDialog = false }) { Text("Cancelar") }
+            }
+        )
+    }
+
+    if (taskToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { taskToDelete = null },
+            title = { Text("Eliminar Tarea") },
+            text = { Text("¿Deseas eliminar la tarea '${taskToDelete?.title}'?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onIntent(ProjectDetailIntent.DeleteTask(taskToDelete!!.id))
+                        taskToDelete = null
+                    }
+                ) { Text("Eliminar") }
+            },
+            dismissButton = {
+                TextButton(onClick = { taskToDelete = null }) { Text("Cancelar") }
+            }
+        )
     }
 }
 

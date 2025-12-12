@@ -3,6 +3,7 @@ package com.example.dynasync.data.repository
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
+import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 
 object ProjectRepository {
@@ -65,7 +66,13 @@ object ProjectRepository {
     }
 
     suspend fun addProject(newProject: Project) {
+        delay(2000)
         val newId = (projects.maxByOrNull { it.id }?.id ?: 0) + 1
         projects.add(newProject.copy(id = newId))
+    }
+
+    suspend fun deleteProject(projectId: Int) {
+        delay(2000)
+        projects.removeIf { it.id == projectId }
     }
 }

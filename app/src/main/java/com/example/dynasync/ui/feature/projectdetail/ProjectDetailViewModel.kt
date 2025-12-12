@@ -7,8 +7,10 @@ import androidx.navigation.toRoute
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.data.repository.ProjectRepository.getProjectById
 import com.example.dynasync.navigation.MainDestination
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,6 +22,9 @@ class ProjectDetailViewModel(
 
     private val _state = MutableStateFlow(value = ProjectDetailState())
     val state = _state.asStateFlow()
+
+    private val _uiEvent = Channel<ProjectDetailUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     val projectId = args.projectId
 
@@ -37,7 +42,7 @@ class ProjectDetailViewModel(
                 getProjectById(intent.projectId)
             }
             is ProjectDetailIntent.DeleteProject -> {
-                println("Eliminando el proyecto ${intent.projectId}")
+                deleteProject(intent.projectId)
             }
             is ProjectDetailIntent.EditProject -> {
                 println("Editando el proyecto ${intent.projectId}")
@@ -62,5 +67,14 @@ class ProjectDetailViewModel(
                 )
             }
         }
+    }
+
+    private fun deleteProject(projectId: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            ProjectRepository.deleteProject(projectId = projectId)
+            _uiEvent.send(ProjectDetailUiEvent.NavigateToHome)
+        }
+
     }
 }
