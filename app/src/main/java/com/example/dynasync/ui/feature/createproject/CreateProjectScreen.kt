@@ -1,8 +1,18 @@
 package com.example.dynasync.ui.feature.createproject
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
@@ -22,6 +33,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -34,17 +46,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.example.dynasync.R
 import com.example.dynasync.ui.components.DynaSyncDatePicker
 import com.example.dynasync.ui.components.DynaSyncTextField
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
+import com.example.dynasync.utils.createImageFile
+import com.example.dynasync.utils.uriToFile
+import java.io.File
 
 @Composable
 fun CreateProjectScreen(
@@ -70,7 +91,18 @@ fun CreateProjectScreenContent(
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
+    var showSourceSelectionDialog by remember { mutableStateOf(false) }
+
     val scrollState = rememberScrollState()
+
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+    var tempPhotoUri by remember { mutableStateOf<Uri?>(null) }
+    var currentPhotoPath by remember { mutableStateOf<String?>(null) }
+
+    var showRationaleDialog by remember { mutableStateOf(false) }
+    var showSettingsDialog by remember { mutableStateOf(false) }
 
     val datePickerState = rememberDatePickerState(
         selectableDates = object : SelectableDates {
@@ -84,8 +116,58 @@ fun CreateProjectScreenContent(
     val objectiveMaxChars = 50
     val descriptionMaxChars = 100
 
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            val file = context.uriToFile(uri)
+            if (file != null) {
+                onIntent(CreateProjectIntent.ImageUrlChange(file.absolutePath))
+            }
+        }
+    }
 
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success && currentPhotoPath != null) {
+            onIntent(CreateProjectIntent.ImageUrlChange(currentPhotoPath!!))
+        }
+    }
 
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            val file = context.createImageFile()
+            currentPhotoPath = file.absolutePath
+            val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+            tempPhotoUri = uri
+            cameraLauncher.launch(uri)
+        } else {
+            val shouldShowRationale = activity?.shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) ?: false
+            if (!shouldShowRationale) showSettingsDialog = true
+        }
+    }
+
+    fun openCamera() {
+        val permission = Manifest.permission.CAMERA
+        when {
+            ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED -> {
+                val file = context.createImageFile()
+                currentPhotoPath = file.absolutePath
+                val uri = FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+                tempPhotoUri = uri
+                cameraLauncher.launch(uri)
+            }
+            activity?.shouldShowRequestPermissionRationale(permission) == true -> showRationaleDialog = true
+            else -> permissionLauncher.launch(permission)
+        }
+    }
+
+    fun openGallery() {
+        galleryLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
 
     Column(
         modifier = modifier.
@@ -118,22 +200,51 @@ fun CreateProjectScreenContent(
             verticalArrangement = Arrangement.spacedBy(32.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Button(
-                onClick = {},
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White,
-                    containerColor = JungleTeal
-                ),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.outline_photo_24),
-                    contentDescription = "Upload image"
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(text = "Subir imagen")
+
+            Box(contentAlignment = Alignment.BottomEnd) {
+                if (state.imageUrl.isNotEmpty()) {
+                    AsyncImage(
+                        model = File(state.imageUrl),
+                        contentDescription = "Imagen seleccionada",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    SmallFloatingActionButton(
+                        onClick = { showSourceSelectionDialog = true },
+                        modifier = Modifier.padding(8.dp),
+                        containerColor = JungleTeal
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_edit_24),
+                            contentDescription = "Cambiar", tint = Color.White
+                        )
+                    }
+                } else {
+
+                    Button(
+                        onClick = { showSourceSelectionDialog = true },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.White,
+                            containerColor = JungleTeal
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.outline_photo_24),
+                            contentDescription = "Upload image"
+                        )
+                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                        Text(text = "Subir imagen")
+                    }
+
+                }
             }
+
 
 
             Column(
@@ -276,6 +387,64 @@ fun CreateProjectScreenContent(
             },
             onDismissButtonClick = { showDatePicker = false },
             datePickerState = datePickerState
+        )
+    }
+
+    if (showSourceSelectionDialog) {
+        AlertDialog(
+            onDismissRequest = { showSourceSelectionDialog = false },
+            title = { Text("Seleccionar imagen") },
+            text = { Text("¿De dónde quieres obtener la imagen para tu proyecto?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showSourceSelectionDialog = false
+                    openCamera()
+                }) { Text("Cámara") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showSourceSelectionDialog = false
+                    openGallery()
+                }) { Text("Galería") }
+            }
+        )
+    }
+
+    // 2. Explicación de Permiso (Rationale)
+    if (showRationaleDialog) {
+        AlertDialog(
+            onDismissRequest = { showRationaleDialog = false },
+            title = { Text("Permiso necesario") },
+            text = { Text("DynaSync necesita acceso a la cámara para tomar la foto.") },
+            confirmButton = {
+                TextButton(onClick = { showRationaleDialog = false; permissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                    Text("Permitir")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showRationaleDialog = false }) { Text("Cancelar") }
+            }
+        )
+    }
+
+    // 3. Configuración (Permiso denegado permanente)
+    if (showSettingsDialog) {
+        AlertDialog(
+            onDismissRequest = { showSettingsDialog = false },
+            title = { Text("Permiso bloqueado") },
+            text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showSettingsDialog = false
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                    context.startActivity(intent)
+                }) { Text("Ir a Configuración") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
+            }
         )
     }
 
