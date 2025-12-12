@@ -55,6 +55,7 @@ import kotlinx.datetime.LocalDate
 @Composable
 fun ProjectDetailScreen(
     onDeleteProjectSuccess: () -> Unit,
+    onClickEditProject: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProjectDetailViewModel = viewModel()
 ) {
@@ -65,6 +66,10 @@ fun ProjectDetailScreen(
             when(event) {
                 is ProjectDetailUiEvent.NavigateToHome -> {
                     onDeleteProjectSuccess()
+                }
+
+                is ProjectDetailUiEvent.NavigateToEditProject -> {
+                    onClickEditProject(event.projectId)
                 }
             }
         }

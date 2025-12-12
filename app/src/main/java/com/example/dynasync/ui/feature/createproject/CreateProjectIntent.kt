@@ -7,4 +7,6 @@ sealed interface CreateProjectIntent {
     data class FinishDateChange(val finishDate: String) : CreateProjectIntent
     data class ImageUrlChange(val imageUrl: String) : CreateProjectIntent
     data object SubmitProjectForm : CreateProjectIntent
+
+    data class LoadProject(val projectId: Int): CreateProjectIntent
 }

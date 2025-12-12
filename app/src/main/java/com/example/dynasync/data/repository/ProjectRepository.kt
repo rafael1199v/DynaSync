@@ -75,4 +75,13 @@ object ProjectRepository {
         delay(2000)
         projects.removeIf { it.id == projectId }
     }
+
+    suspend fun updateProject(projectUpdated: Project) {
+        delay(2000)
+        val index = projects.indexOfFirst { it.id == projectUpdated.id }
+
+        if (index != -1) {
+            projects[index] = projectUpdated
+        }
+    }
 }

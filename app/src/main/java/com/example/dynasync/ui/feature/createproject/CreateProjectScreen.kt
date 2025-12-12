@@ -14,6 +14,7 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -196,16 +197,31 @@ fun CreateProjectScreenContent(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(
-                text = "Inicia un nuevo negocio",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.SemiBold
-            )
+            if(state.isEditMode) {
+                Text(
+                    text = "Configura tu negocio",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-            Text(
-                text = "Cada gran proyecto empezó con una simple decisión: atreverte a dar el primer paso incluso antes de sentirte listo.",
-                style = MaterialTheme.typography.bodyLarge
-            )
+                Text(
+                    text = "Los cambios constantes son importantes para el crecimiento del negocio, el dinamismo es lo que diferencia a los negocios exitosos.",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+            else {
+                Text(
+                    text = "Inicia un nuevo negocio",
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.SemiBold
+                )
+
+                Text(
+                    text = "Cada gran proyecto empezó con una simple decisión: atreverte a dar el primer paso incluso antes de sentirte listo.",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+
         }
 
         Column(
@@ -216,7 +232,7 @@ fun CreateProjectScreenContent(
             Box(contentAlignment = Alignment.BottomEnd) {
                 if (state.imageUrl.isNotEmpty()) {
                     AsyncImage(
-                        model = File(state.imageUrl),
+                        model = if(state.isEditMode) state.imageUrl else File(state.imageUrl),
                         contentDescription = "Imagen seleccionada",
                         modifier = Modifier
                             .fillMaxWidth()
@@ -225,16 +241,38 @@ fun CreateProjectScreenContent(
                         contentScale = ContentScale.Crop
                     )
 
-                    SmallFloatingActionButton(
-                        onClick = { showSourceSelectionDialog = true },
-                        modifier = Modifier.padding(8.dp),
-                        containerColor = JungleTeal
+                    Row(
+                        modifier = Modifier.padding(4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.outline_edit_square_24),
-                            contentDescription = "Cambiar", tint = Color.White
-                        )
+                        SmallFloatingActionButton(
+                            onClick = {
+                                onIntent(CreateProjectIntent.ImageUrlChange(""))
+                            },
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = Color.White
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.delete_filled),
+                                contentDescription = "Eliminar imagen"
+                            )
+                        }
+
+
+                        SmallFloatingActionButton(
+                            onClick = { showSourceSelectionDialog = true },
+                            modifier = Modifier.padding(8.dp),
+                            containerColor = JungleTeal
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.outline_edit_square_24),
+                                contentDescription = "Cambiar", tint = Color.White
+                            )
+                        }
                     }
+
+
                 } else {
 
                     Button(
@@ -378,7 +416,7 @@ fun CreateProjectScreenContent(
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
-                text = "Crear proyecto",
+                text = if(state.isEditMode) "Editar proyecto" else "Crear proyecto",
                 style = MaterialTheme.typography.titleMedium
             )
         }

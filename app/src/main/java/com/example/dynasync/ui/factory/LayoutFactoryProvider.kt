@@ -22,7 +22,7 @@ object LayoutFactoryProvider {
             destination.hasRoute<MainDestination.Home>() -> {
                 HomeLayoutFactory(
                     onFloatActionButtonClick = {
-                        navController.navigate(MainDestination.CreateProject)
+                        navController.navigate(MainDestination.CreateProject())
                     },
                     onNavigationIconClick = {},
                     listActions = listOf(
@@ -66,18 +66,38 @@ object LayoutFactoryProvider {
             }
 
             destination.hasRoute<MainDestination.CreateProject>() -> {
-                CreateProjectLayoutFactory(
-                    onNavigationIconClick = { navController.popBackStack() },
-                    onFloatActionButtonClick = null,
-                    listActions = listOf(
-                        ActionItem(
-                            iconId = R.drawable.outline_account_circle_24,
-                            contentDescription = "Profile",
-                            onClick = {}
+
+                val args = entry.toRoute<MainDestination.CreateProject>()
+
+                if(args.projectId == -1) {
+                    CreateProjectLayoutFactory(
+                        onNavigationIconClick = { navController.popBackStack() },
+                        onFloatActionButtonClick = null,
+                        listActions = listOf(
+                            ActionItem(
+                                iconId = R.drawable.outline_account_circle_24,
+                                contentDescription = "Profile",
+                                onClick = {}
+                            )
                         )
                     )
-                )
+                }
+                else {
+                    UpdateProjectLayoutFactory(
+                        onNavigationIconClick = { navController.popBackStack() },
+                        onFloatActionButtonClick = null,
+                        listActions = listOf(
+                            ActionItem(
+                                iconId = R.drawable.outline_account_circle_24,
+                                contentDescription = "Profile",
+                                onClick = {}
+                            )
+                        )
+                    )
+                }
+
             }
+
 
             destination.hasRoute<MainDestination.Staff>() -> {
                 StaffLayoutFactory(

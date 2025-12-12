@@ -199,9 +199,15 @@ fun App(
                 }
 
                 composable<MainDestination.ProjectDetail> {
-                    ProjectDetailScreen(modifier = Modifier.fillMaxSize(), onDeleteProjectSuccess = {
-                        navController.navigate(MainDestination.Home)
-                    })
+                    ProjectDetailScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onDeleteProjectSuccess = {
+                            navController.navigate(MainDestination.Home)
+                        },
+                        onClickEditProject = { projectId ->
+                            navController.navigate(MainDestination.CreateProject(projectId))
+                        }
+                    )
                 }
 
                 composable<MainDestination.CreateProject> {

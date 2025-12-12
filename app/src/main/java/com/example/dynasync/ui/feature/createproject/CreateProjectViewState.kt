@@ -12,4 +12,7 @@ data class CreateProjectViewState(
     val descriptionError: String? = null,
     val finishDateError: String? = null,
     val imageUrlError: String? = null,
+
+    val isLoading: Boolean = false,
+    val isEditMode: Boolean = false
 )

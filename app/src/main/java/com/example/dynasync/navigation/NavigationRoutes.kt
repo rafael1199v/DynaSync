@@ -25,7 +25,7 @@ sealed interface MainDestination {
     data class ProjectDetail(val projectId: Int) : MainDestination
 
     @Serializable
-    data object CreateProject : MainDestination
+    data class CreateProject(val projectId: Int = -1) : MainDestination
 }
 
 

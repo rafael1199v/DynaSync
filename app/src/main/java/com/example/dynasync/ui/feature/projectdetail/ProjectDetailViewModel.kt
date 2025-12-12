@@ -45,7 +45,7 @@ class ProjectDetailViewModel(
                 deleteProject(intent.projectId)
             }
             is ProjectDetailIntent.EditProject -> {
-                println("Editando el proyecto ${intent.projectId}")
+                editProject(intent.projectId)
             }
             is ProjectDetailIntent.DeleteTask -> {
                 println("Eliminando la tarea ${intent.taskId}")
@@ -76,5 +76,11 @@ class ProjectDetailViewModel(
             _uiEvent.send(ProjectDetailUiEvent.NavigateToHome)
         }
 
+    }
+
+    private fun editProject(projectId: Int) {
+        viewModelScope.launch {
+            _uiEvent.send(ProjectDetailUiEvent.NavigateToEditProject(projectId = projectId))
+        }
     }
 }

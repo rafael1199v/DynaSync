@@ -1,9 +1,12 @@
 package com.example.dynasync.ui.feature.createproject
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.domain.model.Project
+import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +15,17 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
+import java.time.format.DateTimeFormatter
 
-class CreateProjectViewModel: ViewModel() {
+class CreateProjectViewModel(
+    savedStateHandle: SavedStateHandle
+): ViewModel() {
+
+    val args = savedStateHandle.toRoute<MainDestination.CreateProject>()
+    val projectId = args.projectId
+    private val isEditMode = projectId != -1
+    private var editableProject : Project? = null
 
     private val _state = MutableStateFlow(value = CreateProjectViewState())
     val state = _state.asStateFlow()
@@ -22,6 +34,16 @@ class CreateProjectViewModel: ViewModel() {
     val uiEvent = _uiEvent.receiveAsFlow()
 
     val projectFormValidator = ProjectFormValidator()
+
+    init {
+        if(isEditMode) {
+            _state.update {
+                it.copy(isEditMode = true)
+            }
+            onIntent(CreateProjectIntent.LoadProject(projectId))
+        }
+    }
+
 
     fun onIntent(intent: CreateProjectIntent) {
         when(intent) {
@@ -42,6 +64,9 @@ class CreateProjectViewModel: ViewModel() {
             }
             is CreateProjectIntent.SubmitProjectForm -> {
                 submitForm()
+            }
+            is CreateProjectIntent.LoadProject -> {
+                loadProjectData()
             }
         }
     }
@@ -77,6 +102,26 @@ class CreateProjectViewModel: ViewModel() {
         }
     }
 
+    private fun loadProjectData() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+
+            val project = ProjectRepository.getProjectById(projectId)
+            editableProject = project
+
+            _state.update {
+                it.copy(
+                    title = project?.title ?: "",
+                    description = project?.description ?: "",
+                    objective = project?.objective ?: "",
+                    finishDate = project?.finishDate?.toString() ?: "",
+                    imageUrl = project?.imageUrl ?: "",
+                    isLoading = false
+                )
+            }
+        }
+    }
+
 
     private fun submitForm() {
         val newState = projectFormValidator.validate(state.value)
@@ -86,20 +131,36 @@ class CreateProjectViewModel: ViewModel() {
             viewModelScope.launch {
                 println(newState)
 
-                val (day, month, year) = newState.finishDate.split("/")
-                val isoDate = "$year-$month-$day"
+                val uploadProject = if(isEditMode) {
+                    Project(
+                        id = projectId,
+                        title = newState.title,
+                        objective = newState.objective,
+                        description = newState.description,
+                        finishDate = LocalDate.parse(newState.finishDate),
+                        imageUrl = newState.imageUrl.ifEmpty { null },
+                        tasks = editableProject?.tasks ?: emptyList()
+                    )
+                }
+                else {
+                    Project(
+                        id = -1,
+                        title = newState.title,
+                        objective = newState.objective,
+                        description = newState.description,
+                        finishDate = LocalDate.parse(newState.finishDate),
+                        imageUrl = newState.imageUrl.ifEmpty { null },
+                        tasks = emptyList()
+                    )
+                }
 
-                val newProject = Project(
-                    id = -1,
-                    title = newState.title,
-                    objective = newState.objective,
-                    description = newState.description,
-                    finishDate = LocalDate.parse(isoDate),
-                    imageUrl = newState.imageUrl.ifEmpty { null },
-                    tasks = emptyList()
-                )
 
-                ProjectRepository.addProject(newProject)
+                if(isEditMode) {
+                    ProjectRepository.updateProject(uploadProject)
+                }
+                else {
+                    ProjectRepository.addProject(uploadProject)
+                }
 
                 _uiEvent.send(CreateProjectUiEvent.NavigateToHome)
             }
