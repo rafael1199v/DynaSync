@@ -113,8 +113,8 @@ fun CreateProjectScreenContent(
     )
 
     val titleMaxChars = 20
-    val objectiveMaxChars = 50
-    val descriptionMaxChars = 100
+    val objectiveMaxChars = 100
+    val descriptionMaxChars = 300
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
@@ -280,7 +280,7 @@ fun CreateProjectScreenContent(
                     charCount = state.objective.length,
                     maxChars = objectiveMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 2,
+                    maxLines = 3,
                 )
 
 
@@ -297,7 +297,7 @@ fun CreateProjectScreenContent(
                     charCount = state.description.length,
                     maxChars = descriptionMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 5
+                    maxLines = 7
                 )
 
                 OutlinedTextField(
