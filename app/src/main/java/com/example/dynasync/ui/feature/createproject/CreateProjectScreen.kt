@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
 import com.example.dynasync.ui.components.DynaSyncDatePicker
+import com.example.dynasync.ui.components.DynaSyncTextField
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
 
@@ -83,16 +84,7 @@ fun CreateProjectScreenContent(
     val objectiveMaxChars = 50
     val descriptionMaxChars = 100
 
-    val customTextFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedContainerColor = Color.Transparent,
-        focusedBorderColor = Color.Gray,
-        focusedLabelColor = Color.Gray,
-        cursorColor = JungleTeal,
 
-        unfocusedContainerColor = Color.Transparent,
-        unfocusedBorderColor = Color.Gray,
-        unfocusedLabelColor = Color.Gray,
-    )
 
 
     Column(
@@ -148,88 +140,54 @@ fun CreateProjectScreenContent(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                OutlinedTextField(
+                DynaSyncTextField(
                     value = state.title,
                     onValueChange = {
                         if(it.length <= titleMaxChars) {
                             onIntent(CreateProjectIntent.TitleChange(it))
                         }
                     },
+                    label = "Nombre",
+                    errorMessage = state.titleError,
+                    supportingText = "Nombre del proyecto",
+                    charCount = state.title.length,
+                    maxChars = titleMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    isError = state.titleError != null,
-                    label = {
-                        Text(text = "Nombre")
-                    },
-                    supportingText = {
-                        if(state.titleError != null) {
-                            Text(
-                                text = state.titleError,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
-                        else {
-                            Text(text = "Nombre del proyecto - ${state.title.length}/${titleMaxChars}")
-                        }
-                    },
-                    maxLines = 1,
-                    colors = customTextFieldColors
+                    maxLines = 1
                 )
 
-                OutlinedTextField(
+                DynaSyncTextField(
                     value = state.objective,
                     onValueChange = {
                         if(it.length <= objectiveMaxChars) {
                             onIntent(CreateProjectIntent.ObjectiveChange(it))
                         }
                     },
+                    label = "Objetivo",
+                    errorMessage = state.objectiveError,
+                    supportingText = "¿Qué quieres lograr con este negocio?",
+                    charCount = state.objective.length,
+                    maxChars = objectiveMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    isError = state.objectiveError != null,
-                    label = {
-                        Text(text = "Objetivo")
-                    },
-                    supportingText = {
-                        if(state.objectiveError != null) {
-                            Text(
-                                text = state.objectiveError,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
-                        else {
-                            Text(text = "¿Qué quieres lograr con este negocio? - ${state.objective.length}/${objectiveMaxChars}")
-                        }
-                    },
                     maxLines = 2,
-                    colors = customTextFieldColors
-
                 )
 
-                OutlinedTextField(
+
+                DynaSyncTextField(
                     value = state.description,
                     onValueChange = {
                         if(it.length <= descriptionMaxChars)  {
                             onIntent(CreateProjectIntent.DescriptionChange(it))
                         }
                     },
+                    label = "Descripción",
+                    errorMessage = state.descriptionError,
+                    supportingText = "Descripción detallada",
+                    charCount = state.description.length,
+                    maxChars = descriptionMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    isError = state.descriptionError != null,
-                    label = {
-                        Text(text = "Descripción")
-                    },
-                    supportingText = {
-                        if(state.descriptionError != null) {
-                            Text(
-                                text = state.descriptionError,
-                                color = MaterialTheme.colorScheme.error
-                            )
-                        }
-                        else {
-                            Text(text = "Descripción detallada - ${state.description.length}/${descriptionMaxChars}")
-                        }
-                    },
-                    maxLines = 5,
-                    colors = customTextFieldColors
+                    maxLines = 5
                 )
-
 
                 OutlinedTextField(
                     value = state.finishDate,
@@ -268,7 +226,7 @@ fun CreateProjectScreenContent(
                             Text(text = "Fecha estimada de finalización")
                         }
                     },
-                    colors = customTextFieldColors
+                    //colors = customTextFieldColors
                 )
 
             }
