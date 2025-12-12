@@ -451,23 +451,33 @@ fun CreateProjectScreenContent(
 
     // 3. Configuración (Permiso denegado permanente)
     if (showSettingsDialog) {
-        AlertDialog(
-            onDismissRequest = { showSettingsDialog = false },
-            title = { Text("Permiso bloqueado") },
-            text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showSettingsDialog = false
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                        data = Uri.fromParts("package", context.packageName, null)
-                    }
-                    context.startActivity(intent)
-                }) { Text("Ir a Configuración") }
-            },
-            dismissButton = {
-                TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
-            }
-        )
+        MaterialTheme(
+            colorScheme = MaterialTheme.colorScheme.copy(
+                primary = JungleTeal,
+                onPrimary = Color.White,
+                surface = Color.White,
+                onSurface = Color.Black
+            )
+        ) {
+            AlertDialog(
+                onDismissRequest = { showSettingsDialog = false },
+                title = { Text("Permiso bloqueado") },
+                text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showSettingsDialog = false
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                            data = Uri.fromParts("package", context.packageName, null)
+                        }
+                        context.startActivity(intent)
+                    }) { Text("Ir a Configuración") }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
+                }
+            )
+        }
+
     }
 
 }
