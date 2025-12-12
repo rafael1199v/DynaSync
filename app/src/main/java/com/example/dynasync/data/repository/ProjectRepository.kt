@@ -6,7 +6,7 @@ import com.example.dynasync.domain.model.Task
 import kotlinx.datetime.LocalDate
 
 object ProjectRepository {
-    val projects: List<Project> = listOf(
+    val projects: MutableList<Project> = mutableListOf(
         Project(
             id = 1,
             title = "DynaSync",
@@ -62,5 +62,10 @@ object ProjectRepository {
 
     suspend fun getProjects() : List<Project> {
         return projects
+    }
+
+    suspend fun addProject(newProject: Project) {
+        val newId = (projects.maxByOrNull { it.id }?.id ?: 0) + 1
+        projects.add(newProject.copy(id = newId))
     }
 }

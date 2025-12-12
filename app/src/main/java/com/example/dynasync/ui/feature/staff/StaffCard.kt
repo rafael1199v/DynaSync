@@ -49,6 +49,7 @@ fun StaffCard(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(staff.imageUrl)
                 .crossfade(true)
+                .error(R.drawable.placeholder)
                 .build(),
             placeholder = painterResource(id = R.drawable.placeholder),
             contentDescription = "Photo staff",

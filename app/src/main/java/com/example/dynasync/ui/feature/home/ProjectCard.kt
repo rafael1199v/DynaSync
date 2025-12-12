@@ -29,6 +29,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
 import com.example.dynasync.domain.model.Project
+import com.example.dynasync.domain.model.calculateCompletePercentage
 import com.example.dynasync.ui.theme.WisteriaBlue
 import kotlinx.datetime.LocalDate
 
@@ -36,7 +37,7 @@ import kotlinx.datetime.LocalDate
 fun ProjectCard(
     project: Project,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier.Companion
+    modifier: Modifier = Modifier
 ) {
     Card(
         modifier = modifier.border(
@@ -45,26 +46,27 @@ fun ProjectCard(
             shape = RoundedCornerShape(size = 12.dp)
         ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.Companion.Transparent
+            containerColor = Color.Transparent
         ),
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier.Companion.height(IntrinsicSize.Min)
+            modifier = Modifier.height(IntrinsicSize.Min)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(project.imageUrl)
                     .crossfade(true)
+                    .error(R.drawable.project_placeholder)
                     .build(),
                 placeholder = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = "Image",
-                contentScale = ContentScale.Companion.Crop,
-                modifier = Modifier.Companion.width(108.dp).fillMaxHeight()
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.width(108.dp).fillMaxHeight()
             )
 
             Column(
-                modifier = Modifier.Companion.padding(all = 16.dp),
+                modifier = Modifier.padding(all = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Column(
@@ -75,17 +77,17 @@ fun ProjectCard(
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    Spacer(modifier = Modifier.Companion.width(4.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
 
                     Text(
                         text = project.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Companion.Ellipsis,
+                        overflow = TextOverflow.Ellipsis,
                         maxLines = 2
                     )
                 }
 
-                Spacer(modifier = Modifier.Companion.width(8.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -97,10 +99,10 @@ fun ProjectCard(
 
                     LinearProgressIndicator(
                         progress = {
-                            0.5f
+                            project.calculateCompletePercentage()
                         },
                         color = WisteriaBlue,
-                        modifier = Modifier.Companion.height(8.dp)
+                        modifier = Modifier.height(8.dp)
                     )
                 }
             }

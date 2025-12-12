@@ -204,6 +204,9 @@ fun App(
 
                 composable<MainDestination.CreateProject> {
                     CreateProjectScreen(
+                        onSubmitFormSuccess = {
+                            navController.navigate(MainDestination.Home)
+                        },
                         modifier = Modifier.fillMaxSize()
                     )
                 }

@@ -77,6 +77,7 @@ fun ProjectDetailScreenContent(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(state.project?.imageUrl)
                     .crossfade(true)
+                    .error(R.drawable.project_placeholder)
                     .build(),
                 placeholder = painterResource(id = R.drawable.ic_launcher_background),
                 contentDescription = "Project Image",

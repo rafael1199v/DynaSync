@@ -4,7 +4,7 @@ import com.example.dynasync.domain.model.Personal
 import kotlinx.coroutines.delay
 
 object StaffRepository {
-    val staff = listOf(
+    val staff = mutableListOf(
         Personal(
             id = 1,
             name = "Bill",

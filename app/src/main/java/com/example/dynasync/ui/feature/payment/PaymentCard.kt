@@ -4,7 +4,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +38,6 @@ fun PaymentCard(
             .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(10.dp))
             .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
 
        Icon(
@@ -49,8 +50,10 @@ fun PaymentCard(
            contentDescription = "Payment type Icon"
        )
 
+        Spacer(modifier = Modifier.width(20.dp))
 
         Column(
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterVertically)
         ) {
             Text(
@@ -72,7 +75,7 @@ fun PaymentCard(
         Text(
             text = "${payment.amount.roundToInt()} Bs",
             style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
         )
 
     }

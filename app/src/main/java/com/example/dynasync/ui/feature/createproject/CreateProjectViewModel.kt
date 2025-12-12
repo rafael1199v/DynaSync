@@ -1,15 +1,25 @@
 package com.example.dynasync.ui.feature.createproject
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.dynasync.data.repository.ProjectRepository
+import com.example.dynasync.domain.model.Project
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class CreateProjectViewModel: ViewModel() {
 
     private val _state = MutableStateFlow(value = CreateProjectViewState())
     val state = _state.asStateFlow()
+
+    private val _uiEvent = Channel<CreateProjectUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     val projectFormValidator = ProjectFormValidator()
 
@@ -70,14 +80,30 @@ class CreateProjectViewModel: ViewModel() {
 
     private fun submitForm() {
         val newState = projectFormValidator.validate(state.value)
-        println(newState)
+
 
         if(projectFormValidator.isValid(newState)) {
-            //Logica de crear projecto
+            viewModelScope.launch {
+                println(newState)
 
-            _state.update {
-                CreateProjectViewState()
+                val (day, month, year) = newState.finishDate.split("/")
+                val isoDate = "$year-$month-$day"
+
+                val newProject = Project(
+                    id = -1,
+                    title = newState.title,
+                    objective = newState.objective,
+                    description = newState.description,
+                    finishDate = LocalDate.parse(isoDate),
+                    imageUrl = newState.imageUrl.ifEmpty { null },
+                    tasks = emptyList()
+                )
+
+                ProjectRepository.addProject(newProject)
+
+                _uiEvent.send(CreateProjectUiEvent.NavigateToHome)
             }
+
         }
         else {
             _state.update {

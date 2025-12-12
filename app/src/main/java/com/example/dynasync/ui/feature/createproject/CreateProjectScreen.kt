@@ -61,6 +61,7 @@ import coil.compose.AsyncImage
 import com.example.dynasync.R
 import com.example.dynasync.ui.components.DynaSyncDatePicker
 import com.example.dynasync.ui.components.DynaSyncTextField
+import com.example.dynasync.ui.feature.login.LoginUiEvent
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
 import com.example.dynasync.utils.createImageFile
@@ -69,10 +70,21 @@ import java.io.File
 
 @Composable
 fun CreateProjectScreen(
+    onSubmitFormSuccess: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CreateProjectViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is CreateProjectUiEvent.NavigateToHome -> {
+                    onSubmitFormSuccess()
+                }
+            }
+        }
+    }
 
     CreateProjectScreenContent(
         modifier = modifier,

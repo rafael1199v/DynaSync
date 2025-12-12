@@ -39,7 +39,7 @@ class PaymentViewModel: ViewModel() {
             _state.update { it.copy(isLoading = true )}
 
             try {
-                delay(2000)
+
                 val payments = PaymentRepository.getPayments()
                 cachePayments = payments
                 _state.update {

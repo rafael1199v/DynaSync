@@ -2,10 +2,11 @@ package com.example.dynasync.data.repository
 
 import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
+import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 
 object PaymentRepository {
-    val payments: List<Payment> = listOf(
+    val payments: MutableList<Payment> = mutableListOf(
         Payment(
             id = 1,
             beneficiary = "Juan Pérez",
@@ -45,6 +46,7 @@ object PaymentRepository {
 
 
     suspend fun getPayments(): List<Payment> {
+        delay(2000)
         return payments
     }
 
