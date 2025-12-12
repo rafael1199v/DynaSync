@@ -391,40 +391,62 @@ fun CreateProjectScreenContent(
     }
 
     if (showSourceSelectionDialog) {
-        AlertDialog(
-            onDismissRequest = { showSourceSelectionDialog = false },
-            title = { Text("Seleccionar imagen") },
-            text = { Text("¿De dónde quieres obtener la imagen para tu proyecto?") },
-            confirmButton = {
-                TextButton(onClick = {
-                    showSourceSelectionDialog = false
-                    openCamera()
-                }) { Text("Cámara") }
-            },
-            dismissButton = {
-                TextButton(onClick = {
-                    showSourceSelectionDialog = false
-                    openGallery()
-                }) { Text("Galería") }
-            }
-        )
+
+        MaterialTheme(
+            colorScheme = MaterialTheme.colorScheme.copy(
+                primary = JungleTeal,
+                onPrimary = Color.White,
+                surface = Color.White,
+                onSurface = Color.Black
+            )
+        ) {
+            AlertDialog(
+                onDismissRequest = { showSourceSelectionDialog = false },
+                title = { Text("Seleccionar imagen") },
+                text = { Text("¿De dónde quieres obtener la imagen para tu proyecto?") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showSourceSelectionDialog = false
+                        openCamera()
+                    }) { Text("Cámara") }
+                },
+                dismissButton = {
+                    TextButton(onClick = {
+                        showSourceSelectionDialog = false
+                        openGallery()
+                    }) { Text("Galería") }
+                }
+            )
+        }
+
     }
 
     // 2. Explicación de Permiso (Rationale)
     if (showRationaleDialog) {
-        AlertDialog(
-            onDismissRequest = { showRationaleDialog = false },
-            title = { Text("Permiso necesario") },
-            text = { Text("DynaSync necesita acceso a la cámara para tomar la foto.") },
-            confirmButton = {
-                TextButton(onClick = { showRationaleDialog = false; permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                    Text("Permitir")
+
+        MaterialTheme(
+            colorScheme = MaterialTheme.colorScheme.copy(
+                primary = JungleTeal,
+                onPrimary = Color.White,
+                surface = Color.White,
+                onSurface = Color.Black
+            )
+        ) {
+            AlertDialog(
+                onDismissRequest = { showRationaleDialog = false },
+                title = { Text("Permiso necesario") },
+                text = { Text("DynaSync necesita acceso a la cámara para tomar la foto.") },
+                confirmButton = {
+                    TextButton(onClick = { showRationaleDialog = false; permissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                        Text("Permitir")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showRationaleDialog = false }) { Text("Cancelar") }
                 }
-            },
-            dismissButton = {
-                TextButton(onClick = { showRationaleDialog = false }) { Text("Cancelar") }
-            }
-        )
+            )
+        }
+
     }
 
     // 3. Configuración (Permiso denegado permanente)
