@@ -9,7 +9,7 @@ data class Task(
     val title: String,
     val description: String,
     val isCompleted: Boolean,
-    val personal: Personal,
+    val personal: Personal?,
     val finishDate: LocalDate,
     val createdAt: Instant? = null
 )
