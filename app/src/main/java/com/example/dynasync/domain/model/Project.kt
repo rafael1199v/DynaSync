@@ -20,5 +20,5 @@ fun Project.calculateCompletePercentage() : Float {
     return if(totalTasks == 0)
         0f
     else
-        (completedTasks.toFloat() / totalTasks.toFloat()) * 100
+        (completedTasks.toFloat() / totalTasks.toFloat())
 }
