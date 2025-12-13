@@ -2,13 +2,15 @@ package com.example.dynasync.domain.model
 
 import java.util.Locale
 import kotlinx.datetime.LocalDateTime
+import kotlin.time.Instant
 
 data class Payment(
     val id: Int,
     val beneficiary: String,
     val amount: Double,
     val dateTime: LocalDateTime,
-    val paymentType: PaymentType
+    val paymentType: PaymentType,
+    val createdAt: Instant? = null
 )
 
 enum class PaymentType(val description: String) {

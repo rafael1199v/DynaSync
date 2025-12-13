@@ -36,6 +36,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += listOf(
+            "-opt-in=kotlinx.datetime.ExperimentalKotlinxDatetimeApi",
+            "-opt-in=kotlin.time.ExperimentalTime"
+        )
     }
     buildFeatures {
         compose = true

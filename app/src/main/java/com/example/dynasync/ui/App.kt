@@ -51,7 +51,7 @@ import com.example.dynasync.ui.theme.JungleTeal
 fun App(
     modifier: Modifier = Modifier
 ) {
-    var userIsAuthenticated by remember { mutableStateOf(value = false )}
+    var userIsAuthenticated by remember { mutableStateOf(value = true )}
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 

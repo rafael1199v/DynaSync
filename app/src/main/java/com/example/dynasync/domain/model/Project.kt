@@ -1,6 +1,7 @@
 package com.example.dynasync.domain.model
 
 import kotlinx.datetime.LocalDate
+import kotlin.time.Instant
 
 data class Project(
     val id: Int,
@@ -9,7 +10,8 @@ data class Project(
     val description: String,
     val finishDate: LocalDate,
     val imageUrl: String?,
-    val tasks: List<Task>
+    val tasks: List<Task>,
+    val createdAt: Instant? = null
 )
 
 

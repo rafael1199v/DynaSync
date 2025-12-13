@@ -294,15 +294,22 @@ fun ProjectDetailScreenContent(
     if (taskToDelete != null) {
         AlertDialog(
             onDismissRequest = { taskToDelete = null },
-            title = { Text("Eliminar Tarea") },
-            text = { Text("¿Deseas eliminar la tarea '${taskToDelete?.title}'?") },
+            title = { Text(text = "Eliminar Tarea") },
+            text = { Text(text = "¿Deseas eliminar la tarea '${taskToDelete?.title}'?") },
             confirmButton = {
                 TextButton(
                     onClick = {
                         onIntent(ProjectDetailIntent.DeleteTask(taskToDelete!!.id))
                         taskToDelete = null
-                    }
-                ) { Text("Eliminar") }
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text(
+                        text = "Eliminar"
+                    )
+                }
             },
             dismissButton = {
                 TextButton(onClick = { taskToDelete = null }) { Text("Cancelar") }

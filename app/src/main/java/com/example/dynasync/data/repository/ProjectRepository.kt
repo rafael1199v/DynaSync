@@ -5,6 +5,8 @@ import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 object ProjectRepository {
     val projects: MutableList<Project> = mutableListOf(
@@ -28,6 +30,7 @@ object ProjectRepository {
                         charge = "Developer"
                     ),
                     finishDate = LocalDate(year = 2023, month = 12, day = 1),
+                    createdAt = Instant.parse("2023-11-01T12:00:00Z")
                 ),
                 Task(
                     id = 2,
@@ -41,8 +44,11 @@ object ProjectRepository {
                         charge = "Developer"
                     ),
                     finishDate = LocalDate(year = 2023, month = 12, day = 1),
-                )
-            )
+                    createdAt = Instant.parse("2023-11-01T12:00:00Z")
+                ),
+
+            ),
+            createdAt = Instant.parse("2023-11-01T12:00:00Z")
         ),
         Project(
             id = 2,
@@ -51,7 +57,8 @@ object ProjectRepository {
             description = "Esta tiene que ser una descripcion muy larga para que las personas puedan ver hasta donde se puede extender..",
             finishDate = LocalDate(year = 2023, month = 12, day = 1),
             imageUrl = "https://images.unsplash.com/photo-1761839256791-6a93f89fb8b0?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            tasks = emptyList()
+            tasks = emptyList(),
+            createdAt = Instant.parse("2022-11-01T12:00:00Z")
         )
     )
 
@@ -68,7 +75,11 @@ object ProjectRepository {
     suspend fun addProject(newProject: Project) {
         delay(2000)
         val newId = (projects.maxByOrNull { it.id }?.id ?: 0) + 1
-        projects.add(newProject.copy(id = newId))
+        val creationTime = newProject.createdAt ?: Clock.System.now()
+        projects.add(newProject.copy(
+            id = newId,
+            createdAt = creationTime
+        ))
     }
 
     suspend fun deleteProject(projectId: Int) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.data.repository.ProjectRepository.getProjectById
+import com.example.dynasync.data.repository.TaskRepository
 import com.example.dynasync.navigation.MainDestination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +49,7 @@ class ProjectDetailViewModel(
                 editProject(intent.projectId)
             }
             is ProjectDetailIntent.DeleteTask -> {
-                println("Eliminando la tarea ${intent.taskId}")
+                deleteTask(intent.taskId)
             }
             is ProjectDetailIntent.ToggleTask -> {
                 println("Toggle la tarea ${intent.taskId}")
@@ -58,6 +59,7 @@ class ProjectDetailViewModel(
 
     private fun getProjectById(projectId: Int) {
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             val project = ProjectRepository.getProjectById(projectId = projectId)
 
             _state.update {
@@ -81,6 +83,15 @@ class ProjectDetailViewModel(
     private fun editProject(projectId: Int) {
         viewModelScope.launch {
             _uiEvent.send(ProjectDetailUiEvent.NavigateToEditProject(projectId = projectId))
+        }
+    }
+
+    private fun deleteTask(taskId: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            TaskRepository.deleteTask(taskId = taskId)
+            onIntent(ProjectDetailIntent.LoadProject(projectId))
+            _state.update { it.copy(isLoading = false) }
         }
     }
 }
