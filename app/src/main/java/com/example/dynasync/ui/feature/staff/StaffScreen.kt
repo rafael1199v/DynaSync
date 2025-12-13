@@ -36,7 +36,7 @@ fun StaffScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary )
         }
     }
     else if(state.error != null) {

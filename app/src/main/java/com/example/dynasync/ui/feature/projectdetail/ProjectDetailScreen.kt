@@ -264,7 +264,7 @@ fun ProjectDetailScreenContent(
                 .clickable(enabled = false) {}, // Bloquea clicks
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
         }
     }
 

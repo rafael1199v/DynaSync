@@ -39,7 +39,9 @@ private val DynaSyncTheme = lightColorScheme(
     primary = JungleTeal,
     onPrimary = Color.White,
     surface = Color.White,
-    onSurface = Color.Black
+    onSurface = Color.Black,
+
+    tertiary = WisteriaBlue
 )
 
 @Composable

@@ -48,7 +48,7 @@ fun PaymentScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CircularProgressIndicator(
-                color = JungleTeal
+                color = MaterialTheme.colorScheme.tertiary
             )
         }
     }

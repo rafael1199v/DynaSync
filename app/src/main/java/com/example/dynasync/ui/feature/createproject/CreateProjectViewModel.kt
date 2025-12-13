@@ -129,7 +129,7 @@ class CreateProjectViewModel(
 
         if(projectFormValidator.isValid(newState)) {
             viewModelScope.launch {
-                println(newState)
+                _state.update { it.copy(isLoading = true) }
 
                 val uploadProject = if(isEditMode) {
                     Project(
@@ -161,6 +161,8 @@ class CreateProjectViewModel(
                 else {
                     ProjectRepository.addProject(uploadProject)
                 }
+
+                _state.update { it.copy(isLoading = false) }
 
                 _uiEvent.send(CreateProjectUiEvent.NavigateToHome)
             }

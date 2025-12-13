@@ -25,16 +25,6 @@ fun DynaSyncTextField(
     maxLines: Int = 1
 ) {
 
-    val customTextFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedContainerColor = Color.Transparent,
-        focusedBorderColor = Color.Gray,
-        focusedLabelColor = Color.Gray,
-        cursorColor = JungleTeal,
-
-        unfocusedContainerColor = Color.Transparent,
-        unfocusedBorderColor = Color.Gray,
-        unfocusedLabelColor = Color.Gray,
-    )
 
     OutlinedTextField(
         value = value,
@@ -57,7 +47,6 @@ fun DynaSyncTextField(
                 Text(text = "${supportingText} - ${charCount}/${maxChars}")
             }
         },
-        maxLines = maxLines,
-        colors = customTextFieldColors
+        maxLines = maxLines
     )
 }
