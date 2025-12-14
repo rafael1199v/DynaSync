@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,8 +17,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,31 +41,67 @@ import com.example.dynasync.ui.theme.JungleTeal
 
 @Composable
 fun PaymentScreen(
+    onCreatePayment: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PaymentViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
-    if(state.isLoading) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.tertiary
+
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+        floatingActionButton = {
+            FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = onCreatePayment,
+                content = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(
+                            8.dp,
+                            Alignment.CenterHorizontally
+                        ),
+                        modifier = Modifier.padding(all = 16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_add_24),
+                            contentDescription = "Float Action Button",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+
+                        Text(
+                            text = "Pago",
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+            )
+        }
+    ) { contentPadding ->
+        if(state.isLoading) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+        else {
+            PaymentScreenContent(
+                state = state,
+                onIntent = { intent ->
+                    viewModel.onIntent(intent)
+                },
+                modifier = Modifier.padding(contentPadding)
             )
         }
     }
-    else {
-        PaymentScreenContent(
-            state = state,
-            onIntent = { intent ->
-                viewModel.onIntent(intent)
-            },
-            modifier = modifier
-        )
-    }
+
+
 
 }
 
@@ -140,7 +181,12 @@ fun PaymentScreenContent(
 
                 ) {
                 items(items = state.paymentList) { payment ->
-                    PaymentCard(payment = payment, modifier.fillMaxWidth())
+                    PaymentCard(
+                        onDelete = {},
+                        onEdit = {},
+                        payment = payment,
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
 

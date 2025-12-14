@@ -169,7 +169,12 @@ fun App(
                 }
 
                 composable<MainDestination.Payment> {
-                    PaymentScreen(modifier = Modifier.fillMaxSize())
+                    PaymentScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onCreatePayment = {
+
+                        }
+                    )
                 }
 
                 composable<MainDestination.Staff> {
