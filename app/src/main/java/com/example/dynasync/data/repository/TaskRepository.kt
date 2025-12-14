@@ -70,4 +70,25 @@ object TaskRepository {
         }
     }
 
+    suspend fun toggleTask(taskId: Int) {
+        delay(2000)
+
+        for (project in projects) {
+            val index = project.tasks.indexOfFirst { it.id == taskId }
+
+            if(index != -1) {
+                val toggleTask = project.tasks[index].copy(
+                    isCompleted = !project.tasks[index].isCompleted,
+                )
+
+                val updatedTasks = project.tasks.toMutableList()
+                updatedTasks[index] = toggleTask
+
+                val updatedProject = project.copy(tasks = updatedTasks)
+                val indexProject = projects.indexOfFirst { it.id == project.id }
+                projects[indexProject] = updatedProject
+            }
+        }
+    }
+
 }
