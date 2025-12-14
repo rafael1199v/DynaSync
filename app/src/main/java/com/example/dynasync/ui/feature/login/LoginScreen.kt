@@ -188,7 +188,8 @@ fun LoginScreenContent(
 
             if(state.loginError != null) {
                 Text(
-                    text = state.loginError
+                    text = state.loginError,
+                    color = MaterialTheme.colorScheme.error
                 )
             }
 

@@ -38,7 +38,8 @@ class ProfileViewModel: ViewModel() {
 
         viewModelScope.launch {
             try {
-                val user = UserRepository.getUser("uuid")
+                val user = UserRepository.getUser()
+
                 _state.update {
                     it.copy(
                         user = user,

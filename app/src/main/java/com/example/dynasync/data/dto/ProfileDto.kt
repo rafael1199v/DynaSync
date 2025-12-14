@@ -25,5 +25,8 @@ data class ProfileDto(
     val profileImageUrl: String? = null,
 
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    @SerialName("projects")
+    val projects: List<ProjectDto>? = null
 )

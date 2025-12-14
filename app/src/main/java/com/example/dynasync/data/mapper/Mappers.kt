@@ -1,31 +1,20 @@
 package com.example.dynasync.data.mapper
 
-import com.example.dynasync.data.dto.PaymentDto
-import com.example.dynasync.data.dto.PaymentTypeDto
-import com.example.dynasync.data.dto.PersonalDto
-import com.example.dynasync.data.dto.ProfileDto
-import com.example.dynasync.data.dto.ProjectDto
-import com.example.dynasync.data.dto.TaskDto
-import com.example.dynasync.domain.model.Payment
-import com.example.dynasync.domain.model.PaymentType
-import com.example.dynasync.domain.model.Personal
-import com.example.dynasync.domain.model.Project
-import com.example.dynasync.domain.model.Task
-import com.example.dynasync.domain.model.User
-import kotlin.time.Instant
+import com.example.dynasync.data.dto.*
+import com.example.dynasync.data.repository.AuthRepository
+import com.example.dynasync.domain.model.*
 
-private fun String?.toInstantOrNull(): Instant? {
+private fun String?.toInstantOrNull(): kotlin.time.Instant? {
     return if (this.isNullOrBlank()) null else try {
-        Instant.parse(this)
+        kotlin.time.Instant.parse(this)
     } catch (e: Exception) {
         null
     }
 }
 
-private fun Instant?.toDtoString(): String? {
+private fun kotlin.time.Instant?.toDtoString(): String? {
     return this?.toString()
 }
-
 
 fun PersonalDto.toDomain(): Personal {
     return Personal(
@@ -49,8 +38,7 @@ fun Personal.toDto(): PersonalDto {
     )
 }
 
-
-fun ProjectDto.toDomain(tasks: List<Task> = emptyList()): Project {
+fun ProjectDto.toDomain(): Project {
     return Project(
         id = this.id ?: 0,
         title = this.title,
@@ -59,7 +47,8 @@ fun ProjectDto.toDomain(tasks: List<Task> = emptyList()): Project {
         finishDate = this.finishDate!!,
         imageUrl = this.imageUrl,
         createdAt = this.createdAt.toInstantOrNull(),
-        tasks = tasks
+
+        tasks = this.tasks?.map { it.toDomain() } ?: emptyList()
     )
 }
 
@@ -71,18 +60,19 @@ fun Project.toDto(): ProjectDto {
         description = this.description,
         finishDate = this.finishDate,
         imageUrl = this.imageUrl,
-        createdAt = this.createdAt.toDtoString()
+        createdAt = this.createdAt.toDtoString(),
+        profileId = AuthRepository.getUserId() ?: ""
     )
 }
 
-
-fun TaskDto.toDomain(personal: Personal? = null): Task {
+fun TaskDto.toDomain(): Task {
     return Task(
         id = this.id ?: 0,
         title = this.title,
         isCompleted = this.isCompleted,
         finishDate = this.finishDate,
-        personal = personal,
+        personal = this.personal?.toDomain(),
+
         createdAt = this.createdAt.toInstantOrNull()
     )
 }
@@ -93,21 +83,22 @@ fun Task.toDto(projectId: Int): TaskDto {
         title = this.title,
         isCompleted = this.isCompleted,
         finishDate = this.finishDate,
-        projectId = projectId, // Obligatorio para Supabase
-        personalId = this.personal?.id, // Extraemos el ID del objeto personal
+        projectId = projectId,
+        personalId = this.personal?.id,
         createdAt = this.createdAt.toDtoString()
     )
 }
 
-
 fun ProfileDto.toDomain(): User {
     return User(
-        id = this.id, // String (UUID)
+        id = this.id,
         name = this.name,
         lastName = this.lastName,
         age = this.age,
         profileImageUrl = this.profileImageUrl,
-        createdAt = this.createdAt.toInstantOrNull()
+        createdAt = this.createdAt.toInstantOrNull(),
+
+        projects = this.projects?.map { it.toDomain() } ?: emptyList()
     )
 }
 
@@ -121,7 +112,6 @@ fun User.toDto(): ProfileDto {
         createdAt = this.createdAt.toDtoString()
     )
 }
-
 
 fun PaymentDto.toDomain(): Payment {
     return Payment(
@@ -145,20 +135,16 @@ fun Payment.toDto(): PaymentDto {
     )
 }
 
-fun PaymentTypeDto.toDomain(): PaymentType {
-    return when (this) {
-        PaymentTypeDto.PERSONAL -> PaymentType.PERSONAL
-        PaymentTypeDto.INVENTORY -> PaymentType.INVENTORY
-        PaymentTypeDto.SAVINGS -> PaymentType.SAVINGS
-        PaymentTypeDto.TECHNOLOGY -> PaymentType.TECHNOLOGY
-    }
+fun PaymentTypeDto.toDomain(): PaymentType = when (this) {
+    PaymentTypeDto.PERSONAL -> PaymentType.PERSONAL
+    PaymentTypeDto.INVENTORY -> PaymentType.INVENTORY
+    PaymentTypeDto.SAVINGS -> PaymentType.SAVINGS
+    PaymentTypeDto.TECHNOLOGY -> PaymentType.TECHNOLOGY
 }
 
-fun PaymentType.toDto(): PaymentTypeDto {
-    return when (this) {
-        PaymentType.PERSONAL -> PaymentTypeDto.PERSONAL
-        PaymentType.INVENTORY -> PaymentTypeDto.INVENTORY
-        PaymentType.SAVINGS -> PaymentTypeDto.SAVINGS
-        PaymentType.TECHNOLOGY -> PaymentTypeDto.TECHNOLOGY
-    }
+fun PaymentType.toDto(): PaymentTypeDto = when (this) {
+    PaymentType.PERSONAL -> PaymentTypeDto.PERSONAL
+    PaymentType.INVENTORY -> PaymentTypeDto.INVENTORY
+    PaymentType.SAVINGS -> PaymentTypeDto.SAVINGS
+    PaymentType.TECHNOLOGY -> PaymentTypeDto.TECHNOLOGY
 }

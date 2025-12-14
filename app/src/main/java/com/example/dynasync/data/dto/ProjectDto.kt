@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProjectDto(
-    @SerialName("name")
+    @SerialName("id")
     val id: Int? = null,
 
     @SerialName("title")
@@ -26,5 +26,11 @@ data class ProjectDto(
     val imageUrl: String? = null,
 
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    @SerialName("profile_id")
+    val profileId: String,
+
+    @SerialName("tasks")
+    val tasks: List<TaskDto>? = null
 )

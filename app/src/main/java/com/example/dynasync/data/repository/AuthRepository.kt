@@ -40,6 +40,11 @@ object AuthRepository {
         }
     }
 
+
+    fun getUserId() : String? {
+        return authClient.currentUserOrNull()?.id
+    }
+
     suspend fun signOut() {
         try {
             authClient.signOut()

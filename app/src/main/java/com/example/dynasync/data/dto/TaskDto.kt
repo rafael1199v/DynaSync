@@ -26,5 +26,8 @@ data class TaskDto(
     val personalId: Int? = null,
 
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    @SerialName("personal")
+    val personal: PersonalDto? = null
 )

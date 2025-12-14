@@ -1,14 +1,21 @@
 package com.example.dynasync.data.repository
 
+import com.example.dynasync.data.dto.ProjectDto
+import com.example.dynasync.data.mapper.toDomain
+import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDate
 import kotlin.time.Clock
 import kotlin.time.Instant
 
 object ProjectRepository {
+
+    val supabase = SupabaseClientObject.client
     val projects: MutableList<Project> = mutableListOf(
         Project(
             id = 1,
@@ -68,8 +75,28 @@ object ProjectRepository {
         return projects.find { it.id == projectId }
     }
 
-    suspend fun getProjects() : List<Project> {
-        return projects
+    suspend fun getProjects(userId: String) : List<Project> {
+
+        return try {
+            val projectsDto = supabase.from("projects").select(
+                columns = Columns.raw("""
+                        *,
+                        tasks (*)
+                """.trimIndent())
+            ) {
+                filter {
+                    eq("profile_id", userId)
+                }
+            }.decodeList<ProjectDto>()
+
+
+            val domainProjects = projectsDto.map { it.toDomain() }
+
+            return domainProjects
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
     }
 
     suspend fun addProject(newProject: Project) {

@@ -8,5 +8,6 @@ data class User(
     val lastName: String,
     val age: Int,
     val profileImageUrl: String? = null,
-    val createdAt: Instant? = null
+    val createdAt: Instant? = null,
+    val projects: List<Project> = emptyList()
 )
