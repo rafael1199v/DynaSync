@@ -6,7 +6,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.data.repository.ProjectRepository.getProjectById
+import com.example.dynasync.data.repository.StaffRepository
 import com.example.dynasync.data.repository.TaskRepository
+import com.example.dynasync.domain.model.Personal
+import com.example.dynasync.domain.model.Task
 import com.example.dynasync.navigation.MainDestination
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class ProjectDetailViewModel(
     savedStateHandle: SavedStateHandle
@@ -35,6 +39,7 @@ class ProjectDetailViewModel(
         }
 
         onIntent(ProjectDetailIntent.LoadProject(projectId))
+        loadStaff()
     }
 
     fun onIntent(intent: ProjectDetailIntent) {
@@ -53,6 +58,12 @@ class ProjectDetailViewModel(
             }
             is ProjectDetailIntent.ToggleTask -> {
                 println("Toggle la tarea ${intent.taskId}")
+            }
+            is ProjectDetailIntent.CreateTask -> {
+                addTask(intent.title, intent.staffId, intent.finishDate)
+            }
+            is ProjectDetailIntent.UpdateTask -> {
+                updateTask(intent.taskId, intent.title, intent.staffId, intent.finishDate)
             }
         }
     }
@@ -86,12 +97,60 @@ class ProjectDetailViewModel(
         }
     }
 
+    private fun addTask(title: String, staffId: Int?, finishDate: String) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+
+            val staff = _state.value.staffList.find { it.id == staffId }
+
+            val newTask = Task(
+                id = -1,
+                title = title,
+                isCompleted = false,
+                personal = staff,
+                finishDate = LocalDate.parse(finishDate)
+            )
+
+            TaskRepository.addTask(newTask, projectId)
+
+            onIntent(ProjectDetailIntent.LoadProject(projectId))
+        }
+    }
+
+    private fun updateTask(taskId: Int, title: String, staffId: Int?, finishDate: String) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+
+            val staff = _state.value.staffList.find { it.id == staffId }
+
+            val task = Task(
+                id = taskId,
+                title = title,
+                isCompleted = false,
+                personal = staff,
+                finishDate = LocalDate.parse(finishDate)
+            )
+
+            TaskRepository.updateTask(task)
+
+            onIntent(ProjectDetailIntent.LoadProject(projectId))
+        }
+    }
+
     private fun deleteTask(taskId: Int) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             TaskRepository.deleteTask(taskId = taskId)
             onIntent(ProjectDetailIntent.LoadProject(projectId))
             _state.update { it.copy(isLoading = false) }
+        }
+    }
+
+    private fun loadStaff() {
+        viewModelScope.launch {
+            val staffList = StaffRepository.getStaff()
+            _state.update { it.copy(staffList = staffList) }
+
         }
     }
 }

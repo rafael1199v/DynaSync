@@ -54,7 +54,7 @@ object LayoutFactoryProvider {
 
                 ProjectDetailLayoutFactory(
                     onNavigationIconClick = { navController.popBackStack() },
-                    onFloatActionButtonClick = {},
+                    onFloatActionButtonClick = null,
                     listActions = listOf(
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,

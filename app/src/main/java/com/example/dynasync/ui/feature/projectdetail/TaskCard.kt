@@ -82,7 +82,7 @@ fun TaskCard(
                         )
 
                         Text(
-                            text = "Responsable: ${task.personal.name} ${task.personal.lastname}",
+                            text = if(task.personal == null) "Sin personal asignado" else "${task.personal.name} ${task.personal.lastname}",
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -129,7 +129,6 @@ fun TaskCardPreview() {
     val task = Task(
         id = 1,
         title = "Task 1",
-        description = "Description of task 1",
         isCompleted = false,
         personal = Personal(
             id = 1,

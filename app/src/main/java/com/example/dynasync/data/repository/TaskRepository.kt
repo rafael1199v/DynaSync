@@ -28,6 +28,8 @@ object TaskRepository {
 
             projects[projectIndex] = updatedProject
         }
+
+        println("La nueva tarea agregada es ${newTask}")
     }
     suspend fun deleteTask(taskId: Int) {
         delay(2000)
@@ -40,6 +42,11 @@ object TaskRepository {
                 break
             }
         }
+    }
+
+    suspend fun updateTask(task: Task) {
+        delay(2000)
+
     }
 
 }

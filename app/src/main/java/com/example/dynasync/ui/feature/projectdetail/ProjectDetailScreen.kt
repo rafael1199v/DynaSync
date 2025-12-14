@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -94,179 +95,188 @@ fun ProjectDetailScreenContent(
     var showDeleteProjectDialog by remember { mutableStateOf(false) }
     var taskToDelete by remember { mutableStateOf<Task?>(null) }
 
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(
-            space = 20.dp
-        ),
-        modifier = modifier
-    ) {
-        item {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(state.project?.imageUrl)
-                    .crossfade(true)
-                    .error(R.drawable.project_placeholder)
-                    .build(),
-                placeholder = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = "Project Image",
-                modifier = Modifier.fillMaxWidth().height(280.dp),
-                contentScale = ContentScale.Crop
-            )
-        }
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var taskToEdit by remember { mutableStateOf<Task?>(null) } // null = Crear, objeto = Editar
 
-        item {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = 20.dp
-                ),
-            ) {
-                Text(
-                    text = state.project?.title ?: "Proyecto",
-                    style = MaterialTheme.typography.displaySmall,
-                    fontWeight = FontWeight.W600
-                )
-
-                Text(
-                    text = state.project?.description ?: "Description",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                Text(
-                    text = "Objetivo",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                Text(
-                    text = state.project?.objective ?: "Contenido del objetivo",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                Text(
-                    text = "Finalización: ${state.project?.finishDate.toString()}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                //Seccion de tareas
-
-                Text(
-                    text = "Tareas",
-                    style = MaterialTheme.typography.titleLarge
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(
+                space = 20.dp
+            ),
+            modifier = modifier
+        ) {
+            item {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(state.project?.imageUrl)
+                        .crossfade(true)
+                        .error(R.drawable.project_placeholder)
+                        .build(),
+                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = "Project Image",
+                    modifier = Modifier.fillMaxWidth().height(280.dp),
+                    contentScale = ContentScale.Crop
                 )
             }
 
-        }
-
-        if(state.project?.tasks?.isEmpty() == true) {
             item {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 20.dp
+                    ),
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.no_task2_1),
-                        contentDescription = "No tasks image",
-                        modifier = Modifier
-                            .width(260.dp)
-                            .height(271.dp)
-                            .clip(RoundedCornerShape(20.dp))
+                    Text(
+                        text = state.project?.title ?: "Proyecto",
+                        style = MaterialTheme.typography.displaySmall,
+                        fontWeight = FontWeight.W600
                     )
 
                     Text(
-                        text = "Parece que no tienes tareas nuevas. Añade una!",
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center
+                        text = state.project?.description ?: "Description",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+
+                    Text(
+                        text = "Objetivo",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+
+                    Text(
+                        text = state.project?.objective ?: "Contenido del objetivo",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+
+                    Text(
+                        text = "Finalización: ${state.project?.finishDate.toString()}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    //Seccion de tareas
+
+                    Text(
+                        text = "Tareas",
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
 
             }
-        }
-        else {
-            items(state.project?.tasks ?: emptyList()) { task ->
-                TaskCard(
-                    task = task,
+
+            if(state.project?.tasks?.isEmpty() == true) {
+                item {
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.no_task2_1),
+                            contentDescription = "No tasks image",
+                            modifier = Modifier
+                                .width(260.dp)
+                                .height(271.dp)
+                                .clip(RoundedCornerShape(20.dp))
+                        )
+
+                        Text(
+                            text = "Parece que no tienes tareas nuevas. Añade una!",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                }
+            }
+            else {
+                items(state.project?.tasks ?: emptyList()) { task ->
+                    TaskCard(
+                        task = task,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+                        onToggleTask = { taskId ->
+                            onIntent(ProjectDetailIntent.ToggleTask(taskId))
+                        },
+                        onDeleteTask = {
+                            taskToDelete = task
+                        }
+                    )
+                }
+            }
+
+
+            item {
+                Column(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
-                    onToggleTask = { taskId ->
-                        onIntent(ProjectDetailIntent.ToggleTask(taskId))
-                    },
-                    onDeleteTask = {
-                        taskToDelete = task
-                    }
-                )
-            }
-        }
-
-
-        item {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = 4.dp
-                ),
-            ) {
-                OutlinedButton(
-                    onClick = {
-                        onIntent(ProjectDetailIntent.EditProject(projectId = state.project?.id ?: 0))
-                    },
-                    modifier = Modifier.fillMaxWidth()
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 4.dp
+                    ),
                 ) {
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    OutlinedButton(
+                        onClick = {
+                            onIntent(ProjectDetailIntent.EditProject(projectId = state.project?.id ?: 0))
+                        },
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Icon(
-                           painter = painterResource(id = R.drawable.baseline_edit_24),
-                            contentDescription = "Edit"
-                        )
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_edit_24),
+                                contentDescription = "Edit"
+                            )
 
-                        Text(text = "Editar proyecto")
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            Text(text = "Editar proyecto")
+                        }
+
                     }
 
-                }
-
-                OutlinedButton(
-                    onClick = {
-                        showDeleteProjectDialog = true
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    OutlinedButton(
+                        onClick = {
+                            showDeleteProjectDialog = true
+                        },
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.delete_filled),
-                            contentDescription = "Delete"
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.delete_filled),
+                                contentDescription = "Delete"
+                            )
 
-                        Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
 
-                        Text(text = "Eliminar proyecto")
+                            Text(text = "Eliminar proyecto")
+                        }
                     }
                 }
             }
+
+            item {
+                Spacer(modifier = Modifier.height(60.dp))
+            }
+
         }
 
-        item {
-            Spacer(modifier = Modifier.height(60.dp))
-        }
-
-    }
-
-    if (state.isLoading) {
-        Box(
+        FloatingActionButton(
+            onClick = {
+                taskToEdit = null // Modo Crear
+                showBottomSheet = true
+            },
             modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.5f))
-                .clickable(enabled = false) {}, // Bloquea clicks
-            contentAlignment = Alignment.Center
+                .align(Alignment.BottomEnd) // Abajo a la derecha
+                .padding(26.dp),
+            containerColor = MaterialTheme.colorScheme.primary, // Tu color
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+            Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription = "Add Task")
         }
     }
+
+
 
 
     if (showDeleteProjectDialog) {
@@ -316,6 +326,45 @@ fun ProjectDetailScreenContent(
             }
         )
     }
+
+    if (showBottomSheet) {
+        TaskFormBottomSheet(
+            staffList = state.staffList, // Lista del state
+            initialTask = taskToEdit,    // Tarea a editar o null
+            onDismissRequest = { showBottomSheet = false },
+            onSaveClick = { title, date, person ->
+                if (taskToEdit == null) {
+                    // CREAR
+                    onIntent(ProjectDetailIntent.CreateTask(
+                        title = title,
+                        finishDate = date.toString(),
+                        staffId = person?.id
+                    ))
+                } else {
+                    // EDITAR
+                    onIntent(ProjectDetailIntent.UpdateTask(
+                        taskId = taskToEdit!!.id,
+                        title = title,
+                        finishDate = date.toString(),
+                        staffId = person?.id
+                    ))
+                }
+                showBottomSheet = false
+            }
+        )
+    }
+
+    if (state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .clickable(enabled = false) {}, // Bloquea clicks
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+        }
+    }
 }
 
 
@@ -334,7 +383,7 @@ fun ProjectDetailScreenPreview() {
                 Task(
                     id = 1,
                     title = "Task 1",
-                    description = "Description of task 1",
+                    //description = "Description of task 1",
                     isCompleted = true,
                     personal = Personal(
                         id = 1,
@@ -347,7 +396,7 @@ fun ProjectDetailScreenPreview() {
                 Task(
                     id = 2,
                     title = "Task 2",
-                    description = "Description of task 2",
+                    //description = "Description of task 2",
                     isCompleted = false,
                     personal = Personal(
                         id = 1,

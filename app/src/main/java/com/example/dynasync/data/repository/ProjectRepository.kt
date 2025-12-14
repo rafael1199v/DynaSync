@@ -21,7 +21,7 @@ object ProjectRepository {
                 Task(
                     id = 1,
                     title = "Task 1",
-                    description = "Description of task 1",
+                    //description = "Description of task 1",
                     isCompleted = true,
                     personal = Personal(
                         id = 1,
@@ -35,7 +35,7 @@ object ProjectRepository {
                 Task(
                     id = 2,
                     title = "Task 2",
-                    description = "Description of task 2",
+                    //description = "Description of task 2",
                     isCompleted = false,
                     personal = Personal(
                         id = 1,
