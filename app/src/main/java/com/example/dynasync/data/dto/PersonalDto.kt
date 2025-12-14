@@ -22,5 +22,8 @@ data class PersonalDto(
     val imageUrl: String? = null,
 
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    @SerialName("profile_id")
+    val profileId: String
 )

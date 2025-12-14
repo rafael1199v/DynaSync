@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.dynasync.data.repository.AuthRepository
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.data.repository.ProjectRepository.getProjectById
 import com.example.dynasync.data.repository.StaffRepository
@@ -155,7 +156,7 @@ class ProjectDetailViewModel(
 
     private fun loadStaff() {
         viewModelScope.launch {
-            val staffList = StaffRepository.getStaff()
+            val staffList = StaffRepository.getStaff(AuthRepository.getUserId()!!)
             _state.update { it.copy(staffList = staffList) }
 
         }

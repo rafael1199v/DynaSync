@@ -1,13 +1,22 @@
 package com.example.dynasync.data.repository
 
+import android.util.Log
+import com.example.dynasync.data.dto.PaymentDto
+import com.example.dynasync.data.mapper.toDomain
+import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
 import kotlin.time.Clock
 import kotlin.time.Instant
 
 object PaymentRepository {
+
+    val supabase = SupabaseClientObject.client
+
     val payments: MutableList<Payment> = mutableListOf(
         Payment(
             id = 1,
@@ -52,9 +61,25 @@ object PaymentRepository {
     )
 
 
-    suspend fun getPayments(): List<Payment> {
-        delay(2000)
-        return payments
+    suspend fun getPayments(userId: String): List<Payment> {
+        try {
+            val paymentsDto = supabase.from("payments").select(
+                columns = Columns.raw("""
+                    *
+                """.trimIndent())
+            ) {
+                filter {
+                    eq("profile_id", userId)
+                }
+            }.decodeList<PaymentDto>()
+
+            return paymentsDto.map { it.toDomain() }
+
+        }
+        catch (e: Exception) {
+            Log.e("main", "Hubo un error al cargar los pagos. ${e}")
+            return emptyList()
+        }
     }
 
     suspend fun getPaymentById(id: Int): Payment {

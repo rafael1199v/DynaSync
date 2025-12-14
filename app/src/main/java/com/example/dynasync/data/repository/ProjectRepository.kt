@@ -1,5 +1,6 @@
 package com.example.dynasync.data.repository
 
+import android.util.Log
 import com.example.dynasync.data.dto.ProjectDto
 import com.example.dynasync.data.mapper.toDomain
 import com.example.dynasync.data.supabase.SupabaseClientObject
@@ -72,7 +73,27 @@ object ProjectRepository {
     //val projects = emptyList<Project>()
 
     suspend fun getProjectById(projectId: Int): Project? {
-        return projects.find { it.id == projectId }
+        try {
+            val projectDto = supabase.from("projects").select(
+                columns = Columns.raw("""
+                        *,
+                        tasks (
+                            *,
+                            personal(*)
+                        )
+                """.trimIndent())
+            ) {
+                filter {
+                    eq("id", projectId)
+                }
+            }.decodeSingle<ProjectDto>()
+
+            return projectDto.toDomain()
+        }
+        catch (e: Exception) {
+            Log.e("main", "Hubo un error al cargar el proyecto. ${e}")
+            return null
+        }
     }
 
     suspend fun getProjects(userId: String) : List<Project> {

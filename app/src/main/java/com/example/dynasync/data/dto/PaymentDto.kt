@@ -23,7 +23,10 @@ data class PaymentDto(
     val paymentType: PaymentTypeDto,
 
     @SerialName("created_at")
-    val createdAt: String? = null
+    val createdAt: String? = null,
+
+    @SerialName("profile_id")
+    val profileId: String
 )
 
 @Serializable

@@ -1,6 +1,13 @@
 package com.example.dynasync.data.repository
 
+import android.util.Log
+import com.example.dynasync.data.dto.PaymentDto
+import com.example.dynasync.data.dto.PersonalDto
+import com.example.dynasync.data.mapper.toDomain
+import com.example.dynasync.data.repository.PaymentRepository.supabase
 import com.example.dynasync.domain.model.Personal
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.delay
 import kotlin.time.Instant
 
@@ -70,9 +77,25 @@ object StaffRepository {
         )
     )
 
-    suspend fun getStaff(): List<Personal> {
-        delay(2000)
-        return staff
+    suspend fun getStaff(userId: String): List<Personal> {
+        try {
+            val staffDto = supabase.from("personal").select(
+                columns = Columns.raw("""
+                    *
+                """.trimIndent())
+            ) {
+                filter {
+                    eq("profile_id", userId)
+                }
+            }.decodeList<PersonalDto>()
+
+            Log.d("debug", "Staff: ${staffDto}")
+            return staffDto.map { it.toDomain() }
+        }
+        catch (e: Exception) {
+            Log.e("main", "Hubo un error al cargar al personal. ${e}")
+            return emptyList()
+        }
     }
 
     suspend fun getStaffById(staffId: Int) : Personal {

@@ -34,7 +34,8 @@ fun Personal.toDto(): PersonalDto {
         lastname = this.lastname,
         charge = this.charge,
         imageUrl = this.imageUrl,
-        createdAt = this.createdAt.toDtoString()
+        createdAt = this.createdAt.toDtoString(),
+        profileId = AuthRepository.getUserId() ?: ""
     )
 }
 
@@ -131,7 +132,8 @@ fun Payment.toDto(): PaymentDto {
         amount = this.amount,
         dateTime = this.dateTime,
         paymentType = this.paymentType.toDto(),
-        createdAt = this.createdAt.toDtoString()
+        createdAt = this.createdAt.toDtoString(),
+        profileId = AuthRepository.getUserId() ?: ""
     )
 }
 

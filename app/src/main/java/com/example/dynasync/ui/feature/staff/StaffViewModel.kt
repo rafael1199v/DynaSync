@@ -2,6 +2,7 @@ package com.example.dynasync.ui.feature.staff
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dynasync.data.repository.AuthRepository
 import com.example.dynasync.data.repository.StaffRepository
 import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
 import kotlinx.coroutines.channels.Channel
@@ -62,7 +63,7 @@ class StaffViewModel: ViewModel() {
             }
 
             try {
-                val staff = StaffRepository.getStaff()
+                val staff = StaffRepository.getStaff(AuthRepository.getUserId()!!)
 
                 _state.update {
                     it.copy(

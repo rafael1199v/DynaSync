@@ -2,6 +2,7 @@ package com.example.dynasync.ui.feature.payment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dynasync.data.repository.AuthRepository
 import com.example.dynasync.data.repository.PaymentRepository
 import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
@@ -52,7 +53,7 @@ class PaymentViewModel: ViewModel() {
 
             try {
 
-                val payments = PaymentRepository.getPayments()
+                val payments = PaymentRepository.getPayments(AuthRepository.getUserId()!!)
                 cachePayments = payments
                 _state.update {
                     _state.value.copy(
