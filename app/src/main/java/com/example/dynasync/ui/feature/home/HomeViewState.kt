@@ -8,7 +8,7 @@ data class HomeViewState(
     val pendingTasks: Int = 0,
     val projects: List<Project> = emptyList(),
     val user: User = User(
-        id = 1,
+        id = "uuid",
         name = "Rafael",
         lastName = "Vargas",
         age = 20,

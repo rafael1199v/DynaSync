@@ -5,9 +5,9 @@ import kotlin.time.Instant
 
 object UserRepository {
 
-    suspend fun getUser(userId: Int): User {
+    suspend fun getUser(uuid: String): User {
         return User(
-            id = 1,
+            id = "uuid",
             name = "Rafael Andres",
             lastName = "Vargas Mamani",
             age = 20,
