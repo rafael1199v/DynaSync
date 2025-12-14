@@ -32,6 +32,9 @@ sealed interface MainDestination {
 
     @Serializable
     data class PaymentForm(val paymentId: Int = -1) : MainDestination
+
+    @Serializable
+    data object Profile : MainDestination
 }
 
 

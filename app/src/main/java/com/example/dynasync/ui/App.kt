@@ -43,6 +43,7 @@ import com.example.dynasync.ui.feature.home.HomeScreen
 import com.example.dynasync.ui.feature.login.LoginScreen
 import com.example.dynasync.ui.feature.payment.PaymentScreen
 import com.example.dynasync.ui.feature.payment.form.PaymentFormScreen
+import com.example.dynasync.ui.feature.profile.ProfileScreen
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailScreen
 import com.example.dynasync.ui.feature.staff.StaffScreen
 import com.example.dynasync.ui.feature.staff.form.StaffFormScreen
@@ -229,6 +230,19 @@ fun App(
                         modifier = Modifier.fillMaxWidth(),
                         onSubmitFormSuccess = {
                             navController.navigate(MainDestination.Payment)
+                        }
+                    )
+                }
+
+                composable<MainDestination.Profile> {
+                    ProfileScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onLogout = {
+                            navController.navigate(AuthenticationGraph) {
+                                popUpTo(MainGraph) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     )
                 }

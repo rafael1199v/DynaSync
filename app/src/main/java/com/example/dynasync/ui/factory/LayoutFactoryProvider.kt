@@ -27,7 +27,7 @@ object LayoutFactoryProvider {
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
                             contentDescription = "Profile",
-                            onClick = {}
+                            onClick = { navController.navigate(MainDestination.Profile) }
                         )
                     )
                 )
@@ -41,7 +41,7 @@ object LayoutFactoryProvider {
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
                             contentDescription = "Profile",
-                            onClick = {}
+                            onClick = { navController.navigate(MainDestination.Profile) }
                         )
                     )
                 )
@@ -57,7 +57,7 @@ object LayoutFactoryProvider {
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
                             contentDescription = "Profile",
-                            onClick = {}
+                            onClick = { navController.navigate(MainDestination.Profile) }
                         )
                     )
                 )
@@ -75,7 +75,7 @@ object LayoutFactoryProvider {
                             ActionItem(
                                 iconId = R.drawable.outline_account_circle_24,
                                 contentDescription = "Profile",
-                                onClick = {}
+                                onClick = { navController.navigate(MainDestination.Profile) }
                             )
                         )
                     )
@@ -88,7 +88,7 @@ object LayoutFactoryProvider {
                             ActionItem(
                                 iconId = R.drawable.outline_account_circle_24,
                                 contentDescription = "Profile",
-                                onClick = {}
+                                onClick = { navController.navigate(MainDestination.Profile) }
                             )
                         )
                     )
@@ -105,7 +105,7 @@ object LayoutFactoryProvider {
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
                             contentDescription = "Profile",
-                            onClick = {}
+                            onClick = { navController.navigate(MainDestination.Profile) }
                         )
                     )
                 )
@@ -122,7 +122,7 @@ object LayoutFactoryProvider {
                             ActionItem(
                                 iconId = R.drawable.outline_account_circle_24,
                                 contentDescription = "Profile",
-                                onClick = {}
+                                onClick = { navController.navigate(MainDestination.Profile) }
                             )
                         )
                     )
@@ -135,7 +135,7 @@ object LayoutFactoryProvider {
                             ActionItem(
                                 iconId = R.drawable.outline_account_circle_24,
                                 contentDescription = "Profile",
-                                onClick = {}
+                                onClick = { navController.navigate(MainDestination.Profile) }
                             )
                         )
                     )
@@ -153,7 +153,7 @@ object LayoutFactoryProvider {
                             ActionItem(
                                 iconId = R.drawable.outline_account_circle_24,
                                 contentDescription = "Profile",
-                                onClick = {}
+                                onClick = { navController.navigate(MainDestination.Profile) }
                             )
                         )
                     )
@@ -166,11 +166,19 @@ object LayoutFactoryProvider {
                             ActionItem(
                                 iconId = R.drawable.outline_account_circle_24,
                                 contentDescription = "Profile",
-                                onClick = {}
+                                onClick = { navController.navigate(MainDestination.Profile) }
                             )
                         )
                     )
                 }
+            }
+
+            destination.hasRoute<MainDestination.Profile>() -> {
+                ProfileLayoutFactory(
+                    onNavigationIconClick = { navController.popBackStack() },
+                    onFloatActionButtonClick = null,
+                    listActions = listOf()
+                )
             }
 
             else -> EmptyLayoutFactory()
