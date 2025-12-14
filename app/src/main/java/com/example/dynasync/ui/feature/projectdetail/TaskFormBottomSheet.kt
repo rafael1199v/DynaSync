@@ -1,5 +1,7 @@
 package com.example.dynasync.ui.feature.projectdetail
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,9 +39,15 @@ import com.example.dynasync.R
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Task
 import com.example.dynasync.ui.components.DynaSyncDatePicker
+import com.example.dynasync.ui.components.DynaSyncTextField
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import java.time.ZoneId
+import java.time.LocalDate as JavaLocalDate
+import kotlin.time.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,19 +59,36 @@ fun TaskFormBottomSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    val today = remember {
+        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    }
+
     val datePickerState = rememberDatePickerState(
         selectableDates = object : SelectableDates {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                val todayMillis = JavaLocalDate.now()
+                    .atStartOfDay(ZoneId.of("UTC"))
+                    .toInstant()
+                    .toEpochMilli()
+
+                return utcTimeMillis >= todayMillis
+            }
+
             override fun isSelectableYear(year: Int): Boolean {
-                return year >= 2024
+                return year >= today.year
             }
         }
     )
 
     var title by remember { mutableStateOf(initialTask?.title ?: "") }
+    var isTitleError by remember { mutableStateOf(false) }
+    val maxTitleLength: Int = 20
+
     var showStaffDialog by remember { mutableStateOf(false) }
 
     var finishDate by remember {
-        mutableStateOf(initialTask?.finishDate ?: LocalDate.parse("2025-01-01"))
+        mutableStateOf(initialTask?.finishDate ?: today)
     }
 
     var showDatePicker by remember { mutableStateOf(false) }
@@ -88,12 +113,20 @@ fun TaskFormBottomSheet(
                 fontWeight = FontWeight.Bold
             )
 
-            OutlinedTextField(
+            DynaSyncTextField(
                 value = title,
-                onValueChange = { title = it },
-                label = { Text("Título") },
+                onValueChange = {
+                    if(it.length <= maxTitleLength) {
+                        title = it
+                    }
+                },
+                label = "Titulo",
+                errorMessage = if (isTitleError) "El titulo es requerido" else null,
+                supportingText = "Titulo de la tarea",
+                charCount = title.length,
+                maxChars = maxTitleLength,
                 modifier = Modifier.fillMaxWidth(),
-                singleLine = true
+                maxLines = 1
             )
 
             OutlinedTextField(
@@ -166,7 +199,13 @@ fun TaskFormBottomSheet(
 
             Button(
                 onClick = {
-                    onSaveClick(title, finishDate, selectedPersonal)
+                    if(title.isEmpty()) {
+                        isTitleError = true
+                    }
+                    else {
+                        isTitleError = false
+                        onSaveClick(title, finishDate, selectedPersonal)
+                    }
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(12.dp),
