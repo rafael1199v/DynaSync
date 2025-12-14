@@ -6,14 +6,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,20 +38,55 @@ import coil.request.ImageRequest
 import com.example.dynasync.R
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.navigation.MainDestination
+import com.example.dynasync.ui.theme.JungleTeal
 
 @Composable
 fun HomeScreen(
     onProjectClick: (Int) -> Unit,
+    onCreateProject: () -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel()
 ) {
     val state by homeViewModel.state.collectAsState()
 
-    HomeScreenContent(
-        onProjectClick = onProjectClick,
-        state = state,
-        modifier = modifier
-    )
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+        floatingActionButton = {
+            FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.primary,
+                onClick = onCreateProject,
+                content = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(
+                            8.dp,
+                            Alignment.CenterHorizontally
+                        ),
+                        modifier = Modifier.padding(all = 16.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_add_24),
+                            contentDescription = "Float Action Button",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+
+                        Text(
+                            text = "Proyecto",
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+            )
+        }
+    ) { contentPadding ->
+        HomeScreenContent(
+            onProjectClick = onProjectClick,
+            state = state,
+            modifier = Modifier.padding(contentPadding)
+        )
+    }
+
 }
 
 

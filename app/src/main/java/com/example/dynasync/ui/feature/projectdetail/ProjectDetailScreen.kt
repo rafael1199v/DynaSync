@@ -270,9 +270,9 @@ fun ProjectDetailScreenContent(
                 showBottomSheet = true
             },
             modifier = Modifier
-                .align(Alignment.BottomEnd) // Abajo a la derecha
-                .padding(26.dp),
-            containerColor = MaterialTheme.colorScheme.primary, // Tu color
+                .align(Alignment.BottomEnd)
+                .padding(16.dp),
+            containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
 

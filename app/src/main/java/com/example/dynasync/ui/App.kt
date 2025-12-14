@@ -134,28 +134,7 @@ fun App(
         },
         floatingActionButton = {
             if(layoutConfig.onFloatActionButtonClick != null) {
-                FloatingActionButton(
-                    containerColor = JungleTeal,
-                    onClick = layoutConfig.onFloatActionButtonClick,
-                    content = {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(
-                                8.dp,
-                                Alignment.CenterHorizontally
-                            ),
-                            modifier = Modifier.padding(all = 16.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = layoutConfig.floatingActionButtonIconId!!),
-                                contentDescription = "Float Action Button",
-                                tint = Color.White
-                            )
 
-                            Text(text = layoutConfig.floatingActionButtonText ?: "", color = Color.White)
-                        }
-                    },
-                )
             }
         }
     ) { innerPadding ->
@@ -186,6 +165,9 @@ fun App(
                         modifier = Modifier.fillMaxSize(),
                         onProjectClick = { projectId ->
                             navController.navigate(MainDestination.ProjectDetail(projectId))
+                        },
+                        onCreateProject = {
+                            navController.navigate(MainDestination.CreateProject())
                         }
                     )
                 }

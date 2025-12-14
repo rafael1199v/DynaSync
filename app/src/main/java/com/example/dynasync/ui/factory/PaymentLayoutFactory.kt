@@ -3,8 +3,8 @@ package com.example.dynasync.ui.factory
 import com.example.dynasync.R
 
 class PaymentLayoutFactory(
-    private val onFloatActionButtonClick: (() -> Unit),
-    private val onNavigationIconClick: (() -> Unit),
+    private val onFloatActionButtonClick: (() -> Unit)?,
+    private val onNavigationIconClick: (() -> Unit)?,
     private val listActions: List<ActionItem>
 ) : LayoutFactory {
     override fun create(): LayoutConfiguration {

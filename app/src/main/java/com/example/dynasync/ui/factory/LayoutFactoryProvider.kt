@@ -21,9 +21,7 @@ object LayoutFactoryProvider {
         return when {
             destination.hasRoute<MainDestination.Home>() -> {
                 HomeLayoutFactory(
-                    onFloatActionButtonClick = {
-                        navController.navigate(MainDestination.CreateProject())
-                    },
+                    onFloatActionButtonClick = null,
                     onNavigationIconClick = {},
                     listActions = listOf(
                         ActionItem(
@@ -38,7 +36,7 @@ object LayoutFactoryProvider {
             destination.hasRoute<MainDestination.Payment>() -> {
                 PaymentLayoutFactory(
                     onNavigationIconClick = { navController.popBackStack() },
-                    onFloatActionButtonClick = {},
+                    onFloatActionButtonClick = null,
                     listActions = listOf(
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
@@ -102,7 +100,7 @@ object LayoutFactoryProvider {
             destination.hasRoute<MainDestination.Staff>() -> {
                 StaffLayoutFactory(
                     onNavigationIconClick = { navController.popBackStack() },
-                    onFloatActionButtonClick = { },
+                    onFloatActionButtonClick = null,
                     listActions = listOf(
                         ActionItem(
                             iconId = R.drawable.outline_account_circle_24,
