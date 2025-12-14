@@ -109,6 +109,7 @@ class CreateProjectViewModel(
             val project = ProjectRepository.getProjectById(projectId)
             editableProject = project
 
+
             _state.update {
                 it.copy(
                     title = project?.title ?: "",

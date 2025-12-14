@@ -74,4 +74,16 @@ object StaffRepository {
         delay(2000)
         return staff
     }
+
+    suspend fun getStaffById(staffId: Int) : Personal {
+        delay(2000)
+        return staff.find { it.id == staffId }!!
+    }
+
+    suspend fun addStaff(newStaff: Personal) {
+        delay(2000)
+        val maxId = staff.maxByOrNull { it.id }?.id ?: 0
+        val newStaffCopy = newStaff.copy(id = maxId + 1)
+        this.staff.add(newStaffCopy)
+    }
 }

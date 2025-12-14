@@ -43,6 +43,7 @@ import com.example.dynasync.ui.feature.login.LoginScreen
 import com.example.dynasync.ui.feature.payment.PaymentScreen
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailScreen
 import com.example.dynasync.ui.feature.staff.StaffScreen
+import com.example.dynasync.ui.feature.staff.form.StaffFormScreen
 import com.example.dynasync.ui.theme.IcyBlue
 import com.example.dynasync.ui.theme.JungleTeal
 
@@ -132,11 +133,6 @@ fun App(
             }
 
         },
-        floatingActionButton = {
-            if(layoutConfig.onFloatActionButtonClick != null) {
-
-            }
-        }
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -177,7 +173,15 @@ fun App(
                 }
 
                 composable<MainDestination.Staff> {
-                    StaffScreen(modifier = Modifier.fillMaxSize())
+                    StaffScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onCreateStaff = {
+                            navController.navigate(MainDestination.StaffForm())
+                        },
+                        onEditStaff = { staffId ->
+                            navController.navigate(MainDestination.StaffForm(staffId))
+                        }
+                    )
                 }
 
                 composable<MainDestination.ProjectDetail> {
@@ -196,6 +200,15 @@ fun App(
                     CreateProjectScreen(
                         onSubmitFormSuccess = {
                             navController.navigate(MainDestination.Home)
+                        },
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                composable<MainDestination.StaffForm> {
+                    StaffFormScreen(
+                        onSubmitFormSuccess = {
+                            navController.navigate(MainDestination.Staff)
                         },
                         modifier = Modifier.fillMaxSize()
                     )

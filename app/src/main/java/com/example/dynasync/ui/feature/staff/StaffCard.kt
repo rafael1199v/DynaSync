@@ -5,10 +5,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +30,8 @@ import com.example.dynasync.domain.model.Personal
 
 @Composable
 fun StaffCard(
+    onDeleteStaff: () -> Unit,
+    onUpdateStaff: () -> Unit,
     staff: Personal,
     modifier: Modifier = Modifier
 ) {
@@ -59,21 +64,49 @@ fun StaffCard(
 
 
         Column(
-            modifier = Modifier,
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(
                 8.dp
-            )
+            ),
         ) {
             Text(
                 text = "${staff.name} ${staff.lastname}",
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Text(
                 text = "Cargo: ${staff.charge}",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth()
             )
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                8.dp,
+                Alignment.CenterHorizontally
+            )
+        ) {
+            IconButton(
+                onClick = { onDeleteStaff() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.delete_filled),
+                    contentDescription = "Delete staff"
+                )
+            }
+
+            IconButton(
+                onClick = { onUpdateStaff() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.outline_edit_square_24),
+                    contentDescription = "Edit staff"
+                )
+            }
         }
     }
 }
@@ -88,7 +121,9 @@ fun StaffCardPreview() {
             lastname = "Gates",
             charge = "Developer",
             imageUrl = "https://imgs.search.brave.com/kLAi2FJoe1m0aSPk7FWSxVBUt4OWGGr0552zBv2_430/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/bW9zLmNtcy5mdXR1/cmVjZG4ubmV0L3NL/ZnJlTDV3YlgySmpR/U0pnRmpjdlMuanBn"
-        )
+        ),
+        onDeleteStaff = {},
+        onUpdateStaff = {}
     )
 }
 

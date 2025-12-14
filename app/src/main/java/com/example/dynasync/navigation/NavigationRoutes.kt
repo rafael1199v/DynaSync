@@ -26,6 +26,9 @@ sealed interface MainDestination {
 
     @Serializable
     data class CreateProject(val projectId: Int = -1) : MainDestination
+
+    @Serializable
+    data class StaffForm(val staffId: Int = -1) : MainDestination
 }
 
 
