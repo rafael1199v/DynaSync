@@ -31,7 +31,7 @@ class StaffViewModel: ViewModel() {
             }
 
             is StaffIntent.DeleteStaff -> {
-
+                onDeleteStaff(intent.staffId)
             }
             is StaffIntent.UpdateStaff -> {
                 onUpdateStaff(intent.staffId)
@@ -46,6 +46,13 @@ class StaffViewModel: ViewModel() {
         }
     }
 
+    private fun onDeleteStaff(staffId: Int) {
+        viewModelScope.launch {
+            StaffRepository.deleteStaff(staffId)
+        }
+
+        onIntent(StaffIntent.LoadStaff)
+    }
     private fun getStaff(){
         viewModelScope.launch {
             _state.update {

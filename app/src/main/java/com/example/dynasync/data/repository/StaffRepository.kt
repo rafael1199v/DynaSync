@@ -86,4 +86,9 @@ object StaffRepository {
         val newStaffCopy = newStaff.copy(id = maxId + 1)
         this.staff.add(newStaffCopy)
     }
+
+    suspend fun deleteStaff(staffId: Int) {
+        delay(2000)
+        staff.removeIf { it.id == staffId }
+    }
 }

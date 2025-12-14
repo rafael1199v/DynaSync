@@ -11,16 +11,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
 import com.example.dynasync.data.repository.StaffRepository
+import com.example.dynasync.domain.model.Personal
+import com.example.dynasync.ui.feature.projectdetail.ProjectDetailIntent
 import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
 
 @Composable
@@ -126,6 +134,8 @@ fun StaffScreenContent(
     modifier: Modifier = Modifier
 ) {
 
+    var staffToDelete by remember { mutableStateOf<Personal?>(value = null) }
+
     LazyColumn(
         modifier = modifier.padding(horizontal = 26.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -139,13 +149,41 @@ fun StaffScreenContent(
                 staff = staff,
                 modifier = Modifier.fillMaxWidth(),
                 onDeleteStaff = {
-                    onIntent(StaffIntent.DeleteStaff(staff.id))
+                    //onIntent(StaffIntent.DeleteStaff(staff.id))
+                    staffToDelete = staff
                 },
                 onUpdateStaff = {
                     onIntent(StaffIntent.UpdateStaff(staff.id))
                 }
             )
         }
+    }
+
+
+    if (staffToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { staffToDelete = null },
+            title = { Text(text = "Eliminar personal") },
+            text = { Text(text = "¿Deseas eliminar de la lista de peersonal a '${staffToDelete?.name} ${staffToDelete?.lastname}'?") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        onIntent(StaffIntent.DeleteStaff(staffToDelete!!.id))
+                        staffToDelete = null
+                    },
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text(
+                        text = "Eliminar"
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { staffToDelete = null }) { Text("Cancelar") }
+            }
+        )
     }
 }
 
