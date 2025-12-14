@@ -38,7 +38,7 @@ object ProjectRepository {
                     //description = "Description of task 2",
                     isCompleted = false,
                     personal = Personal(
-                        id = 1,
+                        id = 2,
                         name = "Rafael",
                         lastname = "Vargas",
                         charge = "Developer"

@@ -1,5 +1,6 @@
 package com.example.dynasync.data.repository
 
+import androidx.compose.animation.core.copy
 import com.example.dynasync.domain.model.Task
 import kotlinx.coroutines.delay
 import kotlin.time.Clock
@@ -47,6 +48,26 @@ object TaskRepository {
     suspend fun updateTask(task: Task) {
         delay(2000)
 
+        for (project in projects) {
+            val index = project.tasks.indexOfFirst { it.id == task.id }
+
+            if(index != -1) {
+                val newTask = project.tasks[index].copy(
+                    title = task.title,
+                    isCompleted = task.isCompleted,
+                    personal = task.personal,
+                    finishDate = task.finishDate
+                )
+
+                val updatedTasks = project.tasks.toMutableList()
+                updatedTasks[index] = newTask
+
+                val updatedProject = project.copy(tasks = updatedTasks)
+                val indexProject = projects.indexOfFirst { it.id == project.id }
+                projects[indexProject] = updatedProject
+
+            }
+        }
     }
 
 }

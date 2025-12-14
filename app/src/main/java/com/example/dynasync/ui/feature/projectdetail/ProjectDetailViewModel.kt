@@ -63,6 +63,7 @@ class ProjectDetailViewModel(
                 addTask(intent.title, intent.staffId, intent.finishDate)
             }
             is ProjectDetailIntent.UpdateTask -> {
+                println("aaaa 2")
                 updateTask(intent.taskId, intent.title, intent.staffId, intent.finishDate)
             }
         }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -103,6 +104,7 @@ fun ProjectDetailScreenContent(
             verticalArrangement = Arrangement.spacedBy(
                 space = 20.dp
             ),
+            contentPadding = PaddingValues(bottom = 100.dp),
             modifier = modifier
         ) {
             item {
@@ -198,6 +200,10 @@ fun ProjectDetailScreenContent(
                         },
                         onDeleteTask = {
                             taskToDelete = task
+                        },
+                        onEditTask = {
+                            taskToEdit = task
+                            showBottomSheet = true
                         }
                     )
                 }
@@ -255,9 +261,6 @@ fun ProjectDetailScreenContent(
                 }
             }
 
-            item {
-                Spacer(modifier = Modifier.height(60.dp))
-            }
 
         }
 
@@ -272,7 +275,18 @@ fun ProjectDetailScreenContent(
             containerColor = MaterialTheme.colorScheme.primary, // Tu color
             contentColor = MaterialTheme.colorScheme.onPrimary
         ) {
-            Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription = "Add Task")
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    8.dp,
+                    Alignment.CenterHorizontally
+                ),
+                modifier = Modifier.padding(all = 16.dp)
+            ) {
+                Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription = "Add Task")
+                Text(text = "Tarea")
+            }
         }
     }
 
@@ -334,14 +348,12 @@ fun ProjectDetailScreenContent(
             onDismissRequest = { showBottomSheet = false },
             onSaveClick = { title, date, person ->
                 if (taskToEdit == null) {
-                    // CREAR
                     onIntent(ProjectDetailIntent.CreateTask(
                         title = title,
                         finishDate = date.toString(),
                         staffId = person?.id
                     ))
                 } else {
-                    // EDITAR
                     onIntent(ProjectDetailIntent.UpdateTask(
                         taskId = taskToEdit!!.id,
                         title = title,

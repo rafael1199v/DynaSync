@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.dynasync.R
@@ -36,9 +39,9 @@ fun TaskCard(
     task: Task,
     onToggleTask: (taskId: Int) -> Unit,
     onDeleteTask: (taskId: Int) -> Unit,
+    onEditTask: (taskId: Int) -> Unit, // Agregué este parámetro que faltaba
     modifier: Modifier = Modifier
 ) {
-
     var checkboxToggle by remember { mutableStateOf(task.isCompleted) }
 
     Box(
@@ -49,75 +52,109 @@ fun TaskCard(
         )
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).padding(end = 40.dp)
+            modifier = Modifier
+                .padding(12.dp)
+                .fillMaxWidth(), // Asegura que ocupe el ancho
+            verticalAlignment = Alignment.Top // Alineamos todo arriba
         ) {
+            // 1. Checkbox a la izquierda
             Checkbox(
                 checked = checkboxToggle,
                 onCheckedChange = {
                     checkboxToggle = it
                     onToggleTask(task.id)
                 },
-                colors = CheckboxDefaults.colors(
-                    checkedColor = JungleTeal
-                )
+                colors = CheckboxDefaults.colors(checkedColor = JungleTeal),
+                modifier = Modifier.padding(end = 8.dp) // Espacio entre check y contenido
             )
 
+            // 2. Columna Central (Contenido + Botones en la cabecera)
             Column(
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                modifier = Modifier.weight(1f) // IMPORTANTE: Ocupa todo el ancho restante
             ) {
-                Text(text = task.title, style = MaterialTheme.typography.titleMedium)
-
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                // --- FILA DE CABECERA (Título + Botones) ---
+                Row(
+                    verticalAlignment = Alignment.Top,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
+                    // A. Título
+                    Text(
+                        text = task.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .weight(1f) // El texto toma el espacio disponible
+                            .padding(end = 8.dp) // Margen para no pegarse a los botones
+                    )
+
+                    // B. Botones de Acción (Ahora son parte del flujo, no flotantes)
+                    Row(
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        // Botón Borrar
+                        IconButton(
+                            onClick = { onDeleteTask(task.id) },
+                            modifier = Modifier.size(32.dp) // Tamaño controlado
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.outline_delete_24),
+                                contentDescription = "Borrar",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+
+                        // Botón Editar
+                        IconButton(
+                            onClick = { onEditTask(task.id) },
+                            modifier = Modifier.size(32.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.outline_edit_square_24),
+                                contentDescription = "Editar",
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
+                    }
+                }
+
+                // --- DETALLES DEBAJO DEL TÍTULO ---
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.padding(top = 4.dp)
+                ) {
+                    // Responsable
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
-
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.outline_business_center_24),
-                            contentDescription = "Responsable"
+                            contentDescription = "Responsable",
+                            modifier = Modifier.size(16.dp) // Iconos pequeños para detalles
                         )
-
                         Text(
-                            text = if(task.personal == null) "Sin personal asignado" else "${task.personal.name} ${task.personal.lastname}",
+                            text = if (task.personal == null) "Sin asignar" else "${task.personal.name} ${task.personal.lastname}",
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
 
+                    // Fecha
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
-
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.outline_calendar_today_24),
-                            contentDescription = "Date"
+                            contentDescription = "Date",
+                            modifier = Modifier.size(16.dp)
                         )
-
                         Text(
-                            text = "Finalizacion: ${task.finishDate.toString()}",
+                            text = "Fin: ${task.finishDate}",
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
                 }
-
             }
-        }
-
-        IconButton(
-            onClick = {
-                onDeleteTask(task.id)
-            },
-            modifier = Modifier.align(Alignment.TopEnd)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.outline_delete_24),
-                contentDescription = "Editar tarea",
-                modifier = Modifier.width(24.dp).height(24.dp)
-            )
         }
     }
 }
@@ -128,7 +165,7 @@ fun TaskCard(
 fun TaskCardPreview() {
     val task = Task(
         id = 1,
-        title = "Task 1",
+        title = "012345678901234",
         isCompleted = false,
         personal = Personal(
             id = 1,
@@ -141,6 +178,7 @@ fun TaskCardPreview() {
     TaskCard(
         task = task,
         onDeleteTask = {},
-        onToggleTask = {}
+        onToggleTask = {},
+        onEditTask = {}
     )
 }
