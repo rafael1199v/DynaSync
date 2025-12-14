@@ -1,15 +1,11 @@
 package com.example.dynasync.ui.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.example.dynasync.ui.feature.createproject.CreateProjectIntent
-import com.example.dynasync.ui.theme.JungleTeal
 
 
 @Composable
@@ -22,7 +18,8 @@ fun DynaSyncTextField(
     charCount: Int,
     maxChars: Int,
     modifier: Modifier = Modifier,
-    maxLines: Int = 1
+    maxLines: Int = 1,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
 
 
@@ -47,6 +44,7 @@ fun DynaSyncTextField(
                 Text(text = "${supportingText} - ${charCount}/${maxChars}")
             }
         },
-        maxLines = maxLines
+        maxLines = maxLines,
+        keyboardOptions = keyboardOptions
     )
 }

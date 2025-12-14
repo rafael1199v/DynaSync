@@ -5,16 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -107,6 +105,8 @@ fun StaffFormScreenContent(
     val context = LocalContext.current
     val activity = context as? Activity
 
+    val scrollState = rememberScrollState()
+
     var tempPhotoUri by remember { mutableStateOf<Uri?>(null) }
     var currentPhotoPath by remember { mutableStateOf<String?>(null) }
 
@@ -173,7 +173,8 @@ fun StaffFormScreenContent(
     Column(
         modifier = modifier.
         padding(start = 26.dp, end = 26.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(scrollState),
         verticalArrangement = Arrangement.spacedBy(36.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -301,7 +302,6 @@ fun StaffFormScreenContent(
                     charCount = state.name.length,
                     maxChars = nameMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
                 )
 
                 DynaSyncTextField(
@@ -317,7 +317,6 @@ fun StaffFormScreenContent(
                     charCount = state.lastname.length,
                     maxChars = lastNameMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1,
                 )
 
 
@@ -334,7 +333,6 @@ fun StaffFormScreenContent(
                     charCount = state.charge.length,
                     maxChars = chargeMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
                 )
             }
         }

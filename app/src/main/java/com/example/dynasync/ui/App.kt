@@ -3,6 +3,7 @@ package com.example.dynasync.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -41,6 +42,7 @@ import com.example.dynasync.ui.feature.createproject.CreateProjectScreen
 import com.example.dynasync.ui.feature.home.HomeScreen
 import com.example.dynasync.ui.feature.login.LoginScreen
 import com.example.dynasync.ui.feature.payment.PaymentScreen
+import com.example.dynasync.ui.feature.payment.form.PaymentFormScreen
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailScreen
 import com.example.dynasync.ui.feature.staff.StaffScreen
 import com.example.dynasync.ui.feature.staff.form.StaffFormScreen
@@ -172,7 +174,10 @@ fun App(
                     PaymentScreen(
                         modifier = Modifier.fillMaxSize(),
                         onCreatePayment = {
-
+                            navController.navigate(MainDestination.PaymentForm())
+                        },
+                        onEditPayment = { paymentId ->
+                            navController.navigate(MainDestination.PaymentForm(paymentId))
                         }
                     )
                 }
@@ -216,6 +221,15 @@ fun App(
                             navController.navigate(MainDestination.Staff)
                         },
                         modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                composable<MainDestination.PaymentForm> {
+                    PaymentFormScreen(
+                        modifier = Modifier.fillMaxWidth(),
+                        onSubmitFormSuccess = {
+                            navController.navigate(MainDestination.Payment)
+                        }
                     )
                 }
             }

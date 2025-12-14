@@ -5,9 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.dynasync.data.repository.PaymentRepository
 import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
+import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -15,6 +18,8 @@ class PaymentViewModel: ViewModel() {
     private val _state = MutableStateFlow(value = PaymentViewState())
     val state = _state.asStateFlow()
 
+    private val _uiEvent = Channel<PaymentUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
     private var cachePayments: List<Payment> = emptyList()
 
 
@@ -30,6 +35,13 @@ class PaymentViewModel: ViewModel() {
             }
             PaymentIntent.LoadPayments -> {
                 getPayments()
+            }
+
+            is PaymentIntent.DeletePayment -> {
+                deletePayment(intent.paymentId)
+            }
+            is PaymentIntent.EditPayment -> {
+                editPayment(intent.paymentId)
             }
         }
     }
@@ -58,7 +70,7 @@ class PaymentViewModel: ViewModel() {
     }
 
 
-    private fun onFilterSelected(type: PaymentType) {
+    private fun onFilterSelected(type: PaymentType?) {
         val currentFilter = _state.value.selectedFilter
         val newFilter = if(currentFilter == type) null else type
 
@@ -76,5 +88,21 @@ class PaymentViewModel: ViewModel() {
         }
     }
 
+    private fun deletePayment(paymentId: Int) {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            PaymentRepository.deletePayment(paymentId)
+            _state.update { it.copy(isLoading = true) }
+
+            onIntent(PaymentIntent.LoadPayments)
+            onIntent(PaymentIntent.FilterPayments(_state.value.selectedFilter))
+        }
+    }
+
+    private fun editPayment(paymentId: Int) {
+        viewModelScope.launch {
+            _uiEvent.send(PaymentUiEvent.NavigateToPaymentForm(paymentId))
+        }
+    }
 
 }

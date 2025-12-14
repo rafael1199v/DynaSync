@@ -4,6 +4,7 @@ import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
 import kotlinx.coroutines.delay
 import kotlinx.datetime.LocalDateTime
+import kotlin.time.Clock
 import kotlin.time.Instant
 
 object PaymentRepository {
@@ -54,6 +55,47 @@ object PaymentRepository {
     suspend fun getPayments(): List<Payment> {
         delay(2000)
         return payments
+    }
+
+    suspend fun getPaymentById(id: Int): Payment {
+        delay(500)
+        return payments.find { it.id == id }
+            ?: throw Exception("El pago con ID $id no fue encontrado.")
+    }
+
+    suspend fun addPayment(payment: Payment) {
+        delay(1000)
+
+        val nextId = (payments.maxOfOrNull { it.id } ?: 0) + 1
+
+        val newPayment = payment.copy(
+            id = nextId,
+            createdAt = Clock.System.now()
+        )
+
+        payments.add(newPayment)
+    }
+
+    suspend fun updatePayment(updatedPayment: Payment) {
+        delay(1000)
+
+        val index = payments.indexOfFirst { it.id == updatedPayment.id }
+
+        if (index != -1) {
+            val currentPayment = payments[index]
+            payments[index] = updatedPayment.copy(createdAt = currentPayment.createdAt)
+        } else {
+            throw Exception("No se pudo actualizar: El pago no existe.")
+        }
+    }
+
+    suspend fun deletePayment(id: Int) {
+        delay(500)
+        val wasRemoved = payments.removeIf { it.id == id }
+
+        if (!wasRemoved) {
+            throw Exception("No se pudo eliminar: El pago no existe.")
+        }
     }
 
 }

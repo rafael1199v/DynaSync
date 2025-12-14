@@ -126,7 +126,6 @@ fun TaskFormBottomSheet(
                 charCount = title.length,
                 maxChars = maxTitleLength,
                 modifier = Modifier.fillMaxWidth(),
-                maxLines = 1
             )
 
             OutlinedTextField(

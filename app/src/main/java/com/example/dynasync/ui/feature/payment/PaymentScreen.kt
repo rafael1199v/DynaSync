@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,16 +38,28 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
 import com.example.dynasync.data.repository.PaymentRepository
 import com.example.dynasync.domain.model.PaymentType
+import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
 import com.example.dynasync.ui.theme.JungleTeal
 
 @Composable
 fun PaymentScreen(
     onCreatePayment: () -> Unit,
+    onEditPayment: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PaymentViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is PaymentUiEvent.NavigateToPaymentForm -> {
+                    onEditPayment(event.paymentId)
+                }
+
+            }
+        }
+    }
 
     Scaffold(
         modifier = modifier,
@@ -119,6 +132,42 @@ fun PaymentScreenContent(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
+        LazyRow(
+            modifier = Modifier,
+            contentPadding = PaddingValues(horizontal = 36.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = PaymentType.entries.toTypedArray()) { paymentType ->
+
+                val isSelected = state.selectedFilter == paymentType
+
+                FilterChip(
+                    onClick = { onIntent(PaymentIntent.FilterPayments(paymentType)) },
+                    label = {
+                        Text(text = paymentType.description)
+                    },
+                    selected = isSelected,
+                    leadingIcon = if (isSelected) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_check_24),
+                                contentDescription = null,
+                            )
+                        }
+                    } else null,
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = Color.Transparent,
+                        labelColor = Color.Black,
+                        iconColor = Color.Gray,
+
+                        selectedContainerColor = JungleTeal,
+                        selectedLabelColor = Color.White,
+                        selectedLeadingIconColor = Color.White,
+                    )
+                )
+            }
+        }
+
         if (state.error != null) {
             Column(
                 modifier = Modifier.fillMaxSize().padding(28.dp)
@@ -131,41 +180,6 @@ fun PaymentScreenContent(
             }
 
         } else if (state.paymentList.isNotEmpty()) {
-            LazyRow(
-                modifier = Modifier,
-                contentPadding = PaddingValues(horizontal = 36.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(items = PaymentType.entries.toTypedArray()) { paymentType ->
-
-                    val isSelected = state.selectedFilter == paymentType
-
-                    FilterChip(
-                        onClick = { onIntent(PaymentIntent.FilterPayments(paymentType)) },
-                        label = {
-                            Text(text = paymentType.description)
-                        },
-                        selected = isSelected,
-                        leadingIcon = if (isSelected) {
-                            {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_check_24),
-                                    contentDescription = null,
-                                )
-                            }
-                        } else null,
-                        colors = FilterChipDefaults.filterChipColors(
-                            containerColor = Color.Transparent,
-                            labelColor = Color.Black,
-                            iconColor = Color.Gray,
-
-                            selectedContainerColor = JungleTeal,
-                            selectedLabelColor = Color.White,
-                            selectedLeadingIconColor = Color.White,
-                        )
-                    )
-                }
-            }
 
             LazyColumn(
                 modifier = Modifier
@@ -176,14 +190,18 @@ fun PaymentScreenContent(
                     top = 20.dp,
                     start = 32.dp,
                     end = 32.dp,
-                    bottom = 60.dp
+                    bottom = 80.dp
                 ),
 
                 ) {
                 items(items = state.paymentList) { payment ->
                     PaymentCard(
-                        onDelete = {},
-                        onEdit = {},
+                        onDelete = {
+                            onIntent(PaymentIntent.DeletePayment(payment.id))
+                        },
+                        onEdit = {
+                            onIntent(PaymentIntent.EditPayment(payment.id))
+                        },
                         payment = payment,
                         modifier = Modifier.fillMaxWidth()
                     )

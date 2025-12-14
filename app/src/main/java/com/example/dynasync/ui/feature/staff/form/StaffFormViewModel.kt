@@ -109,20 +109,38 @@ class StaffFormViewModel(
         val newState = staffFormValidator.validate(state.value)
 
         if(staffFormValidator.isValid(newState)) {
-            val newStaff = Personal(
-                id = -1,
-                name = newState.name,
-                lastname = newState.lastname,
-                charge = newState.charge,
-                imageUrl = newState.imageUrl
-            )
+
 
             viewModelScope.launch {
                 _state.update {
                     it.copy(isLoading = true)
                 }
                 try {
-                    StaffRepository.addStaff(newStaff)
+                    println("StaffId: ${staffId}")
+                    if(staffId == -1) {
+                        val newStaff = Personal(
+                            id = -1,
+                            name = newState.name,
+                            lastname = newState.lastname,
+                            charge = newState.charge,
+                            imageUrl = newState.imageUrl
+                        )
+
+                        StaffRepository.addStaff(newStaff)
+                    }
+
+                    else {
+                        val updatedStaff = Personal(
+                            id = staffId,
+                            name = newState.name,
+                            lastname = newState.lastname,
+                            charge = newState.charge,
+                            imageUrl = newState.imageUrl
+                        )
+
+                        StaffRepository.updateStaff(updatedStaff)
+                    }
+
                     _uiEvent.send(StaffFormUiEvent.NavigateToStaff)
 
                 } catch (e: Exception) {

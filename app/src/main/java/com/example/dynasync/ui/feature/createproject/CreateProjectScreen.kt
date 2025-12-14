@@ -25,13 +25,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -65,7 +64,6 @@ import coil.compose.AsyncImage
 import com.example.dynasync.R
 import com.example.dynasync.ui.components.DynaSyncDatePicker
 import com.example.dynasync.ui.components.DynaSyncTextField
-import com.example.dynasync.ui.feature.login.LoginUiEvent
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
 import com.example.dynasync.utils.createImageFile
@@ -317,7 +315,6 @@ fun CreateProjectScreenContent(
                     charCount = state.title.length,
                     maxChars = titleMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 1
                 )
 
                 DynaSyncTextField(
@@ -334,6 +331,7 @@ fun CreateProjectScreenContent(
                     maxChars = objectiveMaxChars,
                     modifier = Modifier.fillMaxWidth(),
                     maxLines = 3,
+                    keyboardOptions = KeyboardOptions.Default
                 )
 
 
@@ -350,7 +348,8 @@ fun CreateProjectScreenContent(
                     charCount = state.description.length,
                     maxChars = descriptionMaxChars,
                     modifier = Modifier.fillMaxWidth(),
-                    maxLines = 7
+                    maxLines = 7,
+
                 )
 
                 OutlinedTextField(

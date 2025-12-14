@@ -80,6 +80,13 @@ object StaffRepository {
         return staff.find { it.id == staffId }!!
     }
 
+    suspend fun updateStaff(staff: Personal) {
+        delay(2000)
+
+        val index = this.staff.indexOfFirst { it.id == staff.id }
+        this.staff[index] = staff
+    }
+
     suspend fun addStaff(newStaff: Personal) {
         delay(2000)
         val maxId = staff.maxByOrNull { it.id }?.id ?: 0

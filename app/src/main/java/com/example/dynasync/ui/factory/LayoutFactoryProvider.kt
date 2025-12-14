@@ -111,6 +111,68 @@ object LayoutFactoryProvider {
                 )
             }
 
+            destination.hasRoute<MainDestination.StaffForm>() -> {
+                val args = entry.toRoute<MainDestination.StaffForm>()
+
+                if(args.staffId == -1) {
+                    StaffCreateLayoutFactory(
+                        onNavigationIconClick = { navController.popBackStack() },
+                        onFloatActionButtonClick = null,
+                        listActions = listOf(
+                            ActionItem(
+                                iconId = R.drawable.outline_account_circle_24,
+                                contentDescription = "Profile",
+                                onClick = {}
+                            )
+                        )
+                    )
+                }
+                else {
+                    StaffEditLayoutFactory(
+                        onNavigationIconClick = { navController.popBackStack() },
+                        onFloatActionButtonClick = null,
+                        listActions = listOf(
+                            ActionItem(
+                                iconId = R.drawable.outline_account_circle_24,
+                                contentDescription = "Profile",
+                                onClick = {}
+                            )
+                        )
+                    )
+                }
+            }
+
+            destination.hasRoute<MainDestination.PaymentForm>() -> {
+                val args = entry.toRoute<MainDestination.PaymentForm>()
+
+                if(args.paymentId == -1) {
+                    PaymentCreateLayoutFactory(
+                        onNavigationIconClick = { navController.popBackStack() },
+                        onFloatActionButtonClick = null,
+                        listActions = listOf(
+                            ActionItem(
+                                iconId = R.drawable.outline_account_circle_24,
+                                contentDescription = "Profile",
+                                onClick = {}
+                            )
+                        )
+                    )
+                }
+                else {
+                    PaymentEditLayoutFactory(
+                        onNavigationIconClick = { navController.popBackStack() },
+                        onFloatActionButtonClick = null,
+                        listActions = listOf(
+                            ActionItem(
+                                iconId = R.drawable.outline_account_circle_24,
+                                contentDescription = "Profile",
+                                onClick = {}
+                            )
+                        )
+                    )
+                }
+            }
+
             else -> EmptyLayoutFactory()
         }
     }
