@@ -31,8 +31,8 @@ android {
             properties.load(FileIO(localPropertiesFile))
         }
 
-        buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supaUrl")}\"")
-        buildConfigField("String", "SUPABASE_KEY", "\"${properties.getProperty("supaKey")}\"")
+        buildConfigField("String", "SUPABASE_URL", "\"${properties.getProperty("supabaseUrl")}\"")
+        buildConfigField("String", "SUPABASE_KEY", "\"${properties.getProperty("supabaseApiKey")}\"")
     }
 
     buildTypes {
@@ -93,6 +93,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("io.github.jan-tennert.supabase:realtime-kt")
+    implementation("io.github.jan-tennert.supabase:storage-kt")
 
     implementation("io.ktor:ktor-client-okhttp:3.2.3")
     implementation("io.ktor:ktor-client-content-negotiation:3.2.3")

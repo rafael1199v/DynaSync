@@ -1,12 +1,9 @@
 package com.example.dynasync.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -16,15 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -33,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.dynasync.data.NavigationBarList
+import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.navigation.AuthenticationDestination
 import com.example.dynasync.navigation.AuthenticationGraph
 import com.example.dynasync.navigation.MainDestination
@@ -48,14 +44,18 @@ import com.example.dynasync.ui.feature.projectdetail.ProjectDetailScreen
 import com.example.dynasync.ui.feature.staff.StaffScreen
 import com.example.dynasync.ui.feature.staff.form.StaffFormScreen
 import com.example.dynasync.ui.theme.IcyBlue
-import com.example.dynasync.ui.theme.JungleTeal
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.status.SessionStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(
     modifier: Modifier = Modifier
 ) {
-    var userIsAuthenticated by remember { mutableStateOf(value = true )}
+
+    val sessionStatus by SupabaseClientObject.client.auth.sessionStatus.collectAsState()
+    val userIsAuthenticated = sessionStatus is SessionStatus.Authenticated
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 

@@ -3,6 +3,8 @@ package com.example.dynasync.ui.feature.login
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dynasync.data.repository.AuthRepository
+import com.example.dynasync.data.repository.AuthResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -76,8 +78,16 @@ class LoginViewModel: ViewModel() {
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true) }
 
-                //Logica de API Integrar
-                _uiEvent.send(LoginUiEvent.NavigateToHome)
+                val result = AuthRepository.signIn(_state.value.email, _state.value.password)
+
+
+                if(result is AuthResult.Error) {
+                    _state.update { it.copy(loginError = "Credenciales incorrectas.") }
+                }
+                else {
+                    _uiEvent.send(LoginUiEvent.NavigateToHome)
+                }
+
 
                 _state.update { it.copy(isLoading = false) }
             }
