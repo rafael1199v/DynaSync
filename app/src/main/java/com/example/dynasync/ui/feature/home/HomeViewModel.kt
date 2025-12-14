@@ -83,11 +83,16 @@ class HomeViewModel : ViewModel() {
                     Log.d("debug",projects.toString())
                     Log.d("debug", user.toString())
 
+                    val projectsInProcess = projects.count { it.tasks.any { task -> !task.isCompleted } }
+                    val pendingTasks = projects.sumOf { project ->
+                        project.tasks.count { !it.isCompleted }
+                    }
+
                     _state.update { currentState ->
                         currentState.copy(
                             user = user,
-                            projectsInProcess = 2,
-                            pendingTasks = 3,
+                            projectsInProcess = projectsInProcess,
+                            pendingTasks = pendingTasks,
                             projects = projects
                         )
                     }
