@@ -76,13 +76,24 @@ fun ProjectDetailScreen(
         }
     }
 
-    ProjectDetailScreenContent(
-        state = state,
-        onIntent = { intent ->
-            viewModel.onIntent(intent = intent)
-        },
-        modifier = modifier
-    )
+    if(state.isInitLoading) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+        }
+    }
+    else {
+        ProjectDetailScreenContent(
+            state = state,
+            onIntent = { intent ->
+                viewModel.onIntent(intent = intent)
+            },
+            modifier = modifier
+        )
+    }
+
 
 }
 

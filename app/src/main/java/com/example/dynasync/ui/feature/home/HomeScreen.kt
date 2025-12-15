@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -85,39 +86,13 @@ fun HomeScreen(
     ) { contentPadding ->
 
         if(state.isLoading) {
-            Column(
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                contentAlignment = Alignment.Center
             ) {
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(all = 20.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .shimmerEffect()
-                )
-
-                Spacer(modifier = Modifier.height(56.dp))
-
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    ProjectCardSkeleton(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    ProjectCardSkeleton(
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
-
+                CircularProgressIndicator()
             }
+
         }
         else {
             HomeScreenContent(
@@ -297,4 +272,43 @@ fun HomeScreenPreview() {
         ),
         modifier = Modifier.fillMaxWidth()
     )
+}
+
+@Composable
+fun HomeSkeletonLoader(
+    modifier: Modifier
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .padding(all = 20.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .shimmerEffect()
+        )
+
+        Spacer(modifier = Modifier.height(56.dp))
+
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            ProjectCardSkeleton(
+                modifier = Modifier.fillMaxWidth()
+            )
+            ProjectCardSkeleton(
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+
+    }
 }

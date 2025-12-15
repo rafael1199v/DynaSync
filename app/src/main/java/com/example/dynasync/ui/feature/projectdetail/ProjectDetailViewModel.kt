@@ -36,11 +36,10 @@ class ProjectDetailViewModel(
 
     init {
         _state.update {
-            it.copy(isLoading = true)
+            it.copy(isInitLoading = true)
         }
 
         onIntent(ProjectDetailIntent.LoadProject(projectId))
-        loadStaff()
     }
 
     fun onIntent(intent: ProjectDetailIntent) {
@@ -73,6 +72,8 @@ class ProjectDetailViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val project = ProjectRepository.getProjectById(projectId = projectId)
+            val staffList = StaffRepository.getStaff(AuthRepository.getUserId()!!)
+
             val sortedProject = project?.let {
                 it.copy(
                     tasks = it.tasks.sortedWith(
@@ -85,7 +86,9 @@ class ProjectDetailViewModel(
             _state.update {
                 it.copy(
                     project = sortedProject,
-                    isLoading = false
+                    staffList = staffList,
+                    isLoading = false,
+                    isInitLoading = false
                 )
             }
         }
@@ -162,9 +165,9 @@ class ProjectDetailViewModel(
 
     private fun loadStaff() {
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             val staffList = StaffRepository.getStaff(AuthRepository.getUserId()!!)
-            _state.update { it.copy(staffList = staffList) }
-
+            _state.update { it.copy(staffList = staffList, isLoading = false) }
         }
     }
 }
