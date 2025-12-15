@@ -193,7 +193,26 @@ object StaffRepository {
     }
 
     suspend fun deleteStaff(staffId: Int) {
-        delay(2000)
-        //staff.removeIf { it.id == staffId }
+        val staffToDelete = getStaffById(staffId)
+        val imageUrl = staffToDelete?.imageUrl
+
+        if (!imageUrl.isNullOrEmpty() && imageUrl.contains("supabase")) {
+            try {
+                StorageHelper.deleteImage("staff-images", imageUrl)
+            } catch (e: Exception) {
+                Log.e("debug", "Error borrando imagen al eliminar al personal: $e")
+            }
+        }
+
+        try {
+            supabase.from("personal").delete {
+                filter {
+                    eq("id", staffId)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ProjectRepo", "Error eliminando al personal de la BD: $e")
+        }
+
     }
 }

@@ -49,10 +49,20 @@ class StaffViewModel: ViewModel() {
 
     private fun onDeleteStaff(staffId: Int) {
         viewModelScope.launch {
-            StaffRepository.deleteStaff(staffId)
-        }
+            _state.update {
+                it.copy(isLoading = true)
+            }
 
-        onIntent(StaffIntent.LoadStaff)
+            try {
+                StaffRepository.deleteStaff(staffId)
+                onIntent(StaffIntent.LoadStaff)
+
+            } catch (e: Exception) {
+                _state.update {
+                    it.copy(isLoading = false, error = "Error al eliminar")
+                }
+            }
+        }
     }
     private fun getStaff(){
         viewModelScope.launch {
