@@ -85,8 +85,23 @@ object PaymentRepository {
 
     suspend fun getPaymentById(id: Int): Payment {
         delay(500)
-        return payments.find { it.id == id }
-            ?: throw Exception("El pago con ID $id no fue encontrado.")
+        try {
+            val paymentDto = supabase.from("payments").select(
+                columns = Columns.raw("""
+                    *
+                """.trimIndent())
+            ) {
+                filter {
+                    eq("id", id)
+                }
+            }.decodeSingle<PaymentDto>()
+
+            return paymentDto.toDomain()
+        }
+        catch (e: Exception) {
+            Log.e("debug", "Hubo un error al cargar los pagos. ${e}")
+            throw e
+        }
     }
 
     suspend fun addPayment(payment: Payment) {
@@ -98,22 +113,24 @@ object PaymentRepository {
             supabase.from("payments").insert(newPayment.toDto())
         }
         catch (e: Exception) {
-            Log.e("main", "Hubo un error al cargar los pagos. ${e}")
+            Log.e("debug", "Hubo un error al cargar los pagos. ${e}")
             throw e
         }
 
     }
 
     suspend fun updatePayment(updatedPayment: Payment) {
-        delay(1000)
 
-        val index = payments.indexOfFirst { it.id == updatedPayment.id }
-
-        if (index != -1) {
-            val currentPayment = payments[index]
-            payments[index] = updatedPayment.copy(createdAt = currentPayment.createdAt)
-        } else {
-            throw Exception("No se pudo actualizar: El pago no existe.")
+        try {
+            supabase.from("payments").update(updatedPayment.toDto()) {
+                filter {
+                    eq("id", updatedPayment.id)
+                }
+            }
+        }
+        catch (e: Exception) {
+            Log.e("debug", "Hubo un error al cargar los pagos. ${e}")
+            throw e
         }
     }
 

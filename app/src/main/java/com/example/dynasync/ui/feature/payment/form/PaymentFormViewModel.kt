@@ -95,7 +95,7 @@ class PaymentFormViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             try {
-                 val payment = PaymentRepository.getPaymentById(id) // TODO: Implementar
+                 val payment = PaymentRepository.getPaymentById(id)
                  _state.update {
                     it.copy(
                         beneficiary = payment.beneficiary,
