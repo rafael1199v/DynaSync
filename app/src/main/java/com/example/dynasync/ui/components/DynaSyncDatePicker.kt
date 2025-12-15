@@ -24,37 +24,30 @@ fun DynaSyncDatePicker(
     datePickerState: DatePickerState,
     modifier: Modifier = Modifier
 ){
-    MaterialTheme(
-        colorScheme = MaterialTheme.colorScheme.copy(
-            primary = JungleTeal,
-            onPrimary = Color.White,
-            surface = Color.White,
-            onSurface = Color.Black
-        )
-    ) {
-        DatePickerDialog(
-            modifier = modifier,
-            onDismissRequest = {
-                onDismissRequest()
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    onConfirmButtonClick()
-                }) {
-                    Text("Aceptar")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        onDismissButtonClick()
-                    }
-                ) {
-                    Text("Cancelar")
-                }
+
+    DatePickerDialog(
+        modifier = modifier,
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onConfirmButtonClick()
+            }) {
+                Text("Aceptar")
             }
-        ) {
-            DatePicker(state = datePickerState)
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissButtonClick()
+                }
+            ) {
+                Text("Cancelar")
+            }
         }
+    ) {
+        DatePicker(state = datePickerState)
     }
+
 }

@@ -253,7 +253,7 @@ fun CreateProjectScreenContent(
                                 onIntent(CreateProjectIntent.ImageUrlChange(""))
                             },
                             containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onError
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.delete_filled),
@@ -265,11 +265,12 @@ fun CreateProjectScreenContent(
                         SmallFloatingActionButton(
                             onClick = { showSourceSelectionDialog = true },
                             modifier = Modifier.padding(8.dp),
-                            containerColor = JungleTeal
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.outline_edit_square_24),
-                                contentDescription = "Cambiar", tint = Color.White
+                                contentDescription = "Cambiar"
                             )
                         }
                     }
@@ -281,8 +282,8 @@ fun CreateProjectScreenContent(
                         onClick = { showSourceSelectionDialog = true },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.White,
-                            containerColor = JungleTeal
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.primary
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -390,16 +391,16 @@ fun CreateProjectScreenContent(
                             Text(text = "Fecha estimada de finalización")
                         }
                     },
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        focusedBorderColor = Color.Gray,
-                        focusedLabelColor = Color.Gray,
-                        cursorColor = JungleTeal,
-
-                        unfocusedContainerColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Gray,
-                        unfocusedLabelColor = Color.Gray,
-                    )
+//                    colors = OutlinedTextFieldDefaults.colors(
+//                        focusedContainerColor = Color.Transparent,
+//                        focusedBorderColor = Color.Gray,
+//                        focusedLabelColor = Color.Gray,
+//                        cursorColor = JungleTeal,
+//
+//                        unfocusedContainerColor = Color.Transparent,
+//                        unfocusedBorderColor = Color.Gray,
+//                        unfocusedLabelColor = Color.Gray,
+//                    )
                 )
 
             }
@@ -413,8 +414,8 @@ fun CreateProjectScreenContent(
                 .fillMaxWidth()
                 .height(56.dp),
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                containerColor = JungleTeal
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary
             ),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -444,93 +445,61 @@ fun CreateProjectScreenContent(
     }
 
     if (showSourceSelectionDialog) {
-
-        MaterialTheme(
-            colorScheme = MaterialTheme.colorScheme.copy(
-                primary = JungleTeal,
-                onPrimary = Color.White,
-                surface = Color.White,
-                onSurface = Color.Black
-            )
-        ) {
-            AlertDialog(
-                onDismissRequest = { showSourceSelectionDialog = false },
-                title = { Text("Seleccionar imagen") },
-                text = { Text("¿De dónde quieres obtener la imagen para tu proyecto?") },
-                confirmButton = {
-                    TextButton(onClick = {
-                        showSourceSelectionDialog = false
-                        openCamera()
-                    }) { Text("Cámara") }
-                },
-                dismissButton = {
-                    TextButton(onClick = {
-                        showSourceSelectionDialog = false
-                        openGallery()
-                    }) { Text("Galería") }
-                }
-            )
-        }
-
+        AlertDialog(
+            onDismissRequest = { showSourceSelectionDialog = false },
+            title = { Text("Seleccionar imagen") },
+            text = { Text("¿De dónde quieres obtener la imagen para tu proyecto?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showSourceSelectionDialog = false
+                    openCamera()
+                }) { Text("Cámara") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showSourceSelectionDialog = false
+                    openGallery()
+                }) { Text("Galería") }
+            }
+        )
     }
 
     // 2. Explicación de Permiso (Rationale)
     if (showRationaleDialog) {
-
-        MaterialTheme(
-            colorScheme = MaterialTheme.colorScheme.copy(
-                primary = JungleTeal,
-                onPrimary = Color.White,
-                surface = Color.White,
-                onSurface = Color.Black
-            )
-        ) {
-            AlertDialog(
-                onDismissRequest = { showRationaleDialog = false },
-                title = { Text("Permiso necesario") },
-                text = { Text("DynaSync necesita acceso a la cámara para tomar la foto.") },
-                confirmButton = {
-                    TextButton(onClick = { showRationaleDialog = false; permissionLauncher.launch(Manifest.permission.CAMERA) }) {
-                        Text("Permitir")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showRationaleDialog = false }) { Text("Cancelar") }
+        AlertDialog(
+            onDismissRequest = { showRationaleDialog = false },
+            title = { Text("Permiso necesario") },
+            text = { Text("DynaSync necesita acceso a la cámara para tomar la foto.") },
+            confirmButton = {
+                TextButton(onClick = { showRationaleDialog = false; permissionLauncher.launch(Manifest.permission.CAMERA) }) {
+                    Text("Permitir")
                 }
-            )
-        }
-
+            },
+            dismissButton = {
+                TextButton(onClick = { showRationaleDialog = false }) { Text("Cancelar") }
+            }
+        )
     }
 
     // 3. Configuración (Permiso denegado permanente)
     if (showSettingsDialog) {
-        MaterialTheme(
-            colorScheme = MaterialTheme.colorScheme.copy(
-                primary = JungleTeal,
-                onPrimary = Color.White,
-                surface = Color.White,
-                onSurface = Color.Black
-            )
-        ) {
-            AlertDialog(
-                onDismissRequest = { showSettingsDialog = false },
-                title = { Text("Permiso bloqueado") },
-                text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
-                confirmButton = {
-                    TextButton(onClick = {
-                        showSettingsDialog = false
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", context.packageName, null)
-                        }
-                        context.startActivity(intent)
-                    }) { Text("Ir a Configuración") }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
-                }
-            )
-        }
-
+        AlertDialog(
+            onDismissRequest = { showSettingsDialog = false },
+            title = { Text("Permiso bloqueado") },
+            text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showSettingsDialog = false
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                    context.startActivity(intent)
+                }) { Text("Ir a Configuración") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
+            }
+        )
     }
 
 

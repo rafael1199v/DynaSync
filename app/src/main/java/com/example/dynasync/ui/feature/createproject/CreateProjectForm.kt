@@ -38,16 +38,16 @@ fun CreateProjectForm(
     val objectiveMaxChars = 50
     val descriptionMaxChars = 100
 
-    val customTextFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedContainerColor = Color.Transparent,
-        focusedBorderColor = Color.Gray,
-        focusedLabelColor = Color.Gray,
-        cursorColor = JungleTeal,
-
-        unfocusedContainerColor = Color.Transparent,
-        unfocusedBorderColor = Color.Gray,
-        unfocusedLabelColor = Color.Gray,
-    )
+//    val customTextFieldColors = OutlinedTextFieldDefaults.colors(
+//        focusedContainerColor = Color.Transparent,
+//        focusedBorderColor = Color.Gray,
+//        focusedLabelColor = Color.Gray,
+//        cursorColor = JungleTeal,
+//
+//        unfocusedContainerColor = Color.Transparent,
+//        unfocusedBorderColor = Color.Gray,
+//        unfocusedLabelColor = Color.Gray,
+//    )
 
 
     Column(
@@ -58,8 +58,8 @@ fun CreateProjectForm(
             onClick = {},
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                containerColor = JungleTeal
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary
             ),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -100,7 +100,7 @@ fun CreateProjectForm(
                     }
                 },
                 maxLines = 1,
-                colors = customTextFieldColors
+                //colors = customTextFieldColors
             )
 
             OutlinedTextField(
@@ -127,7 +127,7 @@ fun CreateProjectForm(
                     }
                 },
                 maxLines = 2,
-                colors = customTextFieldColors
+               // colors = customTextFieldColors
 
             )
 
@@ -155,7 +155,7 @@ fun CreateProjectForm(
                     }
                 },
                 maxLines = 5,
-                colors = customTextFieldColors
+                //colors = customTextFieldColors
             )
 
 
@@ -196,7 +196,7 @@ fun CreateProjectForm(
                         Text(text = "Fecha estimada de finalización")
                     }
                 },
-                colors = customTextFieldColors
+                //colors = customTextFieldColors
             )
 
         }
@@ -210,8 +210,8 @@ fun CreateProjectForm(
             .fillMaxWidth()
             .height(56.dp),
         colors = ButtonDefaults.buttonColors(
-            contentColor = Color.White,
-            containerColor = JungleTeal
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            containerColor = MaterialTheme.colorScheme.primary
         ),
         shape = RoundedCornerShape(12.dp)
     ) {

@@ -239,7 +239,7 @@ fun StaffFormScreenContent(
                                 onIntent(StaffFormIntent.ImageUrlChange(null))
                             },
                             containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = Color.White
+                            contentColor = MaterialTheme.colorScheme.onError
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.delete_filled),
@@ -251,11 +251,12 @@ fun StaffFormScreenContent(
                         SmallFloatingActionButton(
                             onClick = { showSourceSelectionDialog = true },
                             modifier = Modifier.padding(8.dp),
-                            containerColor = JungleTeal
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.outline_edit_square_24),
-                                contentDescription = "Cambiar", tint = Color.White
+                                contentDescription = "Cambiar"
                             )
                         }
                     }
@@ -267,8 +268,8 @@ fun StaffFormScreenContent(
                         onClick = { showSourceSelectionDialog = true },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            contentColor = Color.White,
-                            containerColor = JungleTeal
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.primary
                         ),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -345,8 +346,8 @@ fun StaffFormScreenContent(
                 .fillMaxWidth()
                 .height(56.dp),
             colors = ButtonDefaults.buttonColors(
-                contentColor = Color.White,
-                containerColor = JungleTeal
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                containerColor = MaterialTheme.colorScheme.primary
             ),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -398,32 +399,25 @@ fun StaffFormScreenContent(
     }
 
     if (showSettingsDialog) {
-        MaterialTheme(
-            colorScheme = MaterialTheme.colorScheme.copy(
-                primary = JungleTeal,
-                onPrimary = Color.White,
-                surface = Color.White,
-                onSurface = Color.Black
-            )
-        ) {
-            AlertDialog(
-                onDismissRequest = { showSettingsDialog = false },
-                title = { Text("Permiso bloqueado") },
-                text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
-                confirmButton = {
-                    TextButton(onClick = {
-                        showSettingsDialog = false
-                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                            data = Uri.fromParts("package", context.packageName, null)
-                        }
-                        context.startActivity(intent)
-                    }) { Text("Ir a Configuración") }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
-                }
-            )
-        }
+
+        AlertDialog(
+            onDismissRequest = { showSettingsDialog = false },
+            title = { Text("Permiso bloqueado") },
+            text = { Text("El permiso de cámara fue denegado permanentemente. Ve a configuración para activarlo.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    showSettingsDialog = false
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
+                    context.startActivity(intent)
+                }) { Text("Ir a Configuración") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSettingsDialog = false }) { Text("Cancelar") }
+            }
+        )
+
 
     }
 

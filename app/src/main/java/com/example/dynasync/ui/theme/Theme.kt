@@ -38,10 +38,30 @@ private val LightColorScheme = lightColorScheme(
 private val DynaSyncTheme = lightColorScheme(
     primary = JungleTeal,
     onPrimary = Color.White,
+
     surface = Color.White,
     onSurface = Color.Black,
 
-    tertiary = WisteriaBlue
+    background = Color.White,
+    tertiary = WisteriaBlue,
+    onTertiary = Color.White,
+
+    surfaceContainer = IcyBlue.copy(alpha = 0.2f)
+)
+
+
+private val DynaSyncDarkTheme = darkColorScheme(
+    primary = DarkJungleTeal,
+    onPrimary = Color.Black,
+
+    surface = DarkSurface,
+    onSurface = OffWhite,
+
+    background = CharcoalBlue,
+    tertiary = DarkWisteriaBlue,
+    onTertiary = Color.Black,
+
+    surfaceContainer = DarkSurface.copy(alpha = 0.2f)
 )
 
 @Composable
@@ -57,7 +77,7 @@ fun DynaSyncTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
+        darkTheme -> DynaSyncDarkTheme
         else -> DynaSyncTheme
     }
 

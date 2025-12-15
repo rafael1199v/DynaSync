@@ -226,17 +226,17 @@ fun LoginScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            TextButton(
-                onClick = {
-
-                },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.primary,
-                    containerColor = Color.Transparent
-                )
-            ) {
-                Text(text = "¿Olvidaste tu contraseña?")
-            }
+//            TextButton(
+//                onClick = {
+//
+//                },
+//                colors = ButtonDefaults.buttonColors(
+//                    contentColor = MaterialTheme.colorScheme.primary,
+//                    containerColor = Color.Transparent
+//                )
+//            ) {
+//                Text(text = "¿Olvidaste tu contraseña?")
+//            }
             TextButton(
                 onClick = {
                     onIntent(LoginIntent.NavigateToRegister)
