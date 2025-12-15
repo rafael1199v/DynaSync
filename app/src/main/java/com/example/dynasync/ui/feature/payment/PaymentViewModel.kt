@@ -54,11 +54,13 @@ class PaymentViewModel: ViewModel() {
             try {
 
                 val payments = PaymentRepository.getPayments(AuthRepository.getUserId()!!)
-                cachePayments = payments
+                val sortedPayments = payments.sortedByDescending { it.createdAt }
+
+                cachePayments = sortedPayments
                 _state.update {
                     _state.value.copy(
                         isLoading = false,
-                        paymentList = payments
+                        paymentList = sortedPayments
                     )
                 }
             } catch (e: Exception) {
