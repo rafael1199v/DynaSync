@@ -26,9 +26,6 @@ object RegisterRepository {
                 )
             }
 
-            Log.d("testing", "createUser: $finalImageUrl")
-
-
             val metaData = UserMetaData(
                 name = profileCreateDto.name,
                 lastname = profileCreateDto.lastname,
@@ -36,20 +33,26 @@ object RegisterRepository {
                 profileImageUrl = finalImageUrl
             )
 
-            Log.d("testing", "createUser: $metaData")
-
             supabase.auth.signUpWith(Email) {
                 this.email = profileCreateDto.email
                 this.password = profileCreateDto.password
-
-                this.data =  Json.encodeToJsonElement(metaData).jsonObject
+                this.data = Json.encodeToJsonElement(metaData).jsonObject
             }
 
-            Log.d("testing", "se supone que termino")
+            if (finalImageUrl != null) {
+                try {
+                    supabase.auth.updateUser {
+                        data = Json.encodeToJsonElement(metaData).jsonObject
+                    }
+                } catch (e: Exception) {
+                    Log.e(
+                        "RegisterRepo",
+                        "El usuario se creó pero falló la actualización extra: ${e.message}"
+                    )
+                }
+            }
 
-
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             if (finalImageUrl != null) {
                 try {
                     StorageHelper.deleteImage(
@@ -57,17 +60,11 @@ object RegisterRepository {
                         imageUrl = finalImageUrl
                     )
                 } catch (rollbackError: Exception) {
-                    Log.e(
-                        "rollback",
-                        "No se pudo eliminar la imagen durante rollback: $rollbackError"
-                    )
+                    Log.e("rollback", "Error rollback: $rollbackError")
                 }
             }
-
-
-            Log.e("debug", "Hubo un error al crear el usuario. ${e}")
+            Log.e("debug", "Error al crear usuario: ${e}")
             throw e
         }
-
     }
 }
