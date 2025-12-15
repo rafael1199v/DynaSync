@@ -19,7 +19,7 @@ data class PersonalDto(
     val charge: String,
 
     @SerialName("image_url")
-    val imageUrl: String? = null,
+    val imageUrl: String?,
 
     @SerialName("created_at")
     val createdAt: String? = null,

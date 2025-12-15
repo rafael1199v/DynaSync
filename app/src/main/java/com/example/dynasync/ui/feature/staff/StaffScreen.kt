@@ -194,7 +194,7 @@ fun StaffScreenPreview() {
     StaffScreenContent(
         onIntent = {},
         state = StaffViewState(
-            staff = StaffRepository.staff
+
         ),
         modifier = Modifier.fillMaxWidth()
     )

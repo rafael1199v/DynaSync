@@ -72,10 +72,11 @@ class StaffFormViewModel(
 
             _state.update {
                 it.copy(
-                    name = staff.name,
-                    lastname = staff.lastname,
-                    charge = staff.charge,
-                    imageUrl = staff.imageUrl
+                    name = staff?.name ?: "",
+                    lastname = staff?.lastname ?: "",
+                    charge = staff?.charge ?: "",
+                    imageUrl = staff?.imageUrl,
+                    isLoading = false
                 )
             }
 
@@ -154,10 +155,10 @@ class StaffFormViewModel(
                             name = newState.name,
                             lastname = newState.lastname,
                             charge = newState.charge,
-                            imageUrl = newState.imageUrl
+                            imageUrl = urlToSend
                         )
 
-                        StaffRepository.updateStaff(updatedStaff)
+                        StaffRepository.updateStaff(updatedStaff, imageBytes)
                     }
 
                     _uiEvent.send(StaffFormUiEvent.NavigateToStaff)
