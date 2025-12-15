@@ -46,6 +46,7 @@ import com.example.dynasync.ui.feature.payment.PaymentScreen
 import com.example.dynasync.ui.feature.payment.form.PaymentFormScreen
 import com.example.dynasync.ui.feature.profile.ProfileScreen
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailScreen
+import com.example.dynasync.ui.feature.register.RegisterScreen
 import com.example.dynasync.ui.feature.staff.StaffScreen
 import com.example.dynasync.ui.feature.staff.form.StaffFormScreen
 import com.example.dynasync.ui.theme.IcyBlue
@@ -193,17 +194,25 @@ fun App(
         ) {
             navigation<AuthenticationGraph>(startDestination = AuthenticationDestination.Login) {
                 composable<AuthenticationDestination.Login>{
-                    LoginScreen(modifier = Modifier.fillMaxSize(), onLoginSuccess = {
-                        navController.navigate(MainDestination.Home) {
-                            popUpTo(AuthenticationGraph) {
-                                inclusive = true
+                    LoginScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        onLoginSuccess = {
+                            navController.navigate(MainDestination.Home) {
+                                popUpTo(AuthenticationGraph) {
+                                    inclusive = true
+                                }
                             }
+                        },
+                        onNavigateToRegister = {
+                            navController.navigate(AuthenticationDestination.Register)
                         }
-                    })
+                    )
                 }
 
                 composable<AuthenticationDestination.Register> {
-                    Text(text = "Registro")
+                    RegisterScreen(
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
 

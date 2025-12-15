@@ -26,6 +26,9 @@ class LoginViewModel: ViewModel() {
             is LoginIntent.EmailChanged -> updateEmail(intent.email)
             is LoginIntent.PasswordChanged -> updatePassword(intent.password)
             is LoginIntent.SubmitLogin -> submitForm()
+            is LoginIntent.NavigateToRegister -> {
+                onRegisterButtonClick()
+            }
         }
     }
 
@@ -91,6 +94,13 @@ class LoginViewModel: ViewModel() {
 
                 _state.update { it.copy(isLoading = false) }
             }
+        }
+    }
+
+
+    private fun onRegisterButtonClick() {
+        viewModelScope.launch {
+            _uiEvent.send(LoginUiEvent.NavigateToRegister)
         }
     }
 }

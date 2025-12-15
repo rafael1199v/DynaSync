@@ -208,7 +208,6 @@ fun PaymentFormScreenContent(
                 charCount = state.amount.length
             )
 
-            // Selector de Fecha y Hora (Read Only TextField)
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
                     value = state.displayDate,

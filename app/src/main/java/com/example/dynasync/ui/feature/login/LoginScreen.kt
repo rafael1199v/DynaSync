@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
+import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.JungleTeal
 
 
@@ -42,7 +43,8 @@ import com.example.dynasync.ui.theme.JungleTeal
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel(),
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -52,6 +54,9 @@ fun LoginScreen(
             when(event) {
                 is LoginUiEvent.NavigateToHome -> {
                     onLoginSuccess()
+                }
+                is LoginUiEvent.NavigateToRegister -> {
+                    onNavigateToRegister()
                 }
             }
         }
@@ -198,7 +203,8 @@ fun LoginScreenContent(
                     onIntent(LoginIntent.SubmitLogin)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = JungleTeal
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary
                 ),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -221,18 +227,22 @@ fun LoginScreenContent(
         ) {
 
             TextButton(
-                onClick = {},
+                onClick = {
+
+                },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = JungleTeal,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     containerColor = Color.Transparent
                 )
             ) {
                 Text(text = "¿Olvidaste tu contraseña?")
             }
             TextButton(
-                onClick = {},
+                onClick = {
+                    onIntent(LoginIntent.NavigateToRegister)
+                },
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = JungleTeal,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     containerColor = Color.Transparent
                 )
             ) {
@@ -249,9 +259,12 @@ fun LoginScreenContent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreenContent(
-        modifier = Modifier.fillMaxSize(),
-        onIntent = {},
-        state = LoginViewState(),
-    )
+    DynaSyncTheme {
+        LoginScreenContent(
+            modifier = Modifier.fillMaxSize(),
+            onIntent = {},
+            state = LoginViewState(),
+        )
+    }
+
 }
