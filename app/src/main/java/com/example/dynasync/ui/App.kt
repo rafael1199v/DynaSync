@@ -32,6 +32,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.dynasync.data.NavigationBarList
+import com.example.dynasync.data.repository.AuthRepository
 import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.navigation.AuthenticationDestination
 import com.example.dynasync.navigation.AuthenticationGraph
@@ -51,12 +52,17 @@ import com.example.dynasync.ui.theme.IcyBlue
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(
     modifier: Modifier = Modifier
 ) {
+
+    val navController = rememberNavController()
 
     val sessionStatus by SupabaseClientObject.client.auth.sessionStatus.collectAsState(
         initial = SessionStatus.Initializing
@@ -75,6 +81,16 @@ fun App(
                     isReady = true
                 }
             }
+            is SessionStatus.NotAuthenticated -> {
+                if (!isReady) {
+                    startDestinationGraph = AuthenticationGraph
+                    isReady = true
+                } else {
+                    navController.navigate(AuthenticationGraph) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            }
             else -> {
                 if (!isReady) {
                     startDestinationGraph = AuthenticationGraph
@@ -91,7 +107,7 @@ fun App(
         return
     }
 
-    val navController = rememberNavController()
+
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val layoutFactory = LayoutFactoryProvider.getFactoryForRoute(navController = navController, entry = navBackStackEntry)
@@ -271,10 +287,8 @@ fun App(
                     ProfileScreen(
                         modifier = Modifier.fillMaxSize(),
                         onLogout = {
-                            navController.navigate(AuthenticationGraph) {
-                                popUpTo(MainGraph) {
-                                    inclusive = true
-                                }
+                            CoroutineScope(Dispatchers.IO).launch {
+                                AuthRepository.signOut()
                             }
                         }
                     )
