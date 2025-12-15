@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,16 +48,28 @@ import com.example.dynasync.ui.feature.home.HomeScreen
 import com.example.dynasync.ui.feature.login.LoginScreen
 import com.example.dynasync.ui.feature.payment.PaymentScreen
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailScreen
+import com.example.dynasync.ui.theme.AppThemeMode
 import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.IcyBlue
 import com.example.dynasync.ui.theme.JungleTeal
+import com.example.dynasync.ui.theme.ThemeManager
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        //ThemeManager.init(applicationContext)
+
         setContent {
+//            val currentTheme by ThemeManager.themeMode.collectAsState()
+//
+//            val isDark = when(currentTheme) {
+//                AppThemeMode.DARK -> true
+//                AppThemeMode.LIGHT -> false
+//            }
+
             DynaSyncTheme {
                 App(modifier = Modifier.fillMaxSize())
             }
