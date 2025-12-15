@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.dynasync.data.repository.AuthRepository
 import com.example.dynasync.data.repository.StaffRepository
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.navigation.MainDestination
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 
 class StaffFormViewModel(
     stateHandle: SavedStateHandle
@@ -112,21 +114,38 @@ class StaffFormViewModel(
 
 
             viewModelScope.launch {
-                _state.update {
-                    it.copy(isLoading = true)
-                }
+                _state.update { it.copy(isLoading = true) }
+                _state.update { it.copy(error = null) }
+
+
                 try {
-                    println("StaffId: ${staffId}")
+
+                    val imagePath = newState.imageUrl
+                    var imageBytes: ByteArray? = null
+
+                    val isRemoteUrl = imagePath?.startsWith("http")
+                    val isLocalFile = imagePath?.isNotEmpty() == true && !isRemoteUrl!!
+
+                    if (isLocalFile) {
+                        imageBytes = File(imagePath).readBytes()
+                    }
+
+                    val urlToSend = if (isLocalFile) {
+                        if (state.value.isEditMode) state.value.imageUrl else null
+                    } else {
+                        imagePath
+                    }
+
                     if(staffId == -1) {
                         val newStaff = Personal(
-                            id = -1,
+                            id = 0,
                             name = newState.name,
                             lastname = newState.lastname,
                             charge = newState.charge,
                             imageUrl = newState.imageUrl
                         )
 
-                        StaffRepository.addStaff(newStaff)
+                        StaffRepository.addStaff(newStaff, imageBytes, AuthRepository.getUserId()!!)
                     }
 
                     else {

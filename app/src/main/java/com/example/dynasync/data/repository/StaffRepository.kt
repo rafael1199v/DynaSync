@@ -4,11 +4,13 @@ import android.util.Log
 import com.example.dynasync.data.dto.PaymentDto
 import com.example.dynasync.data.dto.PersonalDto
 import com.example.dynasync.data.mapper.toDomain
+import com.example.dynasync.data.mapper.toDto
 import com.example.dynasync.data.repository.PaymentRepository.supabase
 import com.example.dynasync.domain.model.Personal
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.delay
+import kotlin.time.Clock
 import kotlin.time.Instant
 
 object StaffRepository {
@@ -110,11 +112,31 @@ object StaffRepository {
         this.staff[index] = staff
     }
 
-    suspend fun addStaff(newStaff: Personal) {
-        delay(2000)
-        val maxId = staff.maxByOrNull { it.id }?.id ?: 0
-        val newStaffCopy = newStaff.copy(id = maxId + 1)
-        this.staff.add(newStaffCopy)
+    suspend fun addStaff(newStaff: Personal, newImageBytes: ByteArray? = null, userId: String) {
+        var finalImageUrl: String? = null
+
+        try {
+            if (newImageBytes != null) {
+                finalImageUrl = StorageHelper.uploadImage(
+                    bucketName = "staff-images",
+                    byteArray = newImageBytes,
+                    fileNamePrefix = "staff-${userId}"
+                )
+            }
+
+            val staff = newStaff.copy(
+                imageUrl = finalImageUrl,
+                createdAt = Clock.System.now()
+            )
+
+            supabase.from("personal").insert(staff.toDto())
+        }
+        catch (e: Exception) {
+            Log.e("debug", "Error al registrar al empleado: $e")
+        }
+
+
+
     }
 
     suspend fun deleteStaff(staffId: Int) {
