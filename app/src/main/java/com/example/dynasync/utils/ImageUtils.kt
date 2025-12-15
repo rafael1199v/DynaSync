@@ -2,6 +2,7 @@ package com.example.dynasync.utils
 
 import android.content.Context
 import android.net.Uri
+import android.os.Environment
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -10,12 +11,11 @@ import java.util.Date
 import java.util.Locale
 
 fun Context.createImageFile(): File {
-    val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-    val imageFileName = "JPEG_${timeStamp}_"
+    val storageDir = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
-        imageFileName,
-        ".jpg",
-        externalCacheDir
+        "JPEG_${System.currentTimeMillis()}_", /* prefix */
+        ".jpg", /* suffix */
+        storageDir /* directory */
     )
 }
 

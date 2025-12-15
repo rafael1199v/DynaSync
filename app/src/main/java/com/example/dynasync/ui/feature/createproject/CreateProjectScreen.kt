@@ -70,6 +70,7 @@ import com.example.dynasync.utils.createImageFile
 import com.example.dynasync.utils.uriToFile
 import java.io.File
 
+
 @Composable
 fun CreateProjectScreen(
     onSubmitFormSuccess: () -> Unit,
@@ -233,7 +234,7 @@ fun CreateProjectScreenContent(
             Box(contentAlignment = Alignment.BottomEnd) {
                 if (state.imageUrl.isNotEmpty()) {
                     AsyncImage(
-                        model = if(state.isEditMode) state.imageUrl else File(state.imageUrl),
+                        model = state.imageUrl,
                         contentDescription = "Imagen seleccionada",
                         modifier = Modifier
                             .fillMaxWidth()

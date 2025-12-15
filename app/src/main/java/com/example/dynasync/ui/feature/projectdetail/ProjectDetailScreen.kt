@@ -51,7 +51,6 @@ import com.example.dynasync.R
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
-import com.example.dynasync.ui.feature.createproject.CreateProjectUiEvent
 import kotlinx.datetime.LocalDate
 
 @Composable

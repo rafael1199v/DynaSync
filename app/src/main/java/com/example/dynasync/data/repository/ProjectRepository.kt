@@ -3,6 +3,7 @@ package com.example.dynasync.data.repository
 import android.util.Log
 import com.example.dynasync.data.dto.ProjectDto
 import com.example.dynasync.data.mapper.toDomain
+import com.example.dynasync.data.mapper.toDto
 import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
@@ -120,27 +121,87 @@ object ProjectRepository {
         }
     }
 
-    suspend fun addProject(newProject: Project) {
-        delay(2000)
-        val newId = (projects.maxByOrNull { it.id }?.id ?: 0) + 1
-        val creationTime = newProject.createdAt ?: Clock.System.now()
-        projects.add(newProject.copy(
-            id = newId,
-            createdAt = creationTime
-        ))
+//    suspend fun addProject(newProject: Project) {
+//        delay(2000)
+//        val newId = (projects.maxByOrNull { it.id }?.id ?: 0) + 1
+//        val creationTime = newProject.createdAt ?: Clock.System.now()
+//        projects.add(newProject.copy(
+//            id = newId,
+//            createdAt = creationTime
+//        ))
+//    }
+
+    suspend fun addProject(newProject: Project, imageBytes: ByteArray?, userId: String) {
+        var finalImageUrl: String? = null
+
+        if (imageBytes != null) {
+            finalImageUrl = StorageHelper.uploadImage(
+                bucketName = "projects-images",
+                byteArray = imageBytes,
+                fileNamePrefix = "proj-$userId"
+            )
+        }
+
+        val project = newProject.copy(
+            imageUrl = finalImageUrl,
+            createdAt = Clock.System.now()
+        )
+
+        supabase.from("projects").insert(project.toDto())
     }
 
     suspend fun deleteProject(projectId: Int) {
-        delay(2000)
-        projects.removeIf { it.id == projectId }
+        val projectToDelete = getProjectById(projectId)
+        val imageUrl = projectToDelete?.imageUrl
+
+        if (!imageUrl.isNullOrEmpty() && imageUrl.contains("supabase")) {
+            try {
+                StorageHelper.deleteImage("projects-images", imageUrl)
+            } catch (e: Exception) {
+                Log.e("ProjectRepo", "Error borrando imagen al eliminar proyecto: $e")
+            }
+        }
+
+        try {
+            supabase.from("projects").delete {
+                filter {
+                    eq("id", projectId)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("ProjectRepo", "Error eliminando el proyecto de la BD: $e")
+            throw e
+        }
     }
 
-    suspend fun updateProject(projectUpdated: Project) {
-        delay(2000)
-        val index = projects.indexOfFirst { it.id == projectUpdated.id }
 
-        if (index != -1) {
-            projects[index] = projectUpdated
+    suspend fun updateProject(project: Project, newImageBytes: ByteArray? = null) {
+        val oldProjectData = getProjectById(project.id)
+        val oldImageUrl = oldProjectData?.imageUrl
+
+        var finalImageUrl = project.imageUrl
+
+        if (!oldImageUrl.isNullOrEmpty() && oldImageUrl.contains("supabase")) {
+
+            if (newImageBytes != null || finalImageUrl.isNullOrEmpty()) {
+                try {
+                    StorageHelper.deleteImage("projects-images", oldImageUrl)
+                } catch (e: Exception) {
+                    Log.e("ProjectRepo", "No se pudo borrar la imagen antigua: $e")
+                }
+            }
+        }
+
+        if (newImageBytes != null) {
+            finalImageUrl = StorageHelper.uploadImage("projects-images", newImageBytes, "proj-upd")
+        }
+
+        val updatedProject = project.copy(
+            imageUrl = finalImageUrl
+        )
+
+        supabase.from("projects").update(updatedProject.toDto()) {
+            filter { eq("id", project.id) }
         }
     }
 }

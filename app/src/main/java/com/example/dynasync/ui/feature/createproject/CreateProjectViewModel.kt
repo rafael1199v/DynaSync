@@ -1,13 +1,14 @@
 package com.example.dynasync.ui.feature.createproject
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.example.dynasync.data.repository.AuthRepository
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.navigation.MainDestination
-import com.example.dynasync.ui.feature.projectdetail.ProjectDetailState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,8 +16,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.LocalDateTime
+import java.io.File
 
 class CreateProjectViewModel(
     savedStateHandle: SavedStateHandle
@@ -107,8 +108,8 @@ class CreateProjectViewModel(
             _state.update { it.copy(isLoading = true) }
 
             val project = ProjectRepository.getProjectById(projectId)
-            editableProject = project
 
+            editableProject = project
 
             _state.update {
                 it.copy(
@@ -132,35 +133,56 @@ class CreateProjectViewModel(
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true) }
 
-                val uploadProject = if(isEditMode) {
-                    Project(
-                        id = projectId,
-                        title = newState.title,
-                        objective = newState.objective,
-                        description = newState.description,
-                        finishDate = LocalDate.parse(newState.finishDate),
-                        imageUrl = newState.imageUrl.ifEmpty { null },
-                        tasks = editableProject?.tasks ?: emptyList()
-                    )
-                }
-                else {
-                    Project(
-                        id = -1,
-                        title = newState.title,
-                        objective = newState.objective,
-                        description = newState.description,
-                        finishDate = LocalDate.parse(newState.finishDate),
-                        imageUrl = newState.imageUrl.ifEmpty { null },
-                        tasks = emptyList()
-                    )
-                }
+                val userId = AuthRepository.getUserId() ?: return@launch
 
+                try {
+                    val imagePath = newState.imageUrl
+                    var imageBytes: ByteArray? = null
 
-                if(isEditMode) {
-                    ProjectRepository.updateProject(uploadProject)
+                    val isRemoteUrl = imagePath.startsWith("http")
+                    val isLocalFile = imagePath.isNotEmpty() && !isRemoteUrl
+
+                    if (isLocalFile) {
+                        imageBytes = File(imagePath).readBytes()
+                    }
+
+                    val urlToSend = if (isLocalFile) {
+                        if (isEditMode) editableProject?.imageUrl else null
+                    } else {
+                        imagePath
+                    }
+
+                    if(isEditMode) {
+                        val updatedProject = editableProject!!.copy(
+                            title = newState.title,
+                            objective = newState.objective,
+                            description = newState.description,
+                            finishDate = LocalDate.parse(newState.finishDate),
+                            imageUrl = urlToSend
+                        )
+
+                        ProjectRepository.updateProject(updatedProject, newImageBytes = imageBytes)
+                    }
+                    else {
+                        val newProject = Project(
+                            id = 0,
+                            title = newState.title,
+                            objective = newState.objective,
+                            description = newState.description,
+                            finishDate = LocalDate.parse(newState.finishDate),
+                            imageUrl = null,
+                            tasks = emptyList()
+                        )
+                        ProjectRepository.addProject(newProject, imageBytes = imageBytes, userId = userId)
+                    }
+
+                    _uiEvent.send(CreateProjectUiEvent.NavigateToHome)
                 }
-                else {
-                    ProjectRepository.addProject(uploadProject)
+                catch (e: Exception) {
+                    Log.e("debug", "Hubo un error al crear el proyecto. ${e}")
+                }
+                finally {
+                    _state.update { it.copy(isLoading = false) }
                 }
 
                 _state.update { it.copy(isLoading = false) }
