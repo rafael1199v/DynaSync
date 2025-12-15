@@ -2,11 +2,14 @@ package com.example.dynasync.ui.feature.home
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +35,7 @@ import com.example.dynasync.R
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.calculateCompletePercentage
 import com.example.dynasync.ui.theme.WisteriaBlue
+import com.example.dynasync.utils.shimmerEffect
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -124,4 +129,85 @@ fun ProjectCardPreview() {
     )
 
     ProjectCard(project = project, onClick = {})
+}
+
+@Composable
+fun ProjectCardSkeleton(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(150.dp)
+            .border(
+                width = 2.dp,
+                color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
+                shape = RoundedCornerShape(size = 12.dp)
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        shape = RoundedCornerShape(size = 12.dp)
+    ) {
+        Row(modifier = Modifier.fillMaxSize()) {
+
+            Box(
+                modifier = Modifier
+                    .width(108.dp)
+                    .fillMaxHeight()
+                    .shimmerEffect()
+            )
+
+            Column(
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .height(20.dp)
+                            .fillMaxWidth(0.7f)
+                            .clip(RoundedCornerShape(4.dp))
+                            .shimmerEffect()
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .height(14.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp))
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .height(14.dp)
+                            .fillMaxWidth(0.8f) // La segunda línea un poco más corta
+                            .clip(RoundedCornerShape(4.dp))
+                            .shimmerEffect()
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f)) // Empuja lo siguiente hacia abajo
+
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .height(12.dp)
+                            .width(60.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .shimmerEffect()
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(4.dp)) // Redondeamos la barra también
+                            .shimmerEffect()
+                    )
+                }
+            }
+        }
+    }
 }

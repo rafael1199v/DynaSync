@@ -17,26 +17,21 @@ class HomeViewModel : ViewModel() {
     val state = _state.asStateFlow()
 
     init {
-        _state.update {
-            it.copy(isLoading = true)
-        }
-
         onIntent(HomeIntent.LoadDashboardData)
-
-        _state.update {
-            it.copy(isLoading = false)
-        }
     }
 
     private fun getProjects() {
         viewModelScope.launch {
+            _state.update {
+                it.copy(isLoading = true)
+            }
 
             val userId = AuthRepository.getUserId()
 
             if(userId == null) {
                 _state.update {
                     Log.e("debug","Hubo un error al cargar los proyectos")
-                    it.copy(error = "Hubo un error al cargar los proyectos")
+                    it.copy(error = "Hubo un error al cargar los proyectos", isLoading = false)
                 }
             }
             else {
@@ -47,7 +42,8 @@ class HomeViewModel : ViewModel() {
                     currentState.copy(
                         projectsInProcess = 2,
                         pendingTasks = 3,
-                        projects = projects
+                        projects = projects,
+                        isLoading = false
                     )
                 }
             }
@@ -57,6 +53,9 @@ class HomeViewModel : ViewModel() {
 
     private fun loadDashboardData() {
         viewModelScope.launch {
+            _state.update {
+                it.copy(isLoading = true)
+            }
 
             val userId = AuthRepository.getUserId()
 
@@ -76,7 +75,7 @@ class HomeViewModel : ViewModel() {
                 if(user == null) {
                     _state.update {
                         Log.e("debug", "Hubo un error al cargar los datos")
-                        it.copy(error = "Hubo un error al cargar los datos del usuario")
+                        it.copy(error = "Hubo un error al cargar los datos del usuario", isLoading = false)
                     }
                 }
                 else {
@@ -93,7 +92,8 @@ class HomeViewModel : ViewModel() {
                             user = user,
                             projectsInProcess = projectsInProcess,
                             pendingTasks = pendingTasks,
-                            projects = projects
+                            projects = projects,
+                            isLoading = false
                         )
                     }
                 }
