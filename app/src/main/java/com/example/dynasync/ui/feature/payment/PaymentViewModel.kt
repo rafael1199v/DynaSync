@@ -94,8 +94,8 @@ class PaymentViewModel: ViewModel() {
     private fun deletePayment(paymentId: Int) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
+
             PaymentRepository.deletePayment(paymentId)
-            _state.update { it.copy(isLoading = true) }
 
             onIntent(PaymentIntent.LoadPayments)
             onIntent(PaymentIntent.FilterPayments(_state.value.selectedFilter))

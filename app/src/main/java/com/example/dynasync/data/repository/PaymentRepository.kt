@@ -135,12 +135,18 @@ object PaymentRepository {
     }
 
     suspend fun deletePayment(id: Int) {
-        delay(500)
-        val wasRemoved = payments.removeIf { it.id == id }
-
-        if (!wasRemoved) {
-            throw Exception("No se pudo eliminar: El pago no existe.")
+        try {
+            supabase.from("payments").delete {
+                filter {
+                    eq("id", id)
+                }
+            }
         }
+        catch (e: Exception) {
+            Log.e("debug", "Hubo un error al cargar los pagos. ${e}")
+            throw e
+        }
+
     }
 
 }
