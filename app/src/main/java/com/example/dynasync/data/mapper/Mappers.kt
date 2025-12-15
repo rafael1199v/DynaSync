@@ -90,6 +90,16 @@ fun Task.toDto(projectId: Int): TaskDto {
     )
 }
 
+fun Task.toUpdateDto(): TaskUpdateDto {
+    return TaskUpdateDto(
+        id = this.id,
+        title = this.title,
+        finishDate = this.finishDate,
+        personalId = this.personal?.id
+    )
+
+}
+
 fun ProfileDto.toDomain(): User {
     return User(
         id = this.id,

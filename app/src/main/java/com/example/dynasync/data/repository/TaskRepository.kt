@@ -1,7 +1,9 @@
 package com.example.dynasync.data.repository
 
+import android.util.Log
 import androidx.compose.animation.core.copy
 import com.example.dynasync.data.mapper.toDto
+import com.example.dynasync.data.mapper.toUpdateDto
 import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.domain.model.Task
 import io.github.jan.supabase.postgrest.from
@@ -36,26 +38,11 @@ object TaskRepository {
     }
 
     suspend fun updateTask(task: Task) {
-        delay(2000)
+        Log.d("debug", "updateTask: $task")
 
-        for (project in projects) {
-            val index = project.tasks.indexOfFirst { it.id == task.id }
-
-            if(index != -1) {
-                val newTask = project.tasks[index].copy(
-                    title = task.title,
-                    isCompleted = task.isCompleted,
-                    personal = task.personal,
-                    finishDate = task.finishDate
-                )
-
-                val updatedTasks = project.tasks.toMutableList()
-                updatedTasks[index] = newTask
-
-                val updatedProject = project.copy(tasks = updatedTasks)
-                val indexProject = projects.indexOfFirst { it.id == project.id }
-                projects[indexProject] = updatedProject
-
+        supabase.from("tasks").update(task.toUpdateDto()) {
+            filter {
+                eq("id", task.id)
             }
         }
     }

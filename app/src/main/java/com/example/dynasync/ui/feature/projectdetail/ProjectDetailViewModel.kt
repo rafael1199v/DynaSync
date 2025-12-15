@@ -64,7 +64,6 @@ class ProjectDetailViewModel(
                 addTask(intent.title, intent.staffId, intent.finishDate)
             }
             is ProjectDetailIntent.UpdateTask -> {
-                println("aaaa 2")
                 updateTask(intent.taskId, intent.title, intent.staffId, intent.finishDate)
             }
         }
@@ -74,10 +73,18 @@ class ProjectDetailViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val project = ProjectRepository.getProjectById(projectId = projectId)
+            val sortedProject = project?.let {
+                it.copy(
+                    tasks = it.tasks.sortedWith(
+                        compareBy<Task> { task -> task.isCompleted }
+                            .thenBy { task -> task.finishDate }
+                    )
+                )
+            }
 
             _state.update {
                 it.copy(
-                    project = project,
+                    project = sortedProject,
                     isLoading = false
                 )
             }

@@ -190,7 +190,10 @@ fun ProjectDetailScreenContent(
                 }
             }
             else {
-                items(state.project?.tasks ?: emptyList()) { task ->
+                items(
+                    state.project?.tasks ?: emptyList(),
+                    key = { task -> task.id }
+                ) { task ->
                     TaskCard(
                         task = task,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
