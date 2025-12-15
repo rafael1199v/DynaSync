@@ -7,7 +7,7 @@ data class RegisterViewState(
     val email: String = "",
     val password: String = "",
     val repeatPassword: String = "",
-    val profileImageUrl: String? = null,
+    val profileImageUrl: String = "",
 
 
     val nameError: String? = null,

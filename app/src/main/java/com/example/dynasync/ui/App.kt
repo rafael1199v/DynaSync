@@ -211,7 +211,17 @@ fun App(
 
                 composable<AuthenticationDestination.Register> {
                     RegisterScreen(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        onNavigateToHome = {
+                            navController.navigate(MainDestination.Home) {
+                                popUpTo(AuthenticationGraph) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onNavigateToLogin = {
+                            navController.navigate(AuthenticationDestination.Login)
+                        }
                     )
                 }
             }

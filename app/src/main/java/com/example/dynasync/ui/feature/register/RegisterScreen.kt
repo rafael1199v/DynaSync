@@ -37,6 +37,7 @@ import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,11 +67,27 @@ import com.example.dynasync.utils.uriToFile
 
 @Composable
 fun RegisterScreen(
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = viewModel()
 ) {
 
     val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+               is RegisterUiEvent.NavigateToHome -> {
+                   onNavigateToHome()
+               }
+
+                is RegisterUiEvent.NavigateToLogin -> {
+                    onNavigateToLogin()
+                }
+            }
+        }
+    }
 
     RegisterScreenContent(
         modifier = modifier,
@@ -162,7 +179,13 @@ fun RegisterScreenContent(
         modifier = modifier.padding(horizontal = 26.dp)
     ) {
         if(state.isLoading) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+            }
+
         }
         else {
             Column(
@@ -182,7 +205,7 @@ fun RegisterScreenContent(
                         .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
                         .clickable { showSourceSelectionDialog = true }
 
-                    if (state.profileImageUrl != null && state.profileImageUrl.isNotEmpty()) {
+                    if (state.profileImageUrl.isNotEmpty()) {
                         AsyncImage(
                             model = state.profileImageUrl,
                             contentDescription = "Profile Photo",
@@ -211,13 +234,13 @@ fun RegisterScreenContent(
                         shape = CircleShape
                     ) {
                         Icon(
-                            painter = painterResource(if (state.profileImageUrl.isNullOrEmpty()) R.drawable.baseline_add_24 else R.drawable.baseline_edit_24),
+                            painter = painterResource(if (state.profileImageUrl.isEmpty()) R.drawable.baseline_add_24 else R.drawable.baseline_edit_24),
                             contentDescription = "Editar foto",
                             modifier = Modifier.size(16.dp)
                         )
                     }
 
-                    if(!state.profileImageUrl.isNullOrEmpty()) {
+                    if(state.profileImageUrl.isNotEmpty()) {
                         SmallFloatingActionButton(
                             onClick = {
                                 onIntent(RegisterIntent.ChangeProfileImageUrl(""))

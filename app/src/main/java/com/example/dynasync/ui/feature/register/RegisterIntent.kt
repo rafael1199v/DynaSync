@@ -10,5 +10,7 @@ sealed interface RegisterIntent {
     data class ChangeRepeatPassword(val repeatPassword: String): RegisterIntent
     data class ChangeProfileImageUrl(val profileImageUrl: String): RegisterIntent
 
+    data object NavigateToLogin : RegisterIntent
+
     object SubmitForm: RegisterIntent
 }
