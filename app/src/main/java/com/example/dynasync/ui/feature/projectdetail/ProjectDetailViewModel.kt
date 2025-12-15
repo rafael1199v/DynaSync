@@ -58,7 +58,7 @@ class ProjectDetailViewModel(
                 deleteTask(intent.taskId)
             }
             is ProjectDetailIntent.ToggleTask -> {
-                onToggleTask(intent.taskId)
+                onToggleTask(intent.taskId, intent.actualStatus)
             }
             is ProjectDetailIntent.CreateTask -> {
                 addTask(intent.title, intent.staffId, intent.finishDate)
@@ -91,9 +91,9 @@ class ProjectDetailViewModel(
         }
     }
 
-    private fun onToggleTask(taskId: Int) {
+    private fun onToggleTask(taskId: Int, actualStatus: Boolean) {
         viewModelScope.launch {
-            TaskRepository.toggleTask(taskId)
+            TaskRepository.toggleTask(taskId, actualStatus)
         }
     }
 

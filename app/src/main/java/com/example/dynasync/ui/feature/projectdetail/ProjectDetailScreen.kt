@@ -198,7 +198,7 @@ fun ProjectDetailScreenContent(
                         task = task,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 26.dp),
                         onToggleTask = { taskId ->
-                            onIntent(ProjectDetailIntent.ToggleTask(taskId))
+                            onIntent(ProjectDetailIntent.ToggleTask(taskId, task.isCompleted))
                         },
                         onDeleteTask = {
                             taskToDelete = task

@@ -40,33 +40,34 @@ object TaskRepository {
     }
 
     suspend fun updateTask(task: Task) {
-        Log.d("debug", "updateTask: $task")
-
-        supabase.from("tasks").update(task.toUpdateDto()) {
-            filter {
-                eq("id", task.id)
+        try {
+            Log.d("debug", "updateTask: $task")
+            supabase.from("tasks").update(task.toUpdateDto()) {
+                filter {
+                    eq("id", task.id)
+                }
             }
         }
+        catch (e: Exception) {
+            Log.e("debug", "Error actualizando la tarea de la BD: $e")
+            throw e
+        }
+
     }
 
-    suspend fun toggleTask(taskId: Int) {
-        delay(2000)
+    suspend fun toggleTask(taskId: Int, actualStatus: Boolean) {
+        val newStatus = !actualStatus
 
-        for (project in projects) {
-            val index = project.tasks.indexOfFirst { it.id == taskId }
-
-            if(index != -1) {
-                val toggleTask = project.tasks[index].copy(
-                    isCompleted = !project.tasks[index].isCompleted,
-                )
-
-                val updatedTasks = project.tasks.toMutableList()
-                updatedTasks[index] = toggleTask
-
-                val updatedProject = project.copy(tasks = updatedTasks)
-                val indexProject = projects.indexOfFirst { it.id == project.id }
-                projects[indexProject] = updatedProject
+        try {
+            supabase.from("tasks").update(mapOf("is_completed" to newStatus)) {
+                filter {
+                    eq("id", taskId)
+                }
             }
+        }
+        catch (e: Exception) {
+            Log.e("debug", "Error actualizando la tarea de la BD: $e")
+            throw e
         }
     }
 
