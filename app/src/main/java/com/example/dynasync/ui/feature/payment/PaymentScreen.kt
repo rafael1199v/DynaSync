@@ -163,15 +163,15 @@ fun PaymentScreenContent(
                             )
                         }
                     } else null,
-//                    colors = FilterChipDefaults.filterChipColors(
-//                        containerColor = Color.Transparent,
-//                        labelColor = Color.Black,
-//                        iconColor = Color.Gray,
-//
-//                        selectedContainerColor = JungleTeal,
-//                        selectedLabelColor = Color.White,
-//                        selectedLeadingIconColor = Color.White,
-//                    )
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = Color.Transparent,
+                        labelColor = MaterialTheme.colorScheme.onSurface,
+                        iconColor = MaterialTheme.colorScheme.onSurface,
+
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary,
+                        selectedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                        selectedLeadingIconColor = MaterialTheme.colorScheme.onTertiary,
+                    )
                 )
             }
         }

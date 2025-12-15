@@ -207,8 +207,7 @@ fun TaskFormBottomSheet(
                     }
                 },
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = JungleTeal)
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Text(if (initialTask == null) "Crear Tarea" else "Guardar Cambios")
             }

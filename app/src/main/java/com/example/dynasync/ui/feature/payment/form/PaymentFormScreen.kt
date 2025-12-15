@@ -281,7 +281,6 @@ fun PaymentFormScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = JungleTeal),
             shape = RoundedCornerShape(12.dp)
         ) {
             Text(
