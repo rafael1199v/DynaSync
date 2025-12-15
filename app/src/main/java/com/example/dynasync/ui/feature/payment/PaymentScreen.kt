@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -23,10 +24,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -126,6 +131,9 @@ fun PaymentScreenContent(
     modifier: Modifier = Modifier
 ) {
 
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var paymentToDelete by remember { mutableStateOf<Int?>(null) }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -197,7 +205,8 @@ fun PaymentScreenContent(
                 items(items = state.paymentList) { payment ->
                     PaymentCard(
                         onDelete = {
-                            onIntent(PaymentIntent.DeletePayment(payment.id))
+                            paymentToDelete = payment.id
+                            showDeleteDialog = true
                         },
                         onEdit = {
                             onIntent(PaymentIntent.EditPayment(payment.id))
@@ -229,6 +238,20 @@ fun PaymentScreenContent(
 
         }
 
+    }
+
+    if (showDeleteDialog && paymentToDelete != null) {
+        PaymentDeleteDialog(
+            onConfirm = {
+                onIntent(PaymentIntent.DeletePayment(paymentToDelete!!))
+                showDeleteDialog = false
+                paymentToDelete = null
+            },
+            onDismiss =  {
+                showDeleteDialog = false
+                paymentToDelete = null
+            }
+        )
     }
 }
 
