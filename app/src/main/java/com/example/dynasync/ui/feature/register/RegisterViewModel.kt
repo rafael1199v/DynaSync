@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.register
 
+import android.util.Log
 import androidx.activity.result.launch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,7 +39,9 @@ class RegisterViewModel: ViewModel() {
                 onChangeProfileImageUrl(intent.profileImageUrl)
             }
 
-            is RegisterIntent.SubmitForm -> {}
+            is RegisterIntent.SubmitForm -> {
+                onSubmitForm()
+            }
         }
     }
 
@@ -94,16 +97,9 @@ class RegisterViewModel: ViewModel() {
             viewModelScope.launch {
                 _state.update { it.copy(isLoading = true) }
                 try {
-//                    // Aquí iría la lógica para registrar al usuario
-//                    // Ejemplo con un repositorio de autenticación
-//                    AuthRepository.register(
-//                        email = state.value.email,
-//                        password = state.value.password,
-//                        name = state.value.name,
-//                        lastname = state.value.lastname,
-//                        age = state.value.age.toInt()
-//                    )
-//                    _uiEvent.send(RegisterUiEvent.NavigateToHome)
+                    Log.d("debug", "onSubmitForm: ${state.value}")
+
+                    //_uiEvent.send(RegisterUiEvent.NavigateToHome)
 
                 } catch (e: Exception) {
                     _state.update { it.copy(error = e.message) }

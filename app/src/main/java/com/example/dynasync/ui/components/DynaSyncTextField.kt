@@ -6,6 +6,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.VisualTransformation
 
 
 @Composable
@@ -19,7 +20,9 @@ fun DynaSyncTextField(
     maxChars: Int,
     modifier: Modifier = Modifier,
     maxLines: Int = 1,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
 
 
@@ -28,6 +31,8 @@ fun DynaSyncTextField(
         onValueChange = {
             onValueChange(it)
         },
+        visualTransformation = visualTransformation,
+        trailingIcon = trailingIcon,
         modifier = modifier,
         isError = errorMessage != null,
         label = {

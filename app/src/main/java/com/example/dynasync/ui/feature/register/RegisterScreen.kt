@@ -31,6 +31,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
@@ -49,6 +50,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -93,10 +96,14 @@ fun RegisterScreenContent(
     var showRationaleDialog by remember { mutableStateOf(false) }
     var showSettingsDialog by remember { mutableStateOf(false) }
 
-    val maxCharsEmail = 20
+    var passwordVisible by remember { mutableStateOf(value = false) }
+    var repeatPasswordVisible by remember { mutableStateOf(value = false) }
+
+    val maxCharsEmail = 40
     val maxCharsName = 25
     val maxCharsLastname = 25
     val maxCharsAge = 2
+    val maxCharsPassword = 20
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
@@ -295,6 +302,81 @@ fun RegisterScreenContent(
                         modifier = Modifier.fillMaxWidth(),
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+
+                    DynaSyncTextField(
+                        value = state.password,
+                        onValueChange = {
+                            if(it.length <= maxCharsPassword)
+                                onIntent(RegisterIntent.ChangePassword(it))
+                        },
+                        visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { passwordVisible = !passwordVisible}
+                            ) {
+                                if(passwordVisible) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_visibility_off_24),
+                                        contentDescription = "Visibility off"
+                                    )
+                                }
+                                else {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_visibility_24),
+                                        contentDescription = "Visibility on"
+                                    )
+                                }
+                            }
+                        },
+                        label = "Contraseña",
+                        errorMessage = state.passwordError,
+                        supportingText = "Ingresa tu contraseña",
+                        charCount = state.password.length,
+                        maxChars = maxCharsPassword,
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1
+                    )
+
+                    DynaSyncTextField(
+                        value = state.repeatPassword,
+                        onValueChange = {
+                            if(it.length <= maxCharsPassword)
+                                onIntent(RegisterIntent.ChangeRepeatPassword(it))
+                        },
+                        visualTransformation = if(repeatPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { repeatPasswordVisible = !repeatPasswordVisible}
+                            ) {
+                                if(repeatPasswordVisible) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_visibility_off_24),
+                                        contentDescription = "Visibility off"
+                                    )
+                                }
+                                else {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_visibility_24),
+                                        contentDescription = "Visibility on"
+                                    )
+                                }
+                            }
+                        },
+                        label = "Repetir contraseña",
+                        errorMessage = state.repeatPasswordError,
+                        supportingText = "Repite tu contraseña",
+                        charCount = state.repeatPassword.length,
+                        maxChars = maxCharsPassword,
+                        modifier = Modifier.fillMaxWidth(),
+                        maxLines = 1,
+                    )
+                }
+
+                if(state.error != null) {
+                    Text(
+                        text = state.error,
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
 
