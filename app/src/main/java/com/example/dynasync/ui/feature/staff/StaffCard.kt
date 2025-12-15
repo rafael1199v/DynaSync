@@ -39,8 +39,8 @@ fun StaffCard(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
+                width = 1.5.dp,
+                color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(20.dp),

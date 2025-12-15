@@ -46,8 +46,8 @@ fun TaskCard(
 
     Box(
         modifier = modifier.border(
-            width = 1.dp,
-            color = Color.Black.copy(0.2f),
+            width = 1.5.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
             shape = MaterialTheme.shapes.medium
         )
     ) {
@@ -64,7 +64,6 @@ fun TaskCard(
                     checkboxToggle = it
                     onToggleTask(task.id)
                 },
-                colors = CheckboxDefaults.colors(checkedColor = JungleTeal),
                 modifier = Modifier.padding(end = 8.dp) // Espacio entre check y contenido
             )
 

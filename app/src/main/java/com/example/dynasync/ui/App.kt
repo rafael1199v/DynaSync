@@ -8,8 +8,10 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -148,7 +150,7 @@ fun App(
                         }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = IcyBlue.copy(alpha = 0.2f)
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(0.25f)
                     )
                 )
             }
@@ -157,7 +159,7 @@ fun App(
         bottomBar = {
             if(layoutConfig.isVisible) {
                 NavigationBar(
-                    containerColor = IcyBlue.copy(alpha = 0.2f)
+                    containerColor = MaterialTheme.colorScheme.surfaceContainer.copy(0.25f)
                 ) {
                     val currentDestination = navBackStackEntry?.destination
                     NavigationBarList.items.forEachIndexed { index, item ->
@@ -179,7 +181,15 @@ fun App(
                                     painter = painterResource(id = if(isSelected) item.selectedIconId else item.unselectedIconId),
                                     contentDescription = item.label
                                 )
-                            }
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.onSurface,
+                                selectedTextColor = MaterialTheme.colorScheme.onSurface,
+
+
+                                indicatorColor = MaterialTheme.colorScheme.tertiary.copy(0.4f)
+                            )
+
                         )
                     }
                 }

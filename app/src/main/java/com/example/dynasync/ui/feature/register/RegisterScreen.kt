@@ -421,7 +421,9 @@ fun RegisterScreenContent(
                 }
 
                 TextButton(
-                    onClick = {},
+                    onClick = {
+                        onIntent(RegisterIntent.NavigateToLogin)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = MaterialTheme.colorScheme.primary,
                         containerColor = Color.Transparent

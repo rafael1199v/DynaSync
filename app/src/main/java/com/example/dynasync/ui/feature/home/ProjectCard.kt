@@ -41,8 +41,8 @@ fun ProjectCard(
 ) {
     Card(
         modifier = modifier.border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant,
+            width = 2.dp,
+            color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
             shape = RoundedCornerShape(size = 12.dp)
         ),
         colors = CardDefaults.cardColors(
@@ -101,7 +101,7 @@ fun ProjectCard(
                         progress = {
                             project.calculateCompletePercentage()
                         },
-                        color = WisteriaBlue,
+                        color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier.height(8.dp)
                     )
                 }

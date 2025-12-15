@@ -31,4 +31,9 @@ object UserRepository {
             null
         }
     }
+
+    suspend fun getUserEmail() : String? {
+        val email = supabaseClient.auth.currentUserOrNull()?.email
+        return email
+    }
 }

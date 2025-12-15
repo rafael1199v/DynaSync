@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.payment
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,7 +51,7 @@ fun PaymentCard(
         Row(
             modifier = modifier
                 .clip(RoundedCornerShape(10.dp))
-                .border(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant, shape = RoundedCornerShape(10.dp))
+                .border(width = 1.5.dp, color = MaterialTheme.colorScheme.onSurface.copy(0.2f), shape = RoundedCornerShape(10.dp))
                 .padding(20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

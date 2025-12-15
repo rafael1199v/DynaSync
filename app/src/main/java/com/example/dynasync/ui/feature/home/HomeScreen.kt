@@ -111,8 +111,8 @@ fun HomeScreenContent(
                 modifier = Modifier
                     .padding(horizontal = 12.dp)
                     .border(
-                        width = 1.dp,
-                        color = Color.Black.copy(alpha = 0.2f),
+                        width = 1.5.dp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
                         shape = RoundedCornerShape(20.dp)
                     ).padding(all = 20.dp),
                 verticalAlignment = Alignment.CenterVertically

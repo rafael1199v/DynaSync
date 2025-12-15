@@ -166,7 +166,7 @@ fun ProfileScreenContent(
 
             ProfileInfoRow(icon = painterResource(id = R.drawable.person_24), label = "Nombre", value = state.user?.name ?: "Nombre")
             ProfileInfoRow(icon = painterResource(id = R.drawable.person_24), label = "Apellido", value = state.user?.lastName ?: "Apellido")
-
+            ProfileInfoRow(icon = painterResource(id = R.drawable.baseline_email_24), label = "Correo", value = state.userEmail ?: "Correo")
         }
 
         Spacer(modifier = Modifier.weight(1f))

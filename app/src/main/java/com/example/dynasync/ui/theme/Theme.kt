@@ -46,7 +46,7 @@ private val DynaSyncTheme = lightColorScheme(
     tertiary = WisteriaBlue,
     onTertiary = Color.White,
 
-    surfaceContainer = IcyBlue.copy(alpha = 0.2f)
+    surfaceContainer = IcyBlue
 )
 
 
@@ -61,7 +61,7 @@ private val DynaSyncDarkTheme = darkColorScheme(
     tertiary = DarkWisteriaBlue,
     onTertiary = Color.Black,
 
-    surfaceContainer = DarkSurface.copy(alpha = 0.2f)
+    surfaceContainer = DarkSurface
 )
 
 @Composable
