@@ -157,7 +157,6 @@ class ProjectDetailViewModel(
             _state.update { it.copy(isLoading = true) }
             TaskRepository.deleteTask(taskId = taskId)
             onIntent(ProjectDetailIntent.LoadProject(projectId))
-            _state.update { it.copy(isLoading = false) }
         }
     }
 

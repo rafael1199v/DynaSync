@@ -25,16 +25,18 @@ object TaskRepository {
 
     }
     suspend fun deleteTask(taskId: Int) {
-        delay(2000)
-        for (project in projects) {
-            val task = project.tasks.find { it.id == taskId }
-            if (task != null) {
-                val newProject = project.copy(tasks = project.tasks - task)
-                val index = projects.indexOf(project)
-                projects[index] = newProject
-                break
+        try {
+            supabase.from("tasks").delete {
+                filter {
+                    eq("id", taskId)
+                }
             }
         }
+        catch (e: Exception) {
+            Log.e("debug", "Error eliminando la tarea de la BD: $e")
+            throw e
+        }
+
     }
 
     suspend fun updateTask(task: Task) {
