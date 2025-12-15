@@ -112,7 +112,7 @@ class ProjectDetailViewModel(
             val staff = _state.value.staffList.find { it.id == staffId }
 
             val newTask = Task(
-                id = -1,
+                id = 0,
                 title = title,
                 isCompleted = false,
                 personal = staff,

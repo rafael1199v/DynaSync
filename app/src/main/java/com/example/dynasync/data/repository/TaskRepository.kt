@@ -1,36 +1,26 @@
 package com.example.dynasync.data.repository
 
 import androidx.compose.animation.core.copy
+import com.example.dynasync.data.mapper.toDto
+import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.domain.model.Task
+import io.github.jan.supabase.postgrest.from
 import kotlinx.coroutines.delay
 import kotlin.time.Clock
 
 object TaskRepository {
     val projects = ProjectRepository.projects
+    val supabase = SupabaseClientObject.client
 
     suspend fun addTask(newTask: Task, projectId: Int) {
-        delay(2000)
-        val projectIndex = projects.indexOfFirst { it.id == projectId }
-        if (projectIndex != -1) {
-            val project = projects[projectIndex]
+        val createdTask = newTask.copy(
+            createdAt = Clock.System.now()
+        )
 
-            val maxId = project.tasks.maxByOrNull { it.id }?.id ?: 0
-            val newId = maxId + 1
+        val taskDto = createdTask.toDto(projectId)
 
-            val creationTime = newTask.createdAt ?: Clock.System.now()
+        supabase.from("tasks").insert(taskDto)
 
-            val finalTask = newTask.copy(
-                id = newId,
-                createdAt = creationTime
-            )
-
-            val updatedTasks = project.tasks + finalTask
-            val updatedProject = project.copy(tasks = updatedTasks)
-
-            projects[projectIndex] = updatedProject
-        }
-
-        println("La nueva tarea agregada es ${newTask}")
     }
     suspend fun deleteTask(taskId: Int) {
         delay(2000)
