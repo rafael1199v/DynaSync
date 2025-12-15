@@ -3,6 +3,7 @@ package com.example.dynasync.data.repository
 import android.util.Log
 import com.example.dynasync.data.dto.PaymentDto
 import com.example.dynasync.data.mapper.toDomain
+import com.example.dynasync.data.mapper.toDto
 import com.example.dynasync.data.supabase.SupabaseClientObject
 import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
@@ -89,16 +90,18 @@ object PaymentRepository {
     }
 
     suspend fun addPayment(payment: Payment) {
-        delay(1000)
+        try {
+            val newPayment = payment.copy(
+                createdAt = Clock.System.now()
+            )
 
-        val nextId = (payments.maxOfOrNull { it.id } ?: 0) + 1
+            supabase.from("payments").insert(newPayment.toDto())
+        }
+        catch (e: Exception) {
+            Log.e("main", "Hubo un error al cargar los pagos. ${e}")
+            throw e
+        }
 
-        val newPayment = payment.copy(
-            id = nextId,
-            createdAt = Clock.System.now()
-        )
-
-        payments.add(newPayment)
     }
 
     suspend fun updatePayment(updatedPayment: Payment) {

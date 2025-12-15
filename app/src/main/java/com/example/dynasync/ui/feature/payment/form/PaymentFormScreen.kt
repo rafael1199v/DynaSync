@@ -2,6 +2,8 @@ package com.example.dynasync.ui.feature.payment.form
 
 import android.widget.DatePicker
 import android.widget.TimePicker
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -44,6 +46,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -175,7 +179,11 @@ fun PaymentFormScreenContent(
         ) {
             DynaSyncTextField(
                 value = state.beneficiary,
-                onValueChange = { onIntent(PaymentFormIntent.BeneficiaryChange(it)) },
+                onValueChange = {
+                    if(it.length <= 20) {
+                        onIntent(PaymentFormIntent.BeneficiaryChange(it))
+                    }
+                },
                 label = "Beneficiario",
                 errorMessage = state.beneficiaryError,
                 supportingText = "Nombre del receptor",
@@ -186,7 +194,11 @@ fun PaymentFormScreenContent(
 
             DynaSyncTextField(
                 value = state.amount,
-                onValueChange = { onIntent(PaymentFormIntent.AmountChange(it)) },
+                onValueChange = {
+                    if(it.length <= 10) {
+                        onIntent(PaymentFormIntent.AmountChange(it))
+                    }
+                },
                 label = "Monto",
                 errorMessage = state.amountError,
                 supportingText = "Cantidad total",
@@ -279,14 +291,25 @@ fun PaymentFormScreenContent(
             )
         }
 
-        if(state.isLoading) {
-            CircularProgressIndicator()
-        }
 
         state.error?.let {
-            Text(text = it, color = MaterialTheme.colorScheme.error)
+            Toast.makeText(LocalContext.current, it, Toast.LENGTH_SHORT).show()
+            onIntent(PaymentFormIntent.CleanError)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
     }
+
+    if(state.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.5f))
+                .clickable(enabled = false) {},
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+        }
+    }
+
 }

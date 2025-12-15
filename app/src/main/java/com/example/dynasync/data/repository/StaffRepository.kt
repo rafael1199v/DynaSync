@@ -160,6 +160,7 @@ object StaffRepository {
         }
         catch (e: Exception) {
             Log.d("debug", "Error al actualizar al empleado: $e")
+            throw e
         }
 
 
@@ -186,6 +187,7 @@ object StaffRepository {
         }
         catch (e: Exception) {
             Log.e("debug", "Error al registrar al empleado: $e")
+            throw e
         }
 
 
@@ -201,6 +203,7 @@ object StaffRepository {
                 StorageHelper.deleteImage("staff-images", imageUrl)
             } catch (e: Exception) {
                 Log.e("debug", "Error borrando imagen al eliminar al personal: $e")
+                throw e
             }
         }
 
@@ -212,6 +215,7 @@ object StaffRepository {
             }
         } catch (e: Exception) {
             Log.e("ProjectRepo", "Error eliminando al personal de la BD: $e")
+            throw e
         }
 
     }

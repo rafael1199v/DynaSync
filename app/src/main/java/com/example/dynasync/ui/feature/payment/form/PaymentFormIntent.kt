@@ -1,6 +1,7 @@
 package com.example.dynasync.ui.feature.payment.form
 
 import com.example.dynasync.domain.model.PaymentType
+import com.example.dynasync.ui.feature.profile.ProfileIntent
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 
@@ -17,5 +18,7 @@ sealed interface PaymentFormIntent {
     data class TimeSelected(val time: LocalTime) : PaymentFormIntent
 
     data class LoadPayment(val paymentId: Int) : PaymentFormIntent
+
+    data object CleanError: PaymentFormIntent
     data object SubmitForm : PaymentFormIntent
 }

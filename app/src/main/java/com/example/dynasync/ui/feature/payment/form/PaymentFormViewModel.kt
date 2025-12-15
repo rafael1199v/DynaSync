@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.payment.form
 
+import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.compose.animation.core.copy
 import androidx.lifecycle.SavedStateHandle
@@ -82,6 +83,11 @@ class PaymentFormViewModel(
 
             is PaymentFormIntent.LoadPayment -> loadPayment(intent.paymentId)
             is PaymentFormIntent.SubmitForm -> onSubmitForm()
+            is PaymentFormIntent.CleanError -> {
+                _state.update {
+                    it.copy(error = null)
+                }
+            }
         }
     }
 
