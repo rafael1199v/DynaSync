@@ -1,0 +1,251 @@
+package com.example.dynasync.ui.feature.payment
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.dynasync.R
+import com.example.dynasync.data.repository.PaymentRepository
+import com.example.dynasync.domain.model.PaymentType
+import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
+import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
+import com.example.dynasync.ui.theme.JungleTeal
+
+@Composable
+fun PaymentScreen(
+    onCreatePayment: () -> Unit,
+    onEditPayment: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: PaymentViewModel = viewModel()
+) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is PaymentUiEvent.NavigateToPaymentForm -> {
+                    onEditPayment(event.paymentId)
+                }
+
+            }
+        }
+    }
+
+    Scaffold(
+        modifier = modifier,
+        contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
+        floatingActionButton = {
+            DynaSyncFloatingActionButton(
+                onClick = onCreatePayment,
+                text = "Pago",
+                iconId = R.drawable.baseline_add_24,
+                contentDescription = "Floating Action Button Payment"
+            )
+        }
+    ) { contentPadding ->
+        if(state.isLoading) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(contentPadding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
+        }
+        else {
+            PaymentScreenContent(
+                state = state,
+                onIntent = { intent ->
+                    viewModel.onIntent(intent)
+                },
+                modifier = Modifier.padding(contentPadding)
+            )
+        }
+    }
+
+
+
+}
+
+
+@Composable
+fun PaymentScreenContent(
+    state: PaymentViewState,
+    onIntent: (PaymentIntent) -> Unit,
+    modifier: Modifier = Modifier
+) {
+
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var paymentToDelete by remember { mutableStateOf<Int?>(null) }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyRow(
+            modifier = Modifier,
+            contentPadding = PaddingValues(horizontal = 36.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = PaymentType.entries.toTypedArray()) { paymentType ->
+
+                val isSelected = state.selectedFilter == paymentType
+
+                FilterChip(
+                    onClick = { onIntent(PaymentIntent.FilterPayments(paymentType)) },
+                    label = {
+                        Text(text = paymentType.description)
+                    },
+                    selected = isSelected,
+                    leadingIcon = if (isSelected) {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_check_24),
+                                contentDescription = null,
+                            )
+                        }
+                    } else null,
+                    colors = FilterChipDefaults.filterChipColors(
+                        containerColor = Color.Transparent,
+                        labelColor = MaterialTheme.colorScheme.onSurface,
+                        iconColor = MaterialTheme.colorScheme.onSurface,
+
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiary,
+                        selectedLabelColor = MaterialTheme.colorScheme.onTertiary,
+                        selectedLeadingIconColor = MaterialTheme.colorScheme.onTertiary,
+                    )
+                )
+            }
+        }
+
+        if (state.error != null) {
+            Column(
+                modifier = Modifier.fillMaxSize().padding(28.dp)
+            ) {
+                Text(
+                    text = state.error,
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+        } else if (state.paymentList.isNotEmpty()) {
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(
+                    top = 20.dp,
+                    start = 32.dp,
+                    end = 32.dp,
+                    bottom = 80.dp
+                ),
+
+                ) {
+                items(items = state.paymentList) { payment ->
+                    PaymentCard(
+                        onDelete = {
+                            paymentToDelete = payment.id
+                            showDeleteDialog = true
+                        },
+                        onEdit = {
+                            onIntent(PaymentIntent.EditPayment(payment.id))
+                        },
+                        payment = payment,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+
+        } else {
+
+            Column(
+                modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.dynasync_no_payments_light),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth().height(294.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+                Text(
+                    text = "No tienes ningún pago registrado. Añade uno nuevo!",
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+        }
+
+    }
+
+    if (showDeleteDialog && paymentToDelete != null) {
+        PaymentDeleteDialog(
+            onConfirm = {
+                onIntent(PaymentIntent.DeletePayment(paymentToDelete!!))
+                showDeleteDialog = false
+                paymentToDelete = null
+            },
+            onDismiss =  {
+                showDeleteDialog = false
+                paymentToDelete = null
+            }
+        )
+    }
+}
+
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun PaymentScreenPreview() {
+    PaymentScreenContent(
+        state = PaymentViewState(paymentList = PaymentRepository.payments),
+        onIntent = {},
+        modifier = Modifier.fillMaxSize()
+    )
+}
