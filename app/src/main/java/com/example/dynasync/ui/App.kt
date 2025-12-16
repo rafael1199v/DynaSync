@@ -62,6 +62,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App(
+    isDarkTheme: Boolean,
     modifier: Modifier = Modifier
 ) {
 
@@ -205,6 +206,7 @@ fun App(
             navigation<AuthenticationGraph>(startDestination = AuthenticationDestination.Login) {
                 composable<AuthenticationDestination.Login>{
                     LoginScreen(
+                        isDarkTheme = isDarkTheme,
                         modifier = Modifier.fillMaxSize(),
                         onLoginSuccess = {
                             navController.navigate(MainDestination.Home) {

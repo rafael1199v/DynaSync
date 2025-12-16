@@ -1,6 +1,7 @@
 package com.example.dynasync.ui.feature.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,12 +37,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
+import com.example.dynasync.ui.theme.AppThemeMode
 import com.example.dynasync.ui.theme.DynaSyncTheme
 import com.example.dynasync.ui.theme.JungleTeal
+import com.example.dynasync.ui.theme.ThemeManager
 
 
 @Composable
 fun LoginScreen(
+    isDarkTheme: Boolean,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = viewModel(),
     onLoginSuccess: () -> Unit,
@@ -63,6 +68,7 @@ fun LoginScreen(
     }
 
     LoginScreenContent(
+        isDarkTheme = isDarkTheme,
         state = state,
         onIntent = { intent ->
             viewModel.onIntent(intent)
@@ -74,12 +80,14 @@ fun LoginScreen(
 
 @Composable
 fun LoginScreenContent(
+    isDarkTheme: Boolean,
     state: LoginViewState,
     onIntent: (LoginIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     var passwordVisible by remember { mutableStateOf(value = false) }
+    val themeMode = ThemeManager.themeMode.collectAsState()
 
     Column(
         modifier = modifier,
@@ -93,7 +101,7 @@ fun LoginScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.dynasync_logo_light),
+                painter = painterResource(id = if(isDarkTheme) R.drawable.dynasync_logo_dark else R.drawable.dynasync_logo_light),
                 contentDescription = "Logo DynaSync",
                 modifier = Modifier.height(143.dp),
                 contentScale = ContentScale.Crop
@@ -211,11 +219,18 @@ fun LoginScreenContent(
                     .fillMaxWidth()
                     .padding(horizontal = 60.dp, vertical = 8.dp)
             ) {
-                Text(
-                    text = "Iniciar Sesión",
-                    modifier = Modifier.padding(8.dp),
-                    style = MaterialTheme.typography.titleMedium
-                )
+
+                if(state.isLoading) {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
+                }
+                else {
+                    Text(
+                        text = "Iniciar Sesión",
+                        modifier = Modifier.padding(8.dp),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
             }
 
         }
@@ -264,6 +279,7 @@ fun LoginScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             onIntent = {},
             state = LoginViewState(),
+            isDarkTheme = false
         )
     }
 

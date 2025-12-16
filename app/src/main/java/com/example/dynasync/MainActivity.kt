@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
             }
 
             DynaSyncTheme(darkTheme = isDark) {
-                App(modifier = Modifier.fillMaxSize())
+                App(isDarkTheme = isDark, modifier = Modifier.fillMaxSize())
             }
         }
     }
