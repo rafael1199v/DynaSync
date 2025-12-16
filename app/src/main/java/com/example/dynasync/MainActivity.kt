@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,17 +61,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        //ThemeManager.init(applicationContext)
+        ThemeManager.init(applicationContext)
 
         setContent {
-//            val currentTheme by ThemeManager.themeMode.collectAsState()
-//
-//            val isDark = when(currentTheme) {
-//                AppThemeMode.DARK -> true
-//                AppThemeMode.LIGHT -> false
-//            }
+            val currentTheme by ThemeManager.themeMode.collectAsState()
 
-            DynaSyncTheme {
+            val isDark = when(currentTheme) {
+                AppThemeMode.DARK -> true
+                AppThemeMode.LIGHT -> false
+                AppThemeMode.SYSTEM -> isSystemInDarkTheme()
+            }
+
+            DynaSyncTheme(darkTheme = isDark) {
                 App(modifier = Modifier.fillMaxSize())
             }
         }

@@ -2,6 +2,7 @@ package com.example.dynasync.ui.theme
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -28,6 +29,7 @@ object ThemeManager {
     }
 
     fun saveTheme(mode: AppThemeMode) {
+        Log.d("ThemeManager", "Guardando tema: $mode")
         prefs.edit().putString(KEY_THEME_MODE, mode.name).apply()
         _themeMode.value = mode
     }

@@ -23,6 +23,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
 import com.example.dynasync.ui.feature.createproject.CreateProjectUiEvent
+import com.example.dynasync.ui.theme.AppThemeMode
 
 @Composable
 fun ProfileScreen(
@@ -58,6 +60,7 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
+    val themeMode by viewModel.currentTheme.collectAsState()
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
@@ -82,7 +85,8 @@ fun ProfileScreen(
                 ProfileScreenContent(
                     state = state,
                     onIntent = viewModel::onIntent,
-                    modifier = modifier
+                    modifier = modifier,
+                    themeMode = themeMode
                 )
             }
         }
@@ -94,7 +98,8 @@ fun ProfileScreen(
 fun ProfileScreenContent(
     modifier: Modifier = Modifier,
     onIntent: (ProfileIntent) -> Unit,
-    state: ProfileViewState
+    state: ProfileViewState,
+    themeMode: AppThemeMode = AppThemeMode.SYSTEM
 ) {
 
     val scrollState = rememberScrollState()
@@ -151,8 +156,8 @@ fun ProfileScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    width = 1.dp,
-                    color = Color.Black.copy(alpha = 0.1f),
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                     shape = RoundedCornerShape(20.dp)
                 )
                 .padding(24.dp),
@@ -167,6 +172,46 @@ fun ProfileScreenContent(
             ProfileInfoRow(icon = painterResource(id = R.drawable.person_24), label = "Nombre", value = state.user?.name ?: "Nombre")
             ProfileInfoRow(icon = painterResource(id = R.drawable.person_24), label = "Apellido", value = state.user?.lastName ?: "Apellido")
             ProfileInfoRow(icon = painterResource(id = R.drawable.baseline_email_24), label = "Correo", value = state.userEmail ?: "Correo")
+        }
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .padding(all = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = "Temas",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold
+            )
+
+            ProfileRowTheme(
+                onSelect = { onIntent(ProfileIntent.ChangeTheme(AppThemeMode.DARK))},
+                isSelected = AppThemeMode.DARK == themeMode,
+                icon = painterResource(id = R.drawable.baseline_dark_mode_24),
+                title = "Oscuro"
+            )
+
+            ProfileRowTheme(
+                onSelect = { onIntent(ProfileIntent.ChangeTheme(AppThemeMode.LIGHT))},
+                isSelected = AppThemeMode.LIGHT == themeMode,
+                icon = painterResource(id = R.drawable.baseline_light_mode_24),
+                title = "Claro"
+            )
+
+            ProfileRowTheme(
+                onSelect = { onIntent(ProfileIntent.ChangeTheme(AppThemeMode.SYSTEM))},
+                isSelected = AppThemeMode.SYSTEM == themeMode,
+                icon = painterResource(id = R.drawable.outline_routine_24),
+                title = "Sistema"
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -240,7 +285,7 @@ fun ProfileInfoRow(
         Icon(
             painter = icon,
             contentDescription = "Profile Icon",
-            tint = MaterialTheme.colorScheme.primary,
+            tint = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier.size(28.dp)
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -256,6 +301,46 @@ fun ProfileInfoRow(
                 fontWeight = FontWeight.Medium
             )
         }
+    }
+}
+
+@Composable
+fun ProfileRowTheme(
+    onSelect: () -> Unit,
+    isSelected: Boolean,
+    icon: Painter,
+    title: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+
+        RadioButton(
+            selected = isSelected,
+            onClick = onSelect,
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        Column {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Icon(
+            painter = icon,
+            contentDescription = "Profile Icon Theme",
+            tint = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier.size(28.dp)
+        )
+
     }
 }
 

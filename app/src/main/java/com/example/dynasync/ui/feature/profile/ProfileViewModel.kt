@@ -1,9 +1,12 @@
 package com.example.dynasync.ui.feature.profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dynasync.data.repository.UserRepository
 import com.example.dynasync.ui.feature.createproject.CreateProjectUiEvent
+import com.example.dynasync.ui.theme.AppThemeMode
+import com.example.dynasync.ui.theme.ThemeManager
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel: ViewModel() {
 
+    val currentTheme = ThemeManager.themeMode
     private val _state = MutableStateFlow(value = ProfileViewState())
     val state = _state.asStateFlow()
 
@@ -26,9 +30,11 @@ class ProfileViewModel: ViewModel() {
     fun onIntent(intent: ProfileIntent) {
         when(intent) {
            is ProfileIntent.LoadUser -> loadUser()
-           is ProfileIntent.Logout -> {
-                logout()
-           }
+           is ProfileIntent.Logout -> logout()
+            is ProfileIntent.ChangeTheme -> {
+                Log.d("ProfileViewModel", "Cambiando tema: ${intent.newTheme}")
+                onChangeAppTheme(intent.newTheme)
+            }
         }
 
     }
@@ -64,5 +70,9 @@ class ProfileViewModel: ViewModel() {
         viewModelScope.launch {
             _uiEvent.send(ProfileUiEvent.NavigateToLogin)
         }
+    }
+
+    private fun onChangeAppTheme(newAppTheme: AppThemeMode) {
+        ThemeManager.saveTheme(newAppTheme)
     }
 }
