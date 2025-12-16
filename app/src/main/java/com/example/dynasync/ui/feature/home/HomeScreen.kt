@@ -90,7 +90,7 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
             }
 
         }
@@ -126,7 +126,7 @@ fun HomeScreenContent(
         item {
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 20.dp)
                     .border(
                         width = 1.5.dp,
                         color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
