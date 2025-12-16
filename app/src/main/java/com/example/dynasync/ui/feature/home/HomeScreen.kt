@@ -41,6 +41,7 @@ import coil.request.ImageRequest
 import com.example.dynasync.R
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.navigation.MainDestination
+import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.shimmerEffect
 
@@ -57,30 +58,11 @@ fun HomeScreen(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
+            DynaSyncFloatingActionButton(
                 onClick = onCreateProject,
-                content = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            8.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                        modifier = Modifier.padding(all = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_add_24),
-                            contentDescription = "Float Action Button",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-
-                        Text(
-                            text = "Proyecto",
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
+                text = "Proyecto",
+                iconId = R.drawable.baseline_add_24,
+                contentDescription = "Float Action Button Project"
             )
         }
     ) { contentPadding ->
