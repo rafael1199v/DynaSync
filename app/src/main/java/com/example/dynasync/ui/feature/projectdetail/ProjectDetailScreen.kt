@@ -183,12 +183,13 @@ fun ProjectDetailScreenContent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.no_task2_1),
+                            painter = painterResource(id = R.drawable.dynasync_no_tasks_light),
                             contentDescription = "No tasks image",
                             modifier = Modifier
                                 .width(260.dp)
                                 .height(271.dp)
-                                .clip(RoundedCornerShape(20.dp))
+                                .clip(RoundedCornerShape(20.dp)),
+                            contentScale = ContentScale.Crop
                         )
 
                         Text(

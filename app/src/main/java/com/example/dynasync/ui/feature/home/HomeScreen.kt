@@ -222,10 +222,11 @@ fun HomeScreenContent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.no_projects2_1),
+                            painter = painterResource(id = R.drawable.dynasync_no_projects_light),
                             contentDescription = "No projects image",
                             modifier = Modifier.width(285.dp).height(289.dp)
-                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp))
+                                .clip(androidx.compose.foundation.shape.RoundedCornerShape(20.dp)),
+                            contentScale = ContentScale.Crop
                         )
 
                         Text(
@@ -268,7 +269,7 @@ fun HomeScreenPreview() {
     HomeScreenContent(
         onProjectClick = {},
         state = HomeViewState(
-            projects = ProjectRepository.projects
+            projects = emptyList()
         ),
         modifier = Modifier.fillMaxWidth()
     )

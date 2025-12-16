@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -224,9 +225,10 @@ fun PaymentScreenContent(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.no_payments_2),
+                    painter = painterResource(id = R.drawable.dynasync_no_payments_light),
                     contentDescription = null,
                     modifier = Modifier.fillMaxWidth().height(294.dp),
+                    contentScale = ContentScale.Crop
                 )
 
                 Text(

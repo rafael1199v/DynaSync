@@ -93,7 +93,7 @@ fun LoginScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.logo_dyna_sync),
+                painter = painterResource(id = R.drawable.dynasync_logo_light),
                 contentDescription = "Logo DynaSync",
                 modifier = Modifier.height(143.dp),
                 contentScale = ContentScale.Crop
