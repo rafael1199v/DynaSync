@@ -44,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
 import com.example.dynasync.data.repository.PaymentRepository
 import com.example.dynasync.domain.model.PaymentType
+import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
 import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
 import com.example.dynasync.ui.theme.JungleTeal
 
@@ -71,30 +72,11 @@ fun PaymentScreen(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
+            DynaSyncFloatingActionButton(
                 onClick = onCreatePayment,
-                content = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            8.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                        modifier = Modifier.padding(all = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_add_24),
-                            contentDescription = "Float Action Button",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-
-                        Text(
-                            text = "Pago",
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
+                text = "Pago",
+                iconId = R.drawable.baseline_add_24,
+                contentDescription = "Floating Action Button Payment"
             )
         }
     ) { contentPadding ->

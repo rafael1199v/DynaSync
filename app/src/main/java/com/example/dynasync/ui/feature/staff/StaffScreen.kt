@@ -3,6 +3,7 @@ package com.example.dynasync.ui.feature.staff
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -39,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dynasync.R
 import com.example.dynasync.data.repository.StaffRepository
 import com.example.dynasync.domain.model.Personal
+import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailIntent
 import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
 
@@ -67,30 +69,11 @@ fun StaffScreen(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
+            DynaSyncFloatingActionButton(
                 onClick = onCreateStaff,
-                content = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(
-                            8.dp,
-                            Alignment.CenterHorizontally
-                        ),
-                        modifier = Modifier.padding(all = 16.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_add_24),
-                            contentDescription = "Float Action Button",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-
-                        Text(
-                            text = "Personal",
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
+                text = "Personal",
+                iconId = R.drawable.baseline_add_24,
+                contentDescription = "Floating Action Button Staff"
             )
         }
     ){ contentPadding ->
@@ -168,7 +151,7 @@ fun StaffScreenContent(
         LazyColumn(
             modifier = modifier.padding(horizontal = 26.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+            contentPadding = PaddingValues(
                 top = 40.dp,
                 bottom = 80.dp
             )

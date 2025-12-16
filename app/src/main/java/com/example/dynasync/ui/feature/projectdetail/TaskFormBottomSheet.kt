@@ -179,7 +179,7 @@ fun TaskFormBottomSheet(
                             Icon(painter = painterResource(R.drawable.outline_delete_24), contentDescription = "Borrar")
                         }
                     } else {
-                        Icon(painterResource(R.drawable.outline_account_circle_24), "Buscar")
+                        Icon(painterResource(R.drawable.outline_person_24), "Buscar")
                     }
                 },
                 modifier = Modifier

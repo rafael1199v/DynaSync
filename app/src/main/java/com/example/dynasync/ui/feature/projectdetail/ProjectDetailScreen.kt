@@ -51,6 +51,7 @@ import com.example.dynasync.R
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
+import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -278,30 +279,18 @@ fun ProjectDetailScreenContent(
 
         }
 
-        FloatingActionButton(
+        DynaSyncFloatingActionButton(
             onClick = {
-                taskToEdit = null // Modo Crear
+                taskToEdit = null
                 showBottomSheet = true
             },
+            text = "Tarea",
+            iconId = R.drawable.baseline_add_24,
+            contentDescription = "Floating Action Button Add Task",
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ) {
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(
-                    8.dp,
-                    Alignment.CenterHorizontally
-                ),
-                modifier = Modifier.padding(all = 16.dp)
-            ) {
-                Icon(painterResource(id = R.drawable.baseline_add_24), contentDescription = "Add Task")
-                Text(text = "Tarea")
-            }
-        }
+                .padding(16.dp)
+        )
     }
 
 
