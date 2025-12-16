@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.staff
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +30,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -136,27 +139,55 @@ fun StaffScreenContent(
 
     var staffToDelete by remember { mutableStateOf<Personal?>(value = null) }
 
-    LazyColumn(
-        modifier = modifier.padding(horizontal = 26.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            top = 40.dp,
-            bottom = 80.dp
-        )
-    ) {
-        items(items = state.staff) { staff ->
-            StaffCard(
-                staff = staff,
-                modifier = Modifier.fillMaxWidth(),
-                onDeleteStaff = {
-                    //onIntent(StaffIntent.DeleteStaff(staff.id))
-                    staffToDelete = staff
-                },
-                onUpdateStaff = {
-                    onIntent(StaffIntent.UpdateStaff(staff.id))
-                }
+
+    if(state.staff.isEmpty()) {
+        Column(
+            modifier.fillMaxSize().padding(horizontal = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.dynasync_no_staff_light),
+                contentDescription = "No staff image",
+                modifier = Modifier.fillMaxWidth().height(294.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "No tienes personal registrado. Agrega a una persona!",
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
             )
         }
+    }
+    else {
+        LazyColumn(
+            modifier = modifier.padding(horizontal = 26.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                top = 40.dp,
+                bottom = 80.dp
+            )
+        ) {
+            items(items = state.staff) { staff ->
+                StaffCard(
+                    staff = staff,
+                    modifier = Modifier.fillMaxWidth(),
+                    onDeleteStaff = {
+                        //onIntent(StaffIntent.DeleteStaff(staff.id))
+                        staffToDelete = staff
+                    },
+                    onUpdateStaff = {
+                        onIntent(StaffIntent.UpdateStaff(staff.id))
+                    }
+                )
+            }
+        }
+
     }
 
 
