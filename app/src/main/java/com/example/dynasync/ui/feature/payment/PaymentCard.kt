@@ -116,7 +116,8 @@ fun PaymentCard(
 
             DropdownMenu(
                 expanded = showMenu,
-                onDismissRequest = { showMenu = false }
+                onDismissRequest = { showMenu = false },
+                containerColor = MaterialTheme.colorScheme.surface,
             ) {
                 DropdownMenuItem(
                     text = { Text("Editar") },

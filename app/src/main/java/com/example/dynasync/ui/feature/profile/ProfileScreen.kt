@@ -50,6 +50,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.dynasync.R
+import com.example.dynasync.domain.model.User
 import com.example.dynasync.ui.feature.createproject.CreateProjectUiEvent
 import com.example.dynasync.ui.theme.AppThemeMode
 
@@ -295,6 +296,7 @@ fun ProfileInfoRow(
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Gray
             )
+
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodyLarge,
@@ -350,7 +352,16 @@ fun ProfileScreenPreview() {
     ProfileScreenContent(
         modifier = Modifier.fillMaxSize(),
         onIntent = {},
-        state = ProfileViewState()
+        state = ProfileViewState(
+            user = User(
+                id = "1",
+                name = "Daniel Roland",
+                lastName = "Penaranda Colque",
+                age = 22,
+                profileImageUrl = "",
+                projects = emptyList()
+            )
+        )
     )
 }
 
