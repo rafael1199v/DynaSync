@@ -5,10 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -69,6 +71,8 @@ import com.example.dynasync.utils.convertMillisToDate
 import com.example.dynasync.utils.createImageFile
 import com.example.dynasync.utils.uriToFile
 import java.io.File
+import java.time.LocalDate as JavaLocalDate
+import java.time.ZoneId
 
 
 @Composable
@@ -121,8 +125,14 @@ fun CreateProjectScreenContent(
 
     val datePickerState = rememberDatePickerState(
         selectableDates = object : SelectableDates {
-            override fun isSelectableYear(year: Int): Boolean {
-                return year >= 2024
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                val todayMillis = JavaLocalDate.now()
+                    .atStartOfDay(ZoneId.of("UTC"))
+                    .toInstant()
+                    .toEpochMilli()
+
+                return utcTimeMillis >= todayMillis
             }
         }
     )
