@@ -74,26 +74,26 @@ class CreateProjectViewModel(
 
     private fun onChangeTitle(title: String) {
         _state.update {
-            it.copy(title = title)
+            it.copy(title = title, titleError = null)
         }
     }
 
 
     private fun onChangeObjective(objective: String) {
         _state.update {
-            it.copy(objective = objective)
+            it.copy(objective = objective, objectiveError = null)
         }
     }
 
     private fun onChangeDescription(description: String) {
         _state.update {
-            it.copy(description = description)
+            it.copy(description = description, descriptionError = null)
         }
     }
 
     private fun onFinishDateChange(finishDate: String) {
         _state.update {
-            it.copy(finishDate = finishDate)
+            it.copy(finishDate = finishDate, finishDateError = null)
         }
     }
 

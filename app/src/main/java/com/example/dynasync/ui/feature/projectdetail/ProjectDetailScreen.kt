@@ -123,7 +123,7 @@ fun ProjectDetailScreenContent(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(state.project?.imageUrl)
                         .crossfade(true)
-                        .error(R.drawable.no_image_placeholder)
+                        .error(R.drawable.project_placeholder)
                         .build(),
                     placeholder = painterResource(id = R.drawable.no_image_placeholder),
                     contentDescription = "Project Image",
