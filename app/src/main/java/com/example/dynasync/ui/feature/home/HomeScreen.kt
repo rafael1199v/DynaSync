@@ -121,7 +121,7 @@ fun HomeScreenContent(
                         .data(state.user.profileImageUrl)
                         .crossfade(true)
                         .build(),
-                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
+                    placeholder = painterResource(id = R.drawable.no_image_placeholder),
                     error = painterResource(R.drawable.no_image_placeholder),
                     contentDescription = "Profile picture",
                     contentScale = ContentScale.Crop,
