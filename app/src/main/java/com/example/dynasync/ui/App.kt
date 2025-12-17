@@ -1,5 +1,6 @@
 package com.example.dynasync.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -90,8 +91,15 @@ fun App(
                     startDestinationGraph = AuthenticationGraph
                     isReady = true
                 } else {
-                    navController.navigate(AuthenticationGraph) {
-                        popUpTo(0) { inclusive = true }
+                    val currentDestination = navController.currentDestination
+                    val isAlreadyInAuth = currentDestination?.hierarchy?.any {
+                        it.hasRoute(AuthenticationGraph::class)
+                    } == true
+
+                    if(!isAlreadyInAuth) {
+                        navController.navigate(AuthenticationGraph) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
             }
@@ -105,8 +113,8 @@ fun App(
     }
 
     if (!isReady) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+        Box(modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
         }
         return
     }
