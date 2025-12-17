@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.projectdetail
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -236,7 +237,11 @@ fun ProjectDetailScreenContent(
                         onClick = {
                             onIntent(ProjectDetailIntent.EditProject(projectId = state.project?.id ?: 0))
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onSurface.copy(0.2f)
+                        )
                     ) {
 
                         Row(
@@ -258,7 +263,11 @@ fun ProjectDetailScreenContent(
                         onClick = {
                             showDeleteProjectDialog = true
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        border = BorderStroke(
+                            width = 1.dp,
+                            color = MaterialTheme.colorScheme.onSurface.copy(0.2f)
+                        )
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
