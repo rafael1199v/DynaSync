@@ -57,9 +57,11 @@ class StaffFormViewModel(
             is StaffFormIntent.LoadStaff -> {
                 loadStaff(intent.staffId)
             }
-
             is StaffFormIntent.SubmitForm -> {
                 onSubmitForm()
+            }
+            is StaffFormIntent.CleanError -> {
+                onCleanError()
             }
         }
     }
@@ -105,6 +107,12 @@ class StaffFormViewModel(
     private fun onChangeImageUrl(imageUrl: String?) {
         _state.update {
             it.copy(imageUrl = imageUrl)
+        }
+    }
+
+    private fun onCleanError() {
+        _state.update {
+            it.copy(error = null)
         }
     }
 

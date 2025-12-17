@@ -70,6 +70,9 @@ class CreateProjectViewModel(
             is CreateProjectIntent.LoadProject -> {
                 loadProjectData()
             }
+            is CreateProjectIntent.CleanError -> {
+                onCleanError()
+            }
         }
     }
 
@@ -122,6 +125,12 @@ class CreateProjectViewModel(
                     isLoading = false
                 )
             }
+        }
+    }
+
+    private fun onCleanError() {
+        _state.update {
+            it.copy(error = null)
         }
     }
 
@@ -181,6 +190,7 @@ class CreateProjectViewModel(
                 }
                 catch (e: Exception) {
                     Log.e("debug", "Hubo un error al crear el proyecto. ${e}")
+                    _state.update { it.copy(error = e.message) }
                 }
                 finally {
                     _state.update { it.copy(isLoading = false) }

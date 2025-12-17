@@ -65,7 +65,14 @@ class ProjectDetailViewModel(
             is ProjectDetailIntent.UpdateTask -> {
                 updateTask(intent.taskId, intent.title, intent.staffId, intent.finishDate)
             }
+            is ProjectDetailIntent.CleanError -> {
+                onCleanError()
+            }
         }
+    }
+
+    private fun onCleanError() {
+        _state.update { it.copy(error = null) }
     }
 
     private fun getProjectById(projectId: Int) {
@@ -129,9 +136,15 @@ class ProjectDetailViewModel(
                 finishDate = LocalDate.parse(finishDate)
             )
 
-            TaskRepository.addTask(newTask, projectId)
+            try {
+                TaskRepository.addTask(newTask, projectId)
+                onIntent(ProjectDetailIntent.LoadProject(projectId))
+            }
+            catch (e: Exception) {
+                _state.update { it.copy(error = "Hubo un error al crear la tarea", isLoading = false) }
+            }
 
-            onIntent(ProjectDetailIntent.LoadProject(projectId))
+
         }
     }
 
@@ -149,9 +162,14 @@ class ProjectDetailViewModel(
                 finishDate = LocalDate.parse(finishDate)
             )
 
-            TaskRepository.updateTask(task)
+            try {
+                TaskRepository.updateTask(task)
+                onIntent(ProjectDetailIntent.LoadProject(projectId))
+            }
+            catch (e: Exception) {
+                _state.update { it.copy(error = "Hubo un error al actualizar la tarea", isLoading = false) }
+            }
 
-            onIntent(ProjectDetailIntent.LoadProject(projectId))
         }
     }
 

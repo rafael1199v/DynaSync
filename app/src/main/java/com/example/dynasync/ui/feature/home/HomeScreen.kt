@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.home
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -82,7 +83,10 @@ fun HomeScreen(
             HomeScreenContent(
                 onProjectClick = onProjectClick,
                 state = state,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier.padding(contentPadding),
+                onIntent = {
+                    homeViewModel.onIntent(it)
+                }
             )
         }
 
@@ -94,6 +98,7 @@ fun HomeScreen(
 @Composable
 fun HomeScreenContent(
     onProjectClick: (Int) -> Unit,
+    onIntent: (HomeIntent) -> Unit,
     state: HomeViewState,
     modifier: Modifier = Modifier
 ) {
@@ -244,6 +249,11 @@ fun HomeScreenContent(
         }
 
     }
+
+    state.error?.let{
+        Toast.makeText(LocalContext.current, it, Toast.LENGTH_LONG).show()
+        onIntent(HomeIntent.CleanError)
+    }
 }
 
 
@@ -256,7 +266,8 @@ fun HomeScreenPreview() {
         state = HomeViewState(
             projects = emptyList()
         ),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onIntent = {}
     )
 }
 

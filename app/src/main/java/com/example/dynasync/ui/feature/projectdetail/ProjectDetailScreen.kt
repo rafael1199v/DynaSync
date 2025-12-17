@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.projectdetail
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -301,6 +302,11 @@ fun ProjectDetailScreenContent(
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
         )
+
+        state.error?.let {
+            Toast.makeText(LocalContext.current, it, Toast.LENGTH_LONG).show()
+            onIntent(ProjectDetailIntent.CleanError)
+        }
     }
 
 
