@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -433,6 +434,11 @@ fun CreateProjectScreenContent(
                 text = if(state.isEditMode) "Editar proyecto" else "Crear proyecto",
                 style = MaterialTheme.typography.titleMedium
             )
+        }
+
+        state.error?.let {
+            Toast.makeText(LocalContext.current, it, Toast.LENGTH_SHORT).show()
+            onIntent(CreateProjectIntent.CleanError)
         }
 
         Spacer(modifier = Modifier.height(24.dp))

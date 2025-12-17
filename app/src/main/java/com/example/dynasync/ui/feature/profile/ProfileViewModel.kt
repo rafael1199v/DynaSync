@@ -54,10 +54,15 @@ class ProfileViewModel: ViewModel() {
                         error = null
                     )
                 }
+                if(user == null) {
+                    _state.update {
+                        it.copy(error = "Error al cargar el usuario. Revisa tu conexión a internet.")
+                    }
+                }
             }
             catch (e: Exception) {
                 _state.update {
-                    it.copy(error = "Error al cargar el usuario")
+                    it.copy(error = "Error al cargar el usuario. Revisa tu conexión a internet.")
                 }
             }
             finally {

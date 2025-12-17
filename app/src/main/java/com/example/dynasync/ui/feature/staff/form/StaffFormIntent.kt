@@ -9,4 +9,6 @@ sealed interface StaffFormIntent {
     data class ImageUrlChange(val imageUrl: String?) : StaffFormIntent
 
     data object SubmitForm : StaffFormIntent
+
+    data object CleanError: StaffFormIntent
 }

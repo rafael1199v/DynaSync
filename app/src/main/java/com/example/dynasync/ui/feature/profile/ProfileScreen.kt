@@ -81,7 +81,16 @@ fun ProfileScreen(
                 modifier = Modifier.align(Alignment.Center),
                 color = MaterialTheme.colorScheme.tertiary
             )
-        } else {
+        }
+        else if(state.error != null) {
+            Text(
+                text = state.error!!,
+                modifier = Modifier.align(Alignment.Center).padding(26.dp),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+        else {
             state.user?.let { user ->
                 ProfileScreenContent(
                     state = state,

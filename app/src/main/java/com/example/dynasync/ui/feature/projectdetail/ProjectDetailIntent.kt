@@ -25,4 +25,5 @@ sealed interface ProjectDetailIntent {
         val finishDate: String
     ) : ProjectDetailIntent
 
+    data object CleanError : ProjectDetailIntent
 }

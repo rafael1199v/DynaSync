@@ -57,48 +57,62 @@ class HomeViewModel : ViewModel() {
                 it.copy(isLoading = true)
             }
 
-            val userId = AuthRepository.getUserId()
+            try {
+                val userId = AuthRepository.getUserId()
 
-            if(userId == null) {
-                _state.update {
-                    Log.e("debug","Hubo un error al cargar los proyectos")
-                    it.copy(error = "Hubo un error al cargar los proyectos")
-                }
-            }
-            else {
-                val projectsDeferred = async { ProjectRepository.getProjects(userId) }
-                val userDeferred = async { UserRepository.getUser() }
-
-                val projects = projectsDeferred.await()
-                val user = userDeferred.await()
-
-                if(user == null) {
+                if(userId == null) {
                     _state.update {
-                        Log.e("debug", "Hubo un error al cargar los datos")
-                        it.copy(error = "Hubo un error al cargar los datos del usuario", isLoading = false)
+                        Log.e("debug","Hubo un error al cargar los proyectos")
+                        it.copy(error = "Hubo un error al cargar los proyectos")
                     }
                 }
                 else {
-                    Log.d("debug",projects.toString())
-                    Log.d("debug", user.toString())
+                    val projectsDeferred = async { ProjectRepository.getProjects(userId) }
+                    val userDeferred = async { UserRepository.getUser() }
 
-                    val projectsInProcess = projects.count { it.tasks.any { task -> !task.isCompleted } }
-                    val pendingTasks = projects.sumOf { project ->
-                        project.tasks.count { !it.isCompleted }
+                    val projects = projectsDeferred.await()
+                    val user = userDeferred.await()
+
+                    if(user == null) {
+                        _state.update {
+                            Log.e("debug", "Hubo un error al cargar los datos")
+                            it.copy(error = "Hubo un error al cargar los datos del usuario", isLoading = false)
+                        }
                     }
+                    else {
+                        Log.d("debug",projects.toString())
+                        Log.d("debug", user.toString())
 
-                    _state.update { currentState ->
-                        currentState.copy(
-                            user = user,
-                            projectsInProcess = projectsInProcess,
-                            pendingTasks = pendingTasks,
-                            projects = projects,
-                            isLoading = false
-                        )
+                        val projectsInProcess = projects.count { it.tasks.any { task -> !task.isCompleted } }
+                        val pendingTasks = projects.sumOf { project ->
+                            project.tasks.count { !it.isCompleted }
+                        }
+
+                        _state.update { currentState ->
+                            currentState.copy(
+                                user = user,
+                                projectsInProcess = projectsInProcess,
+                                pendingTasks = pendingTasks,
+                                projects = projects,
+                                isLoading = false
+                            )
+                        }
                     }
                 }
             }
+            catch (e: Exception){
+                _state.update {
+                    it.copy(error = "Hubo un error al cargar los datos", isLoading = false)
+                }
+            }
 
+
+        }
+    }
+
+    private fun onCleanError() {
+        _state.update {
+            it.copy(error = null)
         }
     }
 
@@ -107,14 +121,18 @@ class HomeViewModel : ViewModel() {
             is HomeIntent.LoadProjects -> {
                 getProjects()
             }
-            HomeIntent.LoadUser -> {
+            is HomeIntent.LoadUser -> {
                 viewModelScope.launch {
                     val user = UserRepository.getUser()
                 }
             }
 
-            HomeIntent.LoadDashboardData -> {
+            is HomeIntent.LoadDashboardData -> {
                 loadDashboardData()
+            }
+
+            is HomeIntent.CleanError -> {
+                onCleanError()
             }
         }
     }
