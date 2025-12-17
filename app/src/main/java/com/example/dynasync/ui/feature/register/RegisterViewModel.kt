@@ -142,7 +142,7 @@ class RegisterViewModel: ViewModel() {
                     if (errorMsg.contains("user_already_exists") || errorMsg.contains("User already registered")) {
                         _state.update { it.copy(error = "Este correo ya está registrado.") }
                     } else {
-                        _state.update { it.copy(error = "Error al registrarse.") }
+                        _state.update { it.copy(error = "Error al registrarse. Revisa tu conexión a internet.") }
                     }
                 } finally {
                     _state.update { it.copy(isLoading = false) }
