@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dynasync.data.dto.ProfileCreateDto
 import com.example.dynasync.data.repository.RegisterRepository
+import com.example.dynasync.ui.feature.register.validators.RegisterFormValidator
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

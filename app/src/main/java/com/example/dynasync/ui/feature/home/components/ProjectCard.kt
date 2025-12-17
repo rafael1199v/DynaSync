@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.feature.home
+package com.example.dynasync.ui.feature.home.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +34,6 @@ import coil.request.ImageRequest
 import com.example.dynasync.R
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.calculateCompletePercentage
-import com.example.dynasync.ui.theme.WisteriaBlue
 import com.example.dynasync.utils.shimmerEffect
 import kotlinx.datetime.LocalDate
 
@@ -42,7 +41,7 @@ import kotlinx.datetime.LocalDate
 fun ProjectCard(
     project: Project,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.Companion
 ) {
     Card(
         modifier = modifier.border(
@@ -51,12 +50,12 @@ fun ProjectCard(
             shape = RoundedCornerShape(size = 12.dp)
         ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Companion.Transparent
         ),
         onClick = onClick
     ) {
         Row(
-            modifier = Modifier.height(IntrinsicSize.Min)
+            modifier = Modifier.Companion.height(IntrinsicSize.Min)
         ) {
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
@@ -66,12 +65,12 @@ fun ProjectCard(
                     .build(),
                 placeholder = painterResource(id = R.drawable.no_image_placeholder),
                 contentDescription = "Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.width(108.dp).fillMaxHeight()
+                contentScale = ContentScale.Companion.Crop,
+                modifier = Modifier.Companion.width(108.dp).fillMaxHeight()
             )
 
             Column(
-                modifier = Modifier.padding(all = 16.dp),
+                modifier = Modifier.Companion.padding(all = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Column(
@@ -82,17 +81,17 @@ fun ProjectCard(
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.Companion.width(4.dp))
 
                     Text(
                         text = project.description,
                         style = MaterialTheme.typography.bodyMedium,
-                        overflow = TextOverflow.Ellipsis,
+                        overflow = TextOverflow.Companion.Ellipsis,
                         maxLines = 2
                     )
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.Companion.width(8.dp))
 
                 Column(
                     verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -107,7 +106,7 @@ fun ProjectCard(
                             project.calculateCompletePercentage()
                         },
                         color = MaterialTheme.colorScheme.tertiary,
-                        modifier = Modifier.height(8.dp)
+                        modifier = Modifier.Companion.height(8.dp)
                     )
                 }
             }
@@ -132,7 +131,7 @@ fun ProjectCardPreview() {
 }
 
 @Composable
-fun ProjectCardSkeleton(modifier: Modifier = Modifier) {
+fun ProjectCardSkeleton(modifier: Modifier = Modifier.Companion) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -143,21 +142,21 @@ fun ProjectCardSkeleton(modifier: Modifier = Modifier) {
                 shape = RoundedCornerShape(size = 12.dp)
             ),
         colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
+            containerColor = Color.Companion.Transparent
         ),
         shape = RoundedCornerShape(size = 12.dp)
     ) {
-        Row(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.Companion.fillMaxSize()) {
 
             Box(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .width(108.dp)
                     .fillMaxHeight()
                     .shimmerEffect()
             )
 
             Column(
-                modifier = Modifier
+                modifier = Modifier.Companion
                     .padding(all = 16.dp)
                     .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -165,45 +164,45 @@ fun ProjectCardSkeleton(modifier: Modifier = Modifier) {
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .height(20.dp)
                             .fillMaxWidth(0.7f)
-                            .clip(RoundedCornerShape(4.dp))
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
                             .shimmerEffect()
                     )
 
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .height(14.dp)
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(4.dp))
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
                             .shimmerEffect()
                     )
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .height(14.dp)
                             .fillMaxWidth(0.8f) // La segunda línea un poco más corta
-                            .clip(RoundedCornerShape(4.dp))
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
                             .shimmerEffect()
                     )
                 }
 
-                Spacer(modifier = Modifier.weight(1f)) // Empuja lo siguiente hacia abajo
+                Spacer(modifier = Modifier.Companion.weight(1f)) // Empuja lo siguiente hacia abajo
 
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .height(12.dp)
                             .width(60.dp)
-                            .clip(RoundedCornerShape(4.dp))
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp))
                             .shimmerEffect()
                     )
 
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.Companion
                             .height(8.dp)
                             .fillMaxWidth()
-                            .clip(RoundedCornerShape(4.dp)) // Redondeamos la barra también
+                            .clip(androidx.compose.foundation.shape.RoundedCornerShape(4.dp)) // Redondeamos la barra también
                             .shimmerEffect()
                     )
                 }

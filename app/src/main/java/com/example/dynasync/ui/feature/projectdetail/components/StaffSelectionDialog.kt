@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.feature.projectdetail
+package com.example.dynasync.ui.feature.projectdetail.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,9 +10,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,7 +46,7 @@ fun StaffSelectionDialog(
     }
 
     Dialog(onDismissRequest = onDismissRequest) {
-        androidx.compose.material3.Surface(
+        Surface(
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier
@@ -77,7 +79,7 @@ fun StaffSelectionDialog(
                     Text("Sin responsable / Desasignar", color = MaterialTheme.colorScheme.error)
                 }
 
-                androidx.compose.material3.HorizontalDivider()
+                HorizontalDivider()
 
                 LazyColumn {
                     items(filteredList) { person ->

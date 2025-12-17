@@ -1,4 +1,4 @@
-package com.example.dynasync.ui.feature.projectdetail
+package com.example.dynasync.ui.feature.projectdetail.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,7 +39,6 @@ import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Task
 import com.example.dynasync.ui.components.DynaSyncDatePicker
 import com.example.dynasync.ui.components.DynaSyncTextField
-import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.convertMillisToDate
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone

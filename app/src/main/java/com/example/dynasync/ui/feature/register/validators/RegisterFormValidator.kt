@@ -1,6 +1,7 @@
-package com.example.dynasync.ui.feature.register
+package com.example.dynasync.ui.feature.register.validators
 
 import android.util.Patterns
+import com.example.dynasync.ui.feature.register.RegisterViewState
 
 class RegisterFormValidator {
     fun validate(state: RegisterViewState): RegisterViewState {
