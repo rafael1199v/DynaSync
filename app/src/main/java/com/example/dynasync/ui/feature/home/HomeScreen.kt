@@ -42,6 +42,8 @@ import com.example.dynasync.R
 import com.example.dynasync.data.repository.ProjectRepository
 import com.example.dynasync.navigation.MainDestination
 import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
+import com.example.dynasync.ui.feature.home.components.ProjectCard
+import com.example.dynasync.ui.feature.home.components.ProjectCardSkeleton
 import com.example.dynasync.ui.theme.JungleTeal
 import com.example.dynasync.utils.shimmerEffect
 

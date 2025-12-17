@@ -1,4 +1,6 @@
-package com.example.dynasync.ui.feature.createproject
+package com.example.dynasync.ui.feature.createproject.validators
+
+import com.example.dynasync.ui.feature.createproject.CreateProjectViewState
 
 class ProjectFormValidator {
 

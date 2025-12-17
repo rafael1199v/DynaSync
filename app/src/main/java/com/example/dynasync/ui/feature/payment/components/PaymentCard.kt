@@ -1,7 +1,6 @@
-package com.example.dynasync.ui.feature.payment
+package com.example.dynasync.ui.feature.payment.components
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +33,6 @@ import com.example.dynasync.domain.model.Payment
 import com.example.dynasync.domain.model.PaymentType
 import com.example.dynasync.domain.model.toCustomFormat
 import kotlinx.datetime.LocalDateTime
-import kotlin.math.roundToInt
 
 @SuppressLint("DefaultLocale")
 @Composable

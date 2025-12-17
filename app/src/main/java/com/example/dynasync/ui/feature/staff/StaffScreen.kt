@@ -42,6 +42,7 @@ import com.example.dynasync.data.repository.StaffRepository
 import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
 import com.example.dynasync.ui.feature.projectdetail.ProjectDetailIntent
+import com.example.dynasync.ui.feature.staff.components.StaffCard
 import com.example.dynasync.ui.feature.staff.form.StaffFormUiEvent
 
 @Composable

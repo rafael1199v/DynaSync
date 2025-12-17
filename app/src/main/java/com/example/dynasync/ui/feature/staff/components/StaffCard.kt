@@ -1,10 +1,9 @@
-package com.example.dynasync.ui.feature.staff
+package com.example.dynasync.ui.feature.staff.components
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,22 +32,22 @@ fun StaffCard(
     onDeleteStaff: () -> Unit,
     onUpdateStaff: () -> Unit,
     staff: Personal,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier.Companion
 ) {
-    Row (
+    Row(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .border(
                 width = 1.5.dp,
                 color = MaterialTheme.colorScheme.onSurface.copy(0.2f),
-                shape = RoundedCornerShape(16.dp)
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp)
             )
             .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Companion.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(
             12.dp
         ),
-    )  {
+    ) {
 
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -58,13 +57,14 @@ fun StaffCard(
                 .build(),
             placeholder = painterResource(id = R.drawable.placeholder),
             contentDescription = "Photo staff",
-            modifier = Modifier.height(60.dp).width(60.dp).clip(RoundedCornerShape(50.dp)),
-            contentScale = ContentScale.Crop
+            modifier = Modifier.Companion.height(60.dp).width(60.dp)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(50.dp)),
+            contentScale = ContentScale.Companion.Crop
         )
 
 
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.Companion.weight(1f),
             verticalArrangement = Arrangement.spacedBy(
                 8.dp
             ),
@@ -72,22 +72,22 @@ fun StaffCard(
             Text(
                 text = "${staff.name} ${staff.lastname}",
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.Companion.fillMaxWidth()
             )
 
             Text(
                 text = "Cargo: ${staff.charge}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.Companion.fillMaxWidth()
             )
         }
 
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Companion.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(
                 8.dp,
-                Alignment.CenterHorizontally
+                Alignment.Companion.CenterHorizontally
             )
         ) {
             IconButton(
@@ -126,5 +126,3 @@ fun StaffCardPreview() {
         onUpdateStaff = {}
     )
 }
-
-

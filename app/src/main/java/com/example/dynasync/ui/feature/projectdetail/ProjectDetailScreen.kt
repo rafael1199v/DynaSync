@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -53,6 +52,8 @@ import com.example.dynasync.domain.model.Personal
 import com.example.dynasync.domain.model.Project
 import com.example.dynasync.domain.model.Task
 import com.example.dynasync.ui.components.DynaSyncFloatingActionButton
+import com.example.dynasync.ui.feature.projectdetail.components.TaskCard
+import com.example.dynasync.ui.feature.projectdetail.components.TaskFormBottomSheet
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -360,18 +361,22 @@ fun ProjectDetailScreenContent(
             onDismissRequest = { showBottomSheet = false },
             onSaveClick = { title, date, person ->
                 if (taskToEdit == null) {
-                    onIntent(ProjectDetailIntent.CreateTask(
-                        title = title,
-                        finishDate = date.toString(),
-                        staffId = person?.id
-                    ))
+                    onIntent(
+                        ProjectDetailIntent.CreateTask(
+                            title = title,
+                            finishDate = date.toString(),
+                            staffId = person?.id
+                        )
+                    )
                 } else {
-                    onIntent(ProjectDetailIntent.UpdateTask(
-                        taskId = taskToEdit!!.id,
-                        title = title,
-                        finishDate = date.toString(),
-                        staffId = person?.id
-                    ))
+                    onIntent(
+                        ProjectDetailIntent.UpdateTask(
+                            taskId = taskToEdit!!.id,
+                            title = title,
+                            finishDate = date.toString(),
+                            staffId = person?.id
+                        )
+                    )
                 }
                 showBottomSheet = false
             }
