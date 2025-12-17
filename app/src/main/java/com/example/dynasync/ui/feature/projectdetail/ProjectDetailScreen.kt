@@ -123,9 +123,9 @@ fun ProjectDetailScreenContent(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(state.project?.imageUrl)
                         .crossfade(true)
-                        .error(R.drawable.project_placeholder)
+                        .error(R.drawable.no_image_placeholder)
                         .build(),
-                    placeholder = painterResource(id = R.drawable.ic_launcher_background),
+                    placeholder = painterResource(id = R.drawable.no_image_placeholder),
                     contentDescription = "Project Image",
                     modifier = Modifier.fillMaxWidth().height(280.dp),
                     contentScale = ContentScale.Crop
