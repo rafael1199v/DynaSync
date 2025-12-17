@@ -64,7 +64,7 @@ fun ProjectCard(
                     .crossfade(true)
                     .error(R.drawable.project_placeholder)
                     .build(),
-                placeholder = painterResource(id = R.drawable.ic_launcher_background),
+                placeholder = painterResource(id = R.drawable.no_image_placeholder),
                 contentDescription = "Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.width(108.dp).fillMaxHeight()

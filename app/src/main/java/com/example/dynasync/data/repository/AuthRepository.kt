@@ -1,5 +1,6 @@
 package com.example.dynasync.data.repository
 
+import android.util.Log
 import com.example.dynasync.data.supabase.SupabaseClientObject
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
@@ -22,8 +23,18 @@ object AuthRepository {
             }
             AuthResult.Success
         } catch (e: Exception) {
-            println("Error en el login: ${e.message}")
-            AuthResult.Error(e.message ?: "Error desconocido en el inicio de sesión")
+            Log.d("login", "Error en el inicio de sesión: ${e.message}")
+
+            var errorMessage = e.message ?: ""
+
+            if(errorMessage.contains("invalid_credentials")) {
+                errorMessage = "Credenciales inválidas."
+            }
+            else {
+                errorMessage = "Error desconocido en el inicio de sesión. Verifica tu conexión a internet"
+            }
+
+            AuthResult.Error(errorMessage)
         }
     }
 

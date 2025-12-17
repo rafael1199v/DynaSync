@@ -1,5 +1,6 @@
 package com.example.dynasync.ui.feature.payment
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import com.example.dynasync.domain.model.toCustomFormat
 import kotlinx.datetime.LocalDateTime
 import kotlin.math.roundToInt
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun PaymentCard(
     onEdit: () -> Unit,
@@ -94,7 +96,7 @@ fun PaymentCard(
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = "${payment.amount.roundToInt()} Bs",
+                    text = "${String.format("%.2f", payment.amount)} Bs",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(end = 12.dp)

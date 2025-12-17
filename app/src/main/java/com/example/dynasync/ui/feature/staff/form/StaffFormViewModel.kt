@@ -86,19 +86,19 @@ class StaffFormViewModel(
 
     private fun onChangeName(name: String) {
         _state.update {
-            it.copy(name = name)
+            it.copy(name = name, nameError = null)
         }
     }
 
     private fun onChangeLastName(lastname: String) {
         _state.update {
-            it.copy(lastname = lastname)
+            it.copy(lastname = lastname, lastnameError = null)
         }
     }
 
     private fun onChangeCharge(charge: String) {
         _state.update {
-            it.copy(charge = charge)
+            it.copy(charge = charge, chargeError = null)
         }
     }
 

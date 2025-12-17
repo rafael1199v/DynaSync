@@ -57,8 +57,8 @@ class PaymentFormViewModel(
 
     fun onIntent(intent: PaymentFormIntent) {
         when (intent) {
-            is PaymentFormIntent.BeneficiaryChange -> _state.update { it.copy(beneficiary = intent.beneficiary) }
-            is PaymentFormIntent.AmountChange -> _state.update { it.copy(amount = intent.amount) }
+            is PaymentFormIntent.BeneficiaryChange -> _state.update { it.copy(beneficiary = intent.beneficiary, beneficiaryError = null) }
+            is PaymentFormIntent.AmountChange -> _state.update { it.copy(amount = intent.amount, amountError = null) }
             is PaymentFormIntent.PaymentTypeChange -> _state.update { it.copy(paymentType = intent.paymentType) }
 
             PaymentFormIntent.OpenDatePicker -> _state.update { it.copy(showDatePicker = true) }

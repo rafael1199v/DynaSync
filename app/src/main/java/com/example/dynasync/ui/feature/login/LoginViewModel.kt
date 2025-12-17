@@ -33,11 +33,11 @@ class LoginViewModel: ViewModel() {
     }
 
     private fun updateEmail(newEmailValue: String) {
-        _state.update { it.copy(email = newEmailValue) }
+        _state.update { it.copy(email = newEmailValue, emailError = null) }
     }
 
     private fun updatePassword(newPasswordValue: String) {
-        _state.update { it.copy(password = newPasswordValue) }
+        _state.update { it.copy(password = newPasswordValue, passwordError = null) }
     }
 
     private fun validateEmail() : Boolean {
@@ -85,7 +85,7 @@ class LoginViewModel: ViewModel() {
 
 
                 if(result is AuthResult.Error) {
-                    _state.update { it.copy(loginError = "Credenciales incorrectas.") }
+                    _state.update { it.copy(loginError = result.message) }
                 }
                 else {
                     _uiEvent.send(LoginUiEvent.NavigateToHome)

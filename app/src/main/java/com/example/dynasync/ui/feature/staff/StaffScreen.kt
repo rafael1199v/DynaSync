@@ -178,7 +178,14 @@ fun StaffScreenContent(
         AlertDialog(
             onDismissRequest = { staffToDelete = null },
             title = { Text(text = "Eliminar personal") },
-            text = { Text(text = "¿Deseas eliminar de la lista de peersonal a '${staffToDelete?.name} ${staffToDelete?.lastname}'?") },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(text = "¿Deseas eliminar de la lista de personal a '${staffToDelete?.name} ${staffToDelete?.lastname}'?")
+                    Text(text = " Ten en cuenta que las tareas asignadas a este empleado se quedarán sin responsable.")
+                }
+            },
             confirmButton = {
                 TextButton(
                     onClick = {
